@@ -1,0 +1,77 @@
+* {
+  font-family: Inter, sans-serif;
+}
+
+#root {
+  height: 100vh;
+}
+
+.map-container {
+  width: 100%;
+  height: 50vh;
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column-reverse;
+}
+
+@media screen and (width < 768px) {
+  .full {
+    position: sticky;
+    top: 5vh;
+  }
+
+  .stickytab {
+    position: sticky;
+    top: 56vh;
+    z-index: 10;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .map-container {
+    width: 100%;
+    height: 100vh;
+  }
+
+  .flex {
+    flex-direction: row;
+  }
+
+  .full {
+    position: fixed;
+    left: 50%;
+    top: 0;
+  }
+
+  .stickytab {
+    position: sticky;
+    top: 5vh;
+  }
+}
+
+.blue {
+  color: #0c70e5;
+}
+
+.navbar {
+  height: 5vh;
+}
+
+.heading {
+  font-weight: 999;
+}
+
+.botpad {
+  padding-bottom: 1vh;
+}
+
+.backwhite {
+  background-color: white;
+}
+
+.logopad {
+  padding-left: 0.5em;
+}
