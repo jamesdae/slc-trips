@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { highlight, unhighlight, buildContent } from '../lib';
+import { getIconsAndDetails } from '../lib';
 
 export default class MapMarkers extends React.Component {
   constructor(props) {
@@ -14,17 +14,17 @@ export default class MapMarkers extends React.Component {
     this.setState({ place: this.props.place });
     const center = this.props.place[0].geometry.location;
     // eslint-disable-next-line no-undef
-    const map = new google.maps.Map(document.getElementById('map'), { // new map is made where element has id of 'map', which is the element returned by this component's render()
+    const map = new google.maps.Map(document.getElementById('map'), {
       zoom: 9,
       center,
       mapId: process.env.MAP_ID
     });
 
-    this.props.place.forEach((location, index) => { // after component mounts, a map is made, and each location from App's state 'place' gets an AdvancedMarker made using its coordinates and title
+    this.props.place.forEach((location, index) => {
       const div = document.createElement('div');
-      div.classList.add('location');
+      div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
       const root = ReactDOM.createRoot(div);
-      root.render(buildContent(location));
+      root.render(getIconsAndDetails(location));
       // eslint-disable-next-line no-undef
       const advancedMarkerView = new google.maps.marker.AdvancedMarkerView({
         map,
@@ -34,15 +34,18 @@ export default class MapMarkers extends React.Component {
       });
       const element = advancedMarkerView.element;
       element.addEventListener('mouseenter', () => {
-        highlight(advancedMarkerView, location);
+        advancedMarkerView.content.classList.add('highlight', 'hiddenbox');
+        advancedMarkerView.element.style.zIndex = 1;
       });
 
       element.addEventListener('mouseleave', () => {
-        unhighlight(advancedMarkerView, location);
+        advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
+        advancedMarkerView.element.style.zIndex = '';
       });
 
       advancedMarkerView.addListener('click', event => {
-        unhighlight(advancedMarkerView, location);
+        advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
+        advancedMarkerView.element.style.zIndex = '';
       });
     });
   }
@@ -52,17 +55,17 @@ export default class MapMarkers extends React.Component {
       this.setState({ place: this.props.place });
       const center = this.props.place[0].geometry.location;
       // eslint-disable-next-line no-undef
-      const map = new google.maps.Map(document.getElementById('map'), { // new map is made where element has id of 'map', which is the element returned by this component's render()
+      const map = new google.maps.Map(document.getElementById('map'), {
         zoom: 9,
         center,
         mapId: process.env.MAP_ID
       });
 
-      this.props.place.forEach((location, index) => { // after component mounts, a map is made, and each location from App's state 'place' gets an AdvancedMarker made using its coordinates and title
+      this.props.place.forEach((location, index) => {
         const div = document.createElement('div');
-        div.classList.add('location');
+        div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
         const root = ReactDOM.createRoot(div);
-        root.render(buildContent(location));
+        root.render(getIconsAndDetails(location));
         // eslint-disable-next-line no-undef
         const advancedMarkerView = new google.maps.marker.AdvancedMarkerView({
           map,
@@ -72,21 +75,26 @@ export default class MapMarkers extends React.Component {
         });
         const element = advancedMarkerView.element;
         element.addEventListener('mouseenter', () => {
-          highlight(advancedMarkerView, location);
+          advancedMarkerView.content.classList.add('highlight', 'hiddenbox');
+          advancedMarkerView.element.style.zIndex = 1;
         });
 
         element.addEventListener('mouseleave', () => {
-          unhighlight(advancedMarkerView, location);
+          advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
+          advancedMarkerView.element.style.zIndex = '';
+          advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
+          advancedMarkerView.element.style.zIndex = '';
         });
 
         advancedMarkerView.addListener('click', event => {
-          unhighlight(advancedMarkerView, location);
+          advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
+          advancedMarkerView.element.style.zIndex = '';
         });
       });
     }
   }
 
   render() {
-    return <div className='map-container' id='map'/>; // this will contain the map, and be where MapMarkers tag is in places-map
+    return <div className='map-container' id='map'/>;
   }
 }

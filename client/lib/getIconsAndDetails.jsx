@@ -1,8 +1,6 @@
 import React from 'react';
-import titleCase from './titleCase';
 
-export default function buildContent(location) { // this component builds the icon and details for each location in one JSX div element
-  // return a different version of the original return div but for each category
+export default function getIconsAndDetails(location) {
   let categoryValue = 'fa-solid';
   switch (location.category) {
     case 'Parks':
@@ -26,13 +24,12 @@ export default function buildContent(location) { // this component builds the ic
 
   return (
     <div>
-      <div className="icon flex">
-        <i aria-hidden="true" className={categoryValue} title={location.name} />
+      <div className="icon d-flex justify-content-center">
+        <i className={categoryValue} title={location.name} />
       </div>
       <div className="details">
-        <div className="price">{location.name}</div>
-        <div className="address">{titleCase(location.types[0])}</div>
-        <div className="address">{location.category}</div>
+        <p>{location.name}</p>
+        <p className="grey">{location.category}</p>
         <div className='photo'>
           <img className="img" src={location.photos[0].getUrl()} />
         </div>
