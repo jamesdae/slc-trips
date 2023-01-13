@@ -1,3 +1,11 @@
+:root {
+  --hiking-color: rgb(216, 140, 65);
+  --parks-color: rgb(3, 145, 3);
+  --water-color: rgb(59, 94, 249);
+  --attractions-color: rgb(238, 120, 107);
+  --snow-color: rgb(18, 219, 219);
+}
+
 * {
   font-family: Inter, sans-serif;
 }
@@ -8,25 +16,41 @@
 
 .map-container {
   width: 100%;
-  height: 50vh;
+  height: 46vh;
 }
 
-.flex {
-  display: flex;
+.myflex {
   flex-wrap: wrap;
   flex-direction: column-reverse;
 }
 
-@media screen and (width < 768px) {
-  .full {
-    position: sticky;
-    top: 5vh;
+.flex {
+  display: flex;
+}
+
+.detailimage {
+  width: 58%;
+  object-fit: cover;
+}
+
+.stickytab {
+  position: sticky;
+  top: 54vh;
+  z-index: 10;
+}
+
+.full {
+  position: sticky;
+  top: 7vh;
+}
+
+@media screen and (width < 430px) {
+  .card-body {
+    font-size: 80%;
   }
 
-  .stickytab {
-    position: sticky;
-    top: 56vh;
-    z-index: 10;
+  .mybuttons {
+    scale: 75%;
   }
 }
 
@@ -36,7 +60,7 @@
     height: 100vh;
   }
 
-  .flex {
+  .myflex {
     flex-direction: row;
   }
 
@@ -47,8 +71,12 @@
   }
 
   .stickytab {
-    position: sticky;
-    top: 5vh;
+    top: 7vh;
+  }
+
+  .detailimage {
+    height: 22vh;
+    width: 100%;
   }
 }
 
@@ -57,7 +85,7 @@
 }
 
 .navbar {
-  height: 5vh;
+  height: 7vh;
 }
 
 .heading {
@@ -69,9 +97,141 @@
 }
 
 .backwhite {
-  background-color: white;
+  background-color: #f8f9fa;
 }
 
 .logopad {
-  padding-left: 0.5em;
+  padding: 0 0 0.5em 0.5em;
+}
+
+.location {
+  align-items: center;
+  background-color: #fff;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  font-size: 14px;
+  gap: 15px;
+  height: 40px;
+  justify-content: center;
+  padding: 4px;
+  position: relative;
+  transition: all 0.3s ease-out;
+  width: 40px;
+}
+
+.location .icon {
+  align-items: center;
+  justify-content: center;
+}
+
+.location .icon i {
+  height: 20px;
+  width: auto;
+}
+
+.location .details {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+.location .address {
+  color: #9e9e9e;
+  font-size: 10px;
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+
+.location.highlight {
+  background-color: #fff;
+  color: inherit;
+  border-radius: 8px;
+  box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
+  height: auto;
+  padding: 8px 15px;
+  width: auto;
+}
+
+.location.highlight .details {
+  display: flex;
+}
+
+.location.highlight:has(.fa-tree) .icon {
+  color: var(--parks-color);
+}
+
+.location.highlight:has(.fa-binoculars) .icon {
+  color: var(--attractions-color);
+}
+
+.location.highlight:has(.fa-snowflake) .icon {
+  color: var(--snow-color);
+}
+
+.location.highlight:has(.fa-mountain-sun) .icon {
+  color: var(--hiking-color);
+}
+
+.location.highlight:has(.fa-sailboat) .icon {
+  color: var(--water-color);
+}
+
+.location:not(.highlight):has(.fa-tree) {
+  background-color: var(--parks-color);
+}
+
+.location:not(.highlight):has(.fa-binoculars) {
+  background-color: var(--attractions-color);
+}
+
+.location:not(.highlight):has(.fa-snowflake) {
+  background-color: var(--snow-color);
+}
+
+.location:not(.highlight):has(.fa-mountain-sun) {
+  background-color: var(--hiking-color);
+}
+
+.location:not(.highlight):has(.fa-sailboat) {
+  background-color: var(--water-color);
+}
+
+.location:not(.highlight) > div:has(.fa-tree)::after {
+  border-top: 9px solid white;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+}
+
+.photo {
+  max-width: 200px;
+}
+
+.grey {
+  color: gray;
+  font-weight: 100;
+}
+
+.card-title {
+  font-weight: bolder;
+}
+
+.gold {
+  color: gold;
+}
+
+.fa-spinner {
+  font-size: xx-large;
+}
+
+.white {
+  background-color: white;
+}
+
+.main {
+  height: 93vh;
+  transition: cubic-bezier(1, 0, 0, 1);
 }
