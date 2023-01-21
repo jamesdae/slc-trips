@@ -1,9 +1,9 @@
-export default function fetchPlaces(locations, selectedCategory) {
+export default async function fetchPlaces(locations, selectedCategory) {
   const promises = locations.map((location, index) => {
     return new Promise((resolve, reject) => {
+      // eslint-disable-next-line no-undef
+      const service = new google.maps.places.PlacesService(document.createElement('div'));
       setTimeout(() => {
-        // eslint-disable-next-line no-undef
-        const service = new google.maps.places.PlacesService(document.createElement('div'));
         service.getDetails({ placeId: location.placeId, fields: ['name', 'geometry', 'photos', 'rating', 'url', 'user_ratings_total'] }, (newPlace, status) => {
           // eslint-disable-next-line no-undef
           if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -13,9 +13,10 @@ export default function fetchPlaces(locations, selectedCategory) {
             reject(status);
           }
         });
-      }, index * index * 18);
+      }, index * index * 20);
     });
-
   });
-  return Promise.all(promises);
+
+  const results = await Promise.all(promises);
+  return results;
 }

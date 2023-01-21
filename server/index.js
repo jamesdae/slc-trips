@@ -27,9 +27,7 @@ app.get('/api/locations/', (req, res) => {
       order by "locationId"
     `;
     db.query(sql)
-      .then(result => {
-        res.json(result.rows);
-      })
+      .then(result => res.json(result.rows))
       .catch(err => {
         console.error(err);
         res.status(500).json({
@@ -40,14 +38,12 @@ app.get('/api/locations/', (req, res) => {
     sql = `
       select *
         from "locations"
-      where "category" = $1
+       where "category" = $1
     order by "locationId"
     `;
     const params = [category];
     db.query(sql, params)
-      .then(result => {
-        res.json(result.rows);
-      })
+      .then(result => res.json(result.rows))
       .catch(err => {
         console.error(err);
         res.status(500).json({
