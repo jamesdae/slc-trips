@@ -1,9 +1,5 @@
 export default function fetchPlaces(locations, selectedCategory) {
-  const filteredArray = locations.filter(location => {
-    return (location.category === selectedCategory || selectedCategory === 'All Categories');
-  });
-
-  const promises = filteredArray.map((location, index) => {
+  const promises = locations.map((location, index) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         // eslint-disable-next-line no-undef
