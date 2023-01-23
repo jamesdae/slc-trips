@@ -21,7 +21,7 @@ export default function Home() {
 
   useEffect(() => {
     if (isLoaded) {
-      fetch('/api/locations')
+      fetch(`/api/locations/?category=${selectedCategory}`)
         .then(res => res.json())
         .then(locations => fetchPlaces(locations, selectedCategory))
         .then(fetchedLocations => setPlace(fetchedLocations))
