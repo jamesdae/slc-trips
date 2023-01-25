@@ -18,6 +18,7 @@ export default function Home() {
 
   const [place, setPlace] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
+  const [addedLocations, setAddedLocations] = useState(null);
 
   useEffect(() => {
     if (isLoaded) {
@@ -51,7 +52,7 @@ export default function Home() {
                 <div className='tab-pane fade show active' id='nav-places' role='tabpanel' aria-labelledby='nav-places-tab'>
                   <DropdownMenu onSelect={selectedCategory => setSelectedCategory(selectedCategory)} />
                   <div className='row row-cols-1 row-cols-md-2 g-4'>
-                    <LocationCards place={place} />
+                    <LocationCards place={place} addCard={addedLocationId => setAddedLocations(addedLocationId) } />
                   </div>
                 </div>
                 <div className='tab-pane fade' id='nav-mylist' role='tabpanel' aria-labelledby='nav-mylist-tab'>
@@ -60,7 +61,34 @@ export default function Home() {
                   </div>
                 </div>
                 <div className='tab-pane fade' id='nav-routes' role='tabpanel' aria-labelledby='nav-routes-tab'>
-                  <p>Coming Soon...</p>
+                  {
+                    place.map((location, index) => {
+                      if (location.locationId === addedLocations) {
+                        return (
+                          <div key={index} className='col'>
+                            <div className='card m-2 p-2'>
+                              <div className='d-flex flex-md-column flex-row-reverse justify-content-center'>
+                                <img className='p-2 detailimage align-self-center align-self-md-stretch' src={location.photos[0].getUrl()} alt='photo from Google Places' />
+                                <div className='card-body'>
+                                  <p className='card-title'>{location.name}</p>
+                                  <p className='grey'>{location.category}</p>
+                                  <span>Rating: {location.rating}/5 </span>
+                                  <i className='fa-solid fa-star gold' />
+                                  <p>{location.user_ratings_total} reviews</p>
+                                  <div className="d-flex gap-1 d-md-flex justify-content-md-center">
+                                    <a href={location.url} target="_blank" rel="noopener noreferrer" className="mybuttons btn btn-primary me-md-2" type="a">Info</a>
+                                    <button className="mybuttons btn btn-success" type="a">Add</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })
+                  }
                 </div>
               </div>
             </div>

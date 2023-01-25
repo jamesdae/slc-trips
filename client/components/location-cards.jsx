@@ -16,7 +16,7 @@ export default function LocationCards(props) {
                 <p>{location.user_ratings_total} reviews</p>
                 <div className="d-flex gap-1 d-md-flex justify-content-md-center">
                   <a href={location.url} target="_blank" rel="noopener noreferrer" className="mybuttons btn btn-primary me-md-2" type="a">Info</a>
-                  <button className="mybuttons btn btn-success" type="a">Add</button>
+                  <button className="mybuttons btn btn-success" type="a" onClick={event => props.addCard(location.locationId)}>Add</button>
                 </div>
               </div>
             </div>
