@@ -4,6 +4,7 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import LocationCards from '../components/location-cards';
 import DropdownMenu from '../components/dropdown-menu';
+import EachCard from '../components/each-card';
 import Libraries from '../components/apilibraries';
 import MyList from '../components/my-list';
 import MapMarkers from '../components/map-markers';
@@ -52,9 +53,7 @@ export default function Home() {
                 <div className='tab-pane fade show active' id='nav-places' role='tabpanel' aria-labelledby='nav-places-tab'>
                   <DropdownMenu onSelect={selectedCategory => setSelectedCategory(selectedCategory)} />
                   <div className='row row-cols-1 row-cols-md-2 g-4'>
-                    <LocationCards
-                    place={place}
-                    clickedCategory={selectedCategory}
+                    <LocationCards place={place} clickedCategory={selectedCategory}
                     addCard={addedLocationId => {
                       const newLocations = addedLocations.concat([addedLocationId]);
                       setAddedLocations(newLocations);
@@ -66,26 +65,7 @@ export default function Home() {
                     {
                       place.map((location, index) => {
                         if (addedLocations.includes(location.locationId)) {
-                          return (
-                            <div key={index} className='col'>
-                              <div className='card m-2 p-2'>
-                                <div className='d-flex flex-md-column flex-row-reverse justify-content-center'>
-                                  <img className='p-2 detailimage align-self-center align-self-md-stretch' src={location.photos[0].getUrl()} alt='photo from Google Places' />
-                                  <div className='card-body'>
-                                    <p className='card-title'>{location.name}</p>
-                                    <p className='grey'>{location.category}</p>
-                                    <span>Rating: {location.rating}/5 </span>
-                                    <i className='fa-solid fa-star gold' />
-                                    <p>{location.user_ratings_total} reviews</p>
-                                    <div className="d-flex gap-1 d-md-flex justify-content-md-center">
-                                      <a href={location.url} target="_blank" rel="noopener noreferrer" className="mybuttons btn btn-primary me-md-2" type="a">Info</a>
-                                      <button className="mybuttons btn btn-success" type="button">Pin</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          );
+                          return <EachCard location={location} key={index} tab="list" />;
                         } else {
                           return null;
                         }
