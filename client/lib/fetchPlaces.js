@@ -23,33 +23,3 @@ export default async function fetchPlaces(locations, selectedCategory) {
   }
   return results;
 }
-
-// export default async function fetchPlaces(locations, selectedCategory) {
-//   const results = [];
-//   for (let i = 0; i < locations.length; i += 6) {
-//     const batch = locations.slice(i, i + 6);
-//     const promises = batch.map((location, index) => {
-//       return new Promise((resolve, reject) => {
-//         // eslint-disable-next-line no-undef
-//         const service = new google.maps.places.PlacesService(document.createElement('div'));
-//         setTimeout(() => {
-//           service.getDetails({ placeId: location.placeId, fields: ['name', 'geometry', 'photos', 'rating', 'url', 'user_ratings_total'] }, (newPlace, status) => {
-//             // eslint-disable-next-line no-undef
-//             if (status === google.maps.places.PlacesServiceStatus.OK) {
-//               const newPlaceWithCategory = Object.assign({}, newPlace, { category: location.category });
-//               resolve(newPlaceWithCategory);
-//             } else {
-//               reject(status);
-//             }
-//           });
-//         }, index * index * 60);
-//       });
-//     });
-//     const toPush = await Promise.all(promises);
-//     setTimeout(() => {
-//       toPush.forEach(location => results.push(location));
-//     }, 100);
-//   }
-//   console.log(results);
-//   return results;
-// }

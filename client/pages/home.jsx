@@ -20,15 +20,15 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [addedLocations, setAddedLocations] = useState([]);
 
-  useEffect(() => {
-    if (isLoaded) {
+  useEffect(() => { // only occurs once so default value is 'All Categories'
+    if (isLoaded && place === null) {
       fetch(`/api/locations/?category=${selectedCategory}`)
         .then(res => res.json())
         .then(locations => fetchPlaces(locations, selectedCategory))
         .then(fetchedLocations => setPlace(fetchedLocations))
         .catch(error => console.error(error));
     }
-  }, [isLoaded, selectedCategory]);
+  }, [isLoaded, selectedCategory, place]);
 
   if (loadError) return 'Error loading maps';
 
@@ -54,6 +54,7 @@ export default function Home() {
                   <div className='row row-cols-1 row-cols-md-2 g-4'>
                     <LocationCards
                     place={place}
+                    clickedCategory={selectedCategory}
                     addCard={addedLocationId => {
                       const newLocations = addedLocations.concat([addedLocationId]);
                       setAddedLocations(newLocations);
@@ -61,11 +62,6 @@ export default function Home() {
                   </div>
                 </div>
                 <div className='tab-pane fade' id='nav-mylist' role='tabpanel' aria-labelledby='nav-mylist-tab'>
-                  <div>
-                    <MyList place={place} />
-                  </div>
-                </div>
-                <div className='tab-pane fade' id='nav-routes' role='tabpanel' aria-labelledby='nav-routes-tab'>
                   <div className='row row-cols-1 row-cols-md-2 g-4'>
                     {
                       place.map((location, index) => {
@@ -83,7 +79,7 @@ export default function Home() {
                                     <p>{location.user_ratings_total} reviews</p>
                                     <div className="d-flex gap-1 d-md-flex justify-content-md-center">
                                       <a href={location.url} target="_blank" rel="noopener noreferrer" className="mybuttons btn btn-primary me-md-2" type="a">Info</a>
-                                      <button className="mybuttons btn btn-success" type="a">Add</button>
+                                      <button className="mybuttons btn btn-success" type="button">Pin</button>
                                     </div>
                                   </div>
                                 </div>
@@ -97,11 +93,16 @@ export default function Home() {
                     }
                   </div>
                 </div>
+                <div className='tab-pane fade' id='nav-routes' role='tabpanel' aria-labelledby='nav-routes-tab'>
+                  <div>
+                    <MyList place={place} />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div className='full backwhite col-md-6 col-12 botpad'>
-            <MapMarkers place={place} />
+            <MapMarkers place={place} clickedCategory={selectedCategory} />
           </div>
         </div>
       </div>
