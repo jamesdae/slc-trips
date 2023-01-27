@@ -28,8 +28,22 @@ export default function Home() {
         .then(locations => fetchPlaces(locations, selectedCategory))
         .then(fetchedLocations => setPlace(fetchedLocations))
         .catch(error => console.error(error));
+    } else if (isLoaded && place !== null) {
+      const myInit = {
+        method: 'GET',
+        headers: {
+          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc0ODE1OTM5fQ.hZH9KSy8Hdc59629Y2cLKc22UwkwAmt7bYzKIx2mz9E'
+        }
+      };
+      fetch('/api/mylist', myInit)
+        .then(res => res.json())
+        .then(res => {
+          const myList = res.map(obj => obj.locationId);
+          setAddedLocations(myList);
+        })
+        .catch(err => console.error('Error:', err));
     }
-  }, [isLoaded, selectedCategory, place]);
+  }, [isLoaded, selectedCategory, place, addedLocations]);
 
   if (loadError) return 'Error loading maps';
 
@@ -57,6 +71,17 @@ export default function Home() {
                     addCard={addedLocationId => {
                       const newLocations = addedLocations.concat([addedLocationId]);
                       setAddedLocations(newLocations);
+                      const request = {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc0ODE1OTM5fQ.hZH9KSy8Hdc59629Y2cLKc22UwkwAmt7bYzKIx2mz9E'
+                        },
+                        body: JSON.stringify({ locationId: addedLocationId })
+                      };
+                      fetch('/api/mylist', request)
+                        .then(res => res.json())
+                        .catch(err => console.error('Error:', err));
                     }} />
                   </div>
                 </div>

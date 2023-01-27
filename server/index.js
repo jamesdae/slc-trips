@@ -140,6 +140,21 @@ app.post('/api/mylist', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/mylist', (req, res, next) => {
+  const { userId } = req.user;
+  const sql = `
+    select "locationId"
+      from "myListItems"
+     where "userId" = $1
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
