@@ -123,7 +123,22 @@ app.post('/api/auth/sign-in', (req, res, next) => {
 
 app.use(authorizationMiddleware);
 
-// route to post added locations goes under this, will use tokens
+app.post('/api/mylist', (req, res, next) => {
+  const { userId } = req.user;
+  const { locationId } = req.body; // this is where a click event listener would add a locationId to (components/location-cards)
+  const sql = `
+    insert into "myListItems" ("userId", "locationId")
+    values ($1, $2)
+    returning "userId", "locationId", "myListItemsId"
+  `;
+  const params = [userId, locationId];
+  db.query(sql, params)
+    .then(result => {
+      const [myListItem] = result.rows;
+      res.status(201).json(myListItem);
+    })
+    .catch(err => next(err));
+});
 
 app.use(errorMiddleware);
 
