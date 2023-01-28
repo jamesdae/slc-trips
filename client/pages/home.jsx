@@ -4,6 +4,7 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import LocationCards from '../components/location-cards';
 import DropdownMenu from '../components/dropdown-menu';
+import EachCard from '../components/each-card';
 import Libraries from '../components/apilibraries';
 import MyList from '../components/my-list';
 import MapMarkers from '../components/map-markers';
@@ -18,16 +19,31 @@ export default function Home() {
 
   const [place, setPlace] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
+  const [addedLocations, setAddedLocations] = useState([]);
 
   useEffect(() => {
-    if (isLoaded) {
+    if (isLoaded && place === null) {
       fetch(`/api/locations/?category=${selectedCategory}`)
         .then(res => res.json())
         .then(locations => fetchPlaces(locations, selectedCategory))
         .then(fetchedLocations => setPlace(fetchedLocations))
         .catch(error => console.error(error));
+    } else if (isLoaded && place !== null) {
+      const myInit = {
+        method: 'GET',
+        headers: {
+          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc0ODY0NjIyfQ.jSo9w4F5n_XkHb8TgUnBTi1Imw6sNeYD3x8KS9bNCPU'
+        }
+      };
+      fetch('/api/mylist', myInit)
+        .then(res => res.json())
+        .then(res => {
+          const myList = res.map(obj => obj.locationId);
+          setAddedLocations(myList);
+        })
+        .catch(err => console.error('Error:', err));
     }
-  }, [isLoaded, selectedCategory]);
+  }, [isLoaded, selectedCategory, place, addedLocations]);
 
   if (loadError) return 'Error loading maps';
 
@@ -51,22 +67,51 @@ export default function Home() {
                 <div className='tab-pane fade show active' id='nav-places' role='tabpanel' aria-labelledby='nav-places-tab'>
                   <DropdownMenu onSelect={selectedCategory => setSelectedCategory(selectedCategory)} />
                   <div className='row row-cols-1 row-cols-md-2 g-4'>
-                    <LocationCards place={place} />
+                    <LocationCards place={place} clickedCategory={selectedCategory}
+                    addCard={addedLocationId => {
+                      if (addedLocations.includes(addedLocationId)) {
+                        return;
+                      } else {
+                        const newLocations = addedLocations.concat([addedLocationId]);
+                        setAddedLocations(newLocations);
+                      }
+                      const request = {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc0ODY0NjIyfQ.jSo9w4F5n_XkHb8TgUnBTi1Imw6sNeYD3x8KS9bNCPU'
+                        },
+                        body: JSON.stringify({ locationId: addedLocationId })
+                      };
+                      fetch('/api/mylist', request)
+                        .then(res => res.json())
+                        .catch(err => console.error('Error:', err));
+                    }} />
                   </div>
                 </div>
                 <div className='tab-pane fade' id='nav-mylist' role='tabpanel' aria-labelledby='nav-mylist-tab'>
-                  <div>
-                    <MyList place={place} />
+                  <div className='row row-cols-1 row-cols-md-2 g-4'>
+                    {
+                      place.map((location, index) => {
+                        if (addedLocations.includes(location.locationId)) {
+                          return <EachCard location={location} key={index} tab="list" />;
+                        } else {
+                          return null;
+                        }
+                      })
+                    }
                   </div>
                 </div>
                 <div className='tab-pane fade' id='nav-routes' role='tabpanel' aria-labelledby='nav-routes-tab'>
-                  <p>Coming Soon...</p>
+                  <div>
+                    <MyList place={place} />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           <div className='full backwhite col-md-6 col-12 botpad'>
-            <MapMarkers place={place} />
+            <MapMarkers place={place} clickedCategory={selectedCategory} />
           </div>
         </div>
       </div>

@@ -23,7 +23,7 @@ CREATE TABLE "public"."users" (
 	"username" TEXT NOT NULL UNIQUE,
 	"hashedPassword" TEXT NOT NULL,
 	"email" TEXT NOT NULL UNIQUE,
-	"createdAt" timestamptz NOT NULL,
+	"createdAt" timestamptz(6) NOT NULL DEFAULT now(),
 	CONSTRAINT "users_pk" PRIMARY KEY ("userId")
 ) WITH (
   OIDS=FALSE
