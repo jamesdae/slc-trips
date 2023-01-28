@@ -69,8 +69,12 @@ export default function Home() {
                   <div className='row row-cols-1 row-cols-md-2 g-4'>
                     <LocationCards place={place} clickedCategory={selectedCategory}
                     addCard={addedLocationId => {
-                      const newLocations = addedLocations.concat([addedLocationId]);
-                      setAddedLocations(newLocations);
+                      if (addedLocations.includes(addedLocationId)) { // checks if clicked location is already in addedLocations array set by user or database after reloading
+                        return;
+                      } else {
+                        const newLocations = addedLocations.concat([addedLocationId]);
+                        setAddedLocations(newLocations);
+                      }
                       const request = {
                         method: 'POST',
                         headers: {
