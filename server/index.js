@@ -125,7 +125,7 @@ app.use(authorizationMiddleware);
 
 app.post('/api/mylist', (req, res, next) => {
   const { userId } = req.user;
-  const { locationId } = req.body; // this is where a click event listener would add a locationId to (components/location-cards)
+  const { locationId } = req.body;
   const sql = `
     insert into "myListItems" ("userId", "locationId")
     values ($1, $2)

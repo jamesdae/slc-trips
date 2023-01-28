@@ -21,7 +21,7 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [addedLocations, setAddedLocations] = useState([]);
 
-  useEffect(() => { // only occurs once so default value is 'All Categories'
+  useEffect(() => {
     if (isLoaded && place === null) {
       fetch(`/api/locations/?category=${selectedCategory}`)
         .then(res => res.json())
@@ -32,7 +32,7 @@ export default function Home() {
       const myInit = {
         method: 'GET',
         headers: {
-          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc0ODE1OTM5fQ.hZH9KSy8Hdc59629Y2cLKc22UwkwAmt7bYzKIx2mz9E'
+          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc0ODY0NjIyfQ.jSo9w4F5n_XkHb8TgUnBTi1Imw6sNeYD3x8KS9bNCPU'
         }
       };
       fetch('/api/mylist', myInit)
@@ -69,7 +69,7 @@ export default function Home() {
                   <div className='row row-cols-1 row-cols-md-2 g-4'>
                     <LocationCards place={place} clickedCategory={selectedCategory}
                     addCard={addedLocationId => {
-                      if (addedLocations.includes(addedLocationId)) { // checks if clicked location is already in addedLocations array set by user or database after reloading
+                      if (addedLocations.includes(addedLocationId)) {
                         return;
                       } else {
                         const newLocations = addedLocations.concat([addedLocationId]);
@@ -79,7 +79,7 @@ export default function Home() {
                         method: 'POST',
                         headers: {
                           'Content-Type': 'application/json',
-                          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc0ODE1OTM5fQ.hZH9KSy8Hdc59629Y2cLKc22UwkwAmt7bYzKIx2mz9E'
+                          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc0ODY0NjIyfQ.jSo9w4F5n_XkHb8TgUnBTi1Imw6sNeYD3x8KS9bNCPU'
                         },
                         body: JSON.stringify({ locationId: addedLocationId })
                       };
