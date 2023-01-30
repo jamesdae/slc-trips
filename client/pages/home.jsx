@@ -43,7 +43,7 @@ export default function Home() {
         })
         .catch(err => console.error('Error:', err));
     }
-  }, [isLoaded, selectedCategory, place, addedLocations]);
+  }, [isLoaded, selectedCategory, place]);
 
   if (loadError) return 'Error loading maps';
 

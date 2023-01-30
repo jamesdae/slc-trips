@@ -7,7 +7,7 @@ export default async function fetchPlaces(locations, selectedCategory) {
         // eslint-disable-next-line no-undef
         const service = new google.maps.places.PlacesService(document.createElement('div'));
         setTimeout(() => {
-          service.getDetails({ placeId: location.placeId, fields: ['name', 'geometry', 'photos', 'rating', 'url', 'user_ratings_total'] }, (newPlace, status) => {
+          service.getDetails({ placeId: location.placeId, fields: ['name', 'geometry', 'photos', 'rating', 'url', 'user_ratings_total', 'reviews', 'types'] }, (newPlace, status) => {
             // eslint-disable-next-line no-undef
             if (status === google.maps.places.PlacesServiceStatus.OK) {
               const newPlaceWithCategory = Object.assign({}, newPlace, { category: location.category, locationId: location.locationId });
