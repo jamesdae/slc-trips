@@ -20,6 +20,8 @@ export default function Home() {
   const [place, setPlace] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [addedLocations, setAddedLocations] = useState([]);
+  const [extraDetailsOpen, setExtraDetailsOpen] = useState(false);
+  const [viewingId, setViewingId] = useState(null);
 
   useEffect(() => {
     if (isLoaded && place === null) {
@@ -45,6 +47,13 @@ export default function Home() {
     }
   }, [isLoaded, selectedCategory, place]);
 
+  // eslint-disable-next-line no-console
+  console.log('place state', place);
+  // eslint-disable-next-line no-console
+  console.log('addedlocation ids', addedLocations);
+  // eslint-disable-next-line no-console
+  console.log('viewing id', viewingId);
+
   if (loadError) return 'Error loading maps';
 
   if (place !== null) {
@@ -65,29 +74,58 @@ export default function Home() {
               </nav>
               <div className='tab-content white p-2' id='nav-tabContent'>
                 <div className='tab-pane fade show active' id='nav-places' role='tabpanel' aria-labelledby='nav-places-tab'>
-                  <DropdownMenu onSelect={selectedCategory => setSelectedCategory(selectedCategory)} />
-                  <div className='row row-cols-1 row-cols-md-2 g-4'>
-                    <LocationCards place={place} clickedCategory={selectedCategory}
-                    addCard={addedLocationId => {
-                      if (addedLocations.includes(addedLocationId)) {
-                        return;
-                      } else {
-                        const newLocations = addedLocations.concat([addedLocationId]);
-                        setAddedLocations(newLocations);
-                      }
-                      const request = {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc0ODY0NjIyfQ.jSo9w4F5n_XkHb8TgUnBTi1Imw6sNeYD3x8KS9bNCPU'
-                        },
-                        body: JSON.stringify({ locationId: addedLocationId })
-                      };
-                      fetch('/api/mylist', request)
-                        .then(res => res.json())
-                        .catch(err => console.error('Error:', err));
-                    }} />
-                  </div>
+                  {extraDetailsOpen === false
+                    ? (
+                      <div>
+                        <DropdownMenu onSelect={selectedCategory => setSelectedCategory(selectedCategory)} />
+                        <div className='row row-cols-1 row-cols-md-2 g-4'>
+                          <LocationCards place={place} clickedCategory={selectedCategory}
+                            viewCard={viewingId => {
+                              setExtraDetailsOpen(!extraDetailsOpen);
+                              setViewingId(viewingId);
+                            }}
+                            addCard={addedLocationId => {
+                              if (addedLocations.includes(addedLocationId)) {
+                                return;
+                              } else {
+                                const newLocations = addedLocations.concat([addedLocationId]);
+                                setAddedLocations(newLocations);
+                              }
+                              const request = {
+                                method: 'POST',
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                  'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc0ODY0NjIyfQ.jSo9w4F5n_XkHb8TgUnBTi1Imw6sNeYD3x8KS9bNCPU'
+                                },
+                                body: JSON.stringify({ locationId: addedLocationId })
+                              };
+                              fetch('/api/mylist', request)
+                                .then(res => res.json())
+                                .catch(err => console.error('Error:', err));
+                            }} />
+                        </div>
+                      </div>
+                      )
+                    : (
+                      <div>
+                        <button className="mybuttons btn btn-secondary" type="button"
+                        onClick={event => {
+                          setExtraDetailsOpen(!extraDetailsOpen);
+                          setViewingId(null);
+                        }}>
+                          Close Details
+                        </button>
+                        {
+                          place.map((location, index) => {
+                            if (location.locationId === viewingId) {
+                              return <EachCard location={location} key={index} tab="extradetails" />;
+                            } else {
+                              return null;
+                            }
+                          })
+                        }
+                      </div>
+                      )}
                 </div>
                 <div className='tab-pane fade' id='nav-mylist' role='tabpanel' aria-labelledby='nav-mylist-tab'>
                   <div className='row row-cols-1 row-cols-md-2 g-4'>

@@ -12,17 +12,36 @@ export default function EachCard(props) {
             <span>Rating: {props.location.rating}/5 </span>
             <i className='fa-solid fa-star gold' />
             <p>{props.location.user_ratings_total} reviews</p>
-            <div className="d-flex gap-1 d-md-flex justify-content-md-center">
-              <a href={props.location.url} target="_blank" rel="noopener noreferrer" className="mybuttons btn btn-primary me-md-2" type="a">Info</a>
-              {props.tab === 'list'
+            {
+              props.tab === 'extradetails'
                 ? (
-                  <button className="mybuttons btn btn-success" type="button">Pin</button>
+                  <div/> // empty for now. remove this or add stuff where buttons should be. like types or something
                   )
                 : (
-                  <button className="mybuttons btn btn-success" type="button" onClick={event => props.addCard(props.location.locationId)}>Add</button>
-                  )}
-            </div>
+                  <div className="d-flex gap-1 d-md-flex justify-content-md-center">
+                    <button className="mybuttons btn btn-primary me-md-2" type="button" onClick={event => props.viewCard(props.location.locationId)}>Info</button>
+                    {props.tab === 'list'
+                      ? (
+                        <button className="mybuttons btn btn-success" type="button">Pin</button>
+                        )
+                      : (
+                        <button className="mybuttons btn btn-success" type="button" onClick={event => props.addCard(props.location.locationId)}>Add</button>
+                        )}
+                  </div>
+                  )
+            }
           </div>
+        </div>
+        <div>
+          {
+            props.tab === 'extradetails'
+              ? (
+                    `${props.location.reviews[0].author_name}: "${props.location.reviews[0].text}"`
+                )
+              : (
+                  null
+                )
+          }
         </div>
       </div>
     </div>
