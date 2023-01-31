@@ -75,7 +75,7 @@ export default function Home() {
               <div className='tab-content white p-2' id='nav-tabContent'>
                 <div className='tab-pane fade show active' id='nav-places' role='tabpanel' aria-labelledby='nav-places-tab'>
                   {extraDetailsOpen === false
-                    ? (
+                    ? ( // if extraDetails are closed, display default Places list with Dropdown Menu
                       <div>
                         <DropdownMenu onSelect={selectedCategory => setSelectedCategory(selectedCategory)} />
                         <div className='row row-cols-1 row-cols-md-2 g-4'>
@@ -106,7 +106,7 @@ export default function Home() {
                         </div>
                       </div>
                       )
-                    : (
+                    : ( // else if extraDetails are open, display single location card with details
                       <div>
                         <button className="mybuttons btn btn-secondary" type="button"
                         onClick={event => {
@@ -115,7 +115,7 @@ export default function Home() {
                         }}>
                           Close Details
                         </button>
-                        {
+                        { // loop through places to find location with viewingId and replace list of places shown with matching location card
                           place.map((location, index) => {
                             if (location.locationId === viewingId) {
                               return <EachCard location={location} key={index} tab="extradetails" />;
@@ -128,17 +128,43 @@ export default function Home() {
                       )}
                 </div>
                 <div className='tab-pane fade' id='nav-mylist' role='tabpanel' aria-labelledby='nav-mylist-tab'>
-                  <div className='row row-cols-1 row-cols-md-2 g-4'>
-                    {
-                      place.map((location, index) => {
-                        if (addedLocations.includes(location.locationId)) {
-                          return <EachCard location={location} key={index} tab="list" />;
-                        } else {
-                          return null;
+                  {extraDetailsOpen === false
+                    ? (
+                      <div className='row row-cols-1 row-cols-md-2 g-4'>
+                        {
+                          place.map((location, index) => { // loop through places to find locations saved in database and display matching locations in My List tab
+                            if (addedLocations.includes(location.locationId)) {
+                              return <EachCard location={location} key={index} tab="list" viewCard={viewingId => {
+                                setExtraDetailsOpen(!extraDetailsOpen);
+                                setViewingId(viewingId);
+                              }} />;
+                            } else {
+                              return null;
+                            }
+                          })
                         }
-                      })
-                    }
-                  </div>
+                      </div>
+                      )
+                    : ( // else if extraDetails are open, display single location card with details
+                      <div>
+                        <button className="mybuttons btn btn-secondary" type="button"
+                          onClick={event => {
+                            setExtraDetailsOpen(!extraDetailsOpen);
+                            setViewingId(null);
+                          }}>
+                          Close Details
+                        </button>
+                        { // loop through places to find location with viewingId and replace list of places shown with matching location card
+                          place.map((location, index) => {
+                            if (location.locationId === viewingId) {
+                              return <EachCard location={location} key={index} tab="extradetails" />;
+                            } else {
+                              return null;
+                            }
+                          })
+                        }
+                      </div>
+                      )}
                 </div>
                 <div className='tab-pane fade' id='nav-routes' role='tabpanel' aria-labelledby='nav-routes-tab'>
                   <div>
