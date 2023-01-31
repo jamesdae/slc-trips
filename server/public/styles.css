@@ -215,3 +215,46 @@
 .fa-spinner {
   font-size: xx-large;
 }
+
+.reviewtext {
+  font-size: smaller;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+.dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.button {
+  padding: 0;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  border-color: black;
+  background-color: white;
+}
+
+.carouselimg {
+  width: 100%;
+  object-fit: contain;
+  object-position: 50% 50%;
+}
+
+.button.selected {
+  background-color: black;
+}
