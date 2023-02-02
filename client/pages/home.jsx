@@ -47,15 +47,6 @@ export default function Home() {
     }
   }, [isLoaded, selectedCategory, place]);
 
-  // eslint-disable-next-line no-console
-  console.log('place state', place);
-  // eslint-disable-next-line no-console
-  console.log('addedlocation ids', addedLocations);
-  // eslint-disable-next-line no-console
-  console.log('viewing id', viewingId);
-  // eslint-disable-next-line no-console
-  console.log('selected category', selectedCategory);
-
   if (loadError) return 'Error loading maps';
 
   if (place !== null) {
@@ -147,7 +138,7 @@ export default function Home() {
                         }
                       </div>
                       )
-                    : ( // else if extraDetails are open, display single location card with details
+                    : (
                       <div>
                         <button className="mybuttons btn btn-secondary" type="button"
                           onClick={event => {
@@ -156,7 +147,7 @@ export default function Home() {
                           }}>
                           Close Details
                         </button>
-                        { // loop through places to find location with viewingId and replace list of places shown with matching location card
+                        {
                           place.map((location, index) => {
                             if (location.locationId === viewingId) {
                               return <EachCard location={location} key={index} tab="extradetails" />;

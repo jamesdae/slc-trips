@@ -95,7 +95,7 @@ export default class MapMarkers extends React.Component {
           });
         }
       });
-    } else if (prevProps.viewingId !== this.props.viewingId) { // this is for the single marker for location being viewed. may not need both states viewingId and extraDetailsOpen
+    } else if (prevProps.viewingId !== this.props.viewingId) {
       const index = this.props.place.findIndex(location => location.locationId === this.props.viewingId);
       const center = this.props.place[index].geometry.location;
       // eslint-disable-next-line no-undef
