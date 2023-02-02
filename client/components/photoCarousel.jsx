@@ -39,14 +39,14 @@ export default function Carousel(props) {
   return (
     <div className="container">
       <div className='box'>
-        <i className='fa-solid fa-angle-left' onClick={prevImage}/>
+        <i className='fa-solid fa-angle-left blue' onClick={prevImage}/>
         <div className='center'>
-          <img src={props.images[activeIndex].getUrl()} className='carouselimg' />
+          <img src={props.images[activeIndex].getUrl()} className='p-2 carouselimg align-self-center align-self-md-stretch' />
           <div className="dots">
             <Dots />
           </div>
         </div>
-        <i className='fa-solid fa-angle-right' onClick={nextImage}/>
+        <i className='fa-solid fa-angle-right blue' onClick={nextImage}/>
       </div>
     </div>
   );

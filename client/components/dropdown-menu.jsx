@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 export default function DropdownMenu(props) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState('All Categories');
+  const [activeItem, setActiveItem] = useState(props.selectedCategory);
 
   const toggleDropdown = () => {
     setDropdownOpen(prevState => !prevState);

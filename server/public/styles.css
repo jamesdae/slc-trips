@@ -242,10 +242,10 @@
 
 .button {
   padding: 0;
-  height: 15px;
-  width: 15px;
+  height: 10px;
+  width: 10px;
   border-radius: 50%;
-  border-color: black;
+  border-color: var(--water-color);
   background-color: white;
 }
 
@@ -256,5 +256,5 @@
 }
 
 .button.selected {
-  background-color: black;
+  background-color: var(--water-color);
 }

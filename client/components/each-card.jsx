@@ -47,9 +47,9 @@ export default function EachCard(props) {
               ? (
                   props.location.reviews.map((review, index) => {
                     return (
-                      <div key={index}>
+                      <div key={index} className="d-flex flex-column justify-content-center">
                         <a href={review.author_url} target='_blank' rel="noreferrer" className='text-capitalize'><i className='fa-solid fa-circle-user'/>{review.author_name}</a>
-                        <p className='font-weight-bold'>{review.rating}/5 <i className='fa-solid fa-star gold' /> <em>about {review.relative_time_description}</em></p>
+                        <p className='my-1'>{review.rating}/5 <i className='fa-solid fa-star gold' /> <em>about {review.relative_time_description}</em></p>
                         <p className='reviewtext'>&quot;{review.text}&quot;</p>
                       </div>
                     );

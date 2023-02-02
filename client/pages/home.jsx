@@ -34,7 +34,7 @@ export default function Home() {
       const myInit = {
         method: 'GET',
         headers: {
-          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc0ODY0NjIyfQ.jSo9w4F5n_XkHb8TgUnBTi1Imw6sNeYD3x8KS9bNCPU'
+          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1Mjg1NTEzfQ.ntS-IWHMgGHmtJClWnCaizIAlAEr3dBjKFy0CgjKrXg'
         }
       };
       fetch('/api/mylist', myInit)
@@ -53,6 +53,8 @@ export default function Home() {
   console.log('addedlocation ids', addedLocations);
   // eslint-disable-next-line no-console
   console.log('viewing id', viewingId);
+  // eslint-disable-next-line no-console
+  console.log('selected category', selectedCategory);
 
   if (loadError) return 'Error loading maps';
 
@@ -77,7 +79,7 @@ export default function Home() {
                   {extraDetailsOpen === false
                     ? ( // if extraDetails are closed, display default Places list with Dropdown Menu
                       <div>
-                        <DropdownMenu onSelect={selectedCategory => setSelectedCategory(selectedCategory)} />
+                        <DropdownMenu selectedCategory={selectedCategory} onSelect={selectedCategory => setSelectedCategory(selectedCategory)} />
                         <div className='row row-cols-1 row-cols-md-2 g-4'>
                           <LocationCards place={place} clickedCategory={selectedCategory}
                             viewCard={viewingId => {
@@ -95,7 +97,7 @@ export default function Home() {
                                 method: 'POST',
                                 headers: {
                                   'Content-Type': 'application/json',
-                                  'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc0ODY0NjIyfQ.jSo9w4F5n_XkHb8TgUnBTi1Imw6sNeYD3x8KS9bNCPU'
+                                  'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1Mjg1NTEzfQ.ntS-IWHMgGHmtJClWnCaizIAlAEr3dBjKFy0CgjKrXg'
                                 },
                                 body: JSON.stringify({ locationId: addedLocationId })
                               };
@@ -175,7 +177,7 @@ export default function Home() {
             </div>
           </div>
           <div className='full backwhite col-md-6 col-12 botpad'>
-            <MapMarkers place={place} clickedCategory={selectedCategory} />
+            <MapMarkers place={place} clickedCategory={selectedCategory} viewingId={viewingId} extraDetailsOpen={extraDetailsOpen} />
           </div>
         </div>
       </div>
