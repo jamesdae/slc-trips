@@ -23,6 +23,9 @@ export default function Home() {
   const [extraDetailsOpen, setExtraDetailsOpen] = useState(false);
   const [viewingId, setViewingId] = useState(null);
 
+  // eslint-disable-next-line no-console
+  console.log('ADDEDLOCATIONS', addedLocations);
+
   useEffect(() => {
     if (isLoaded && place === null) {
       fetch(`/api/locations/?category=${selectedCategory}`)
@@ -78,23 +81,45 @@ export default function Home() {
                               setViewingId(viewingId);
                             }}
                             addCard={addedLocationId => {
-                              if (addedLocations.includes(addedLocationId)) {
-                                return;
+                              if (!addedLocations[0]) {
+                                const request = { // this part is where the add button will POST to database
+                                  method: 'POST',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1Mjg1NTEzfQ.ntS-IWHMgGHmtJClWnCaizIAlAEr3dBjKFy0CgjKrXg'
+                                  },
+                                  body: JSON.stringify({ locationId: addedLocationId }) // sends a POST request to index.js with a body including the ID. req.user is inherently there bc user is signed in already.
+                                };
+                                fetch('/api/mylist', request)
+                                  .then(res => res.json())
+                                  .then(addedLocation => {
+                                    const newLocations = addedLocations.concat([addedLocation]);
+                                    setAddedLocations(newLocations); // sets state after checking if current state has the specified locationId from user clicking it
+                                  })
+                                  .catch(err => console.error('Error:', err));
                               } else {
-                                const newLocations = addedLocations.concat([addedLocationId]);
-                                setAddedLocations(newLocations); // sets state after checking if current state has the specified locationId from user clicking it
+                                for (let i = 0; i <= addedLocations.length - 1; i++) {
+                                  if (addedLocations[i].locationId === addedLocationId) {
+                                    return null;
+                                  } else {
+                                    const request = { // this part is where the add button will POST to database
+                                      method: 'POST',
+                                      headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1Mjg1NTEzfQ.ntS-IWHMgGHmtJClWnCaizIAlAEr3dBjKFy0CgjKrXg'
+                                      },
+                                      body: JSON.stringify({ locationId: addedLocationId }) // sends a POST request to index.js with a body including the ID. req.user is inherently there bc user is signed in already.
+                                    };
+                                    fetch('/api/mylist', request)
+                                      .then(res => res.json())
+                                      .then(addedLocation => {
+                                        const newLocations = addedLocations.concat([addedLocation]);
+                                        setAddedLocations(newLocations); // sets state after checking if current state has the specified locationId from user clicking it
+                                      })
+                                      .catch(err => console.error('Error:', err));
+                                  }
+                                }
                               }
-                              const request = { // this part is where the add button will POST to database
-                                method: 'POST',
-                                headers: {
-                                  'Content-Type': 'application/json',
-                                  'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1Mjg1NTEzfQ.ntS-IWHMgGHmtJClWnCaizIAlAEr3dBjKFy0CgjKrXg'
-                                },
-                                body: JSON.stringify({ locationId: addedLocationId }) // sends a POST request to index.js with a body including the ID. req.user is inherently there bc user is signed in already.
-                              };
-                              fetch('/api/mylist', request)
-                                .then(res => res.json())
-                                .catch(err => console.error('Error:', err));
                             }} />
                         </div>
                       </div>
@@ -129,8 +154,19 @@ export default function Home() {
                             return addedLocations.map(savedlocation => {
                               if (savedlocation.locationId === location.locationId) {
                                 return <EachCard location={location} key={index} myListItemsId={savedlocation.myListItemsId} tab="list" removeLocation={removeId => {
-                                  // eslint-disable-next-line no-console
-                                  console.log('remove this myListItemsId from database:', removeId);
+                                  const reducedLocations = addedLocations.filter(location => location.myListItemsId !== removeId);
+                                  setAddedLocations(reducedLocations); // clicking remove icon in My List cards will set state with new array without removed locations ID
+                                  fetch(`/api/mylist/${removeId}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                      'Content-Type': 'application/json',
+                                      'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1Mjg1NTEzfQ.ntS-IWHMgGHmtJClWnCaizIAlAEr3dBjKFy0CgjKrXg'
+                                    }
+                                  })
+                                    .then(res => res.json())
+                                    // eslint-disable-next-line no-console
+                                    .then(res => console.log(res.myListItemsId))
+                                    .catch(err => console.error('Error:', err));
                                 }}
                                 viewCard={viewingId => {
                                   setExtraDetailsOpen(!extraDetailsOpen);

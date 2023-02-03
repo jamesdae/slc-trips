@@ -140,6 +140,22 @@ app.post('/api/mylist', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.delete('/api/mylist/:removeId', (req, res, next) => {
+  const removeId = Number(req.params.removeId);
+  const sql = `
+    delete from "myListItems"
+    where "myListItemsId" = $1
+    returning *
+  `;
+  const params = [removeId];
+  db.query(sql, params)
+    .then(result => {
+      const [myListItem] = result.rows;
+      res.status(201).json(myListItem);
+    })
+    .catch(err => next(err));
+});
+
 app.get('/api/mylist', (req, res, next) => {
   const { userId } = req.user;
   const sql = `
