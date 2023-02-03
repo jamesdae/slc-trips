@@ -4,8 +4,8 @@ import Carousel from './photoCarousel';
 export default function EachCard(props) {
   return (
     <div className='col'>
-      <div className='card m-2 p-2'>
-        <div className='d-flex flex-md-column flex-row-reverse justify-content-center'>
+      <div className='card m-2'>
+        <div className='d-flex flex-md-column flex-row-reverse'>
           {
             props.tab === 'extradetails'
               ? (
@@ -17,7 +17,7 @@ export default function EachCard(props) {
           }
           <div className='card-body'>
             <p className='card-title'>{props.location.name}</p>
-            <p className='grey'>{props.location.category}</p>
+            <p className='grey greytext'>{props.location.category}</p>
             <span>Rating: {props.location.rating}/5 </span>
             <i className='fa-solid fa-star gold' />
             <a href={props.location.url} target='_blank' rel="noreferrer" className='d-block py-2'>{props.location.user_ratings_total} reviews</a>
@@ -27,8 +27,9 @@ export default function EachCard(props) {
                     null
                   )
                 : (
-                  <div className="d-flex gap-1 d-md-flex justify-content-md-center">
-                    <button className="mybuttons btn btn-primary me-md-2" type="button" onClick={() => props.viewCard(props.location.locationId)}>Info</button>
+                  <div className="d-flex justify-content-around">
+                    {props.tab === 'list' ? <i className='grey align-self-center fa-solid fa-circle-minus' /> : null}
+                    <button className="mybuttons btn btn-primary" type="button" onClick={() => props.viewCard(props.location.locationId)}>Info</button>
                     {props.tab === 'list'
                       ? (
                         <button className="mybuttons btn btn-success" type="button">Pin</button>
@@ -41,25 +42,23 @@ export default function EachCard(props) {
             }
           </div>
         </div>
-        <div className='m-2 p-2'>
-          { // div for list of reviews and authors
-            props.tab === 'extradetails'
-              ? (
-                  props.location.reviews.map((review, index) => {
-                    return (
-                      <div key={index} className="d-flex flex-column justify-content-center">
-                        <a href={review.author_url} target='_blank' rel="noreferrer" className='text-capitalize'><i className='fa-solid fa-circle-user'/>{review.author_name}</a>
-                        <p className='my-1'>{review.rating}/5 <i className='fa-solid fa-star gold' /> <em>about {review.relative_time_description}</em></p>
-                        <p className='reviewtext'>&quot;{review.text}&quot;</p>
-                      </div>
-                    );
-                  })
-                )
-              : (
-                  null
-                )
-          }
-        </div>
+        { // div for list of reviews and authors
+          props.tab === 'extradetails'
+            ? (
+                props.location.reviews.map((review, index) => {
+                  return (
+                    <div key={index} className="m-2 p-2 d-flex flex-column justify-content-center">
+                      <a href={review.author_url} target='_blank' rel="noreferrer" className='text-capitalize'><i className='fa-solid fa-circle-user'/>{review.author_name}</a>
+                      <p className='my-1'>{review.rating}/5 <i className='fa-solid fa-star gold' /> <em>about {review.relative_time_description}</em></p>
+                      <p className='grey greytext'>&quot;{review.text}&quot;</p>
+                    </div>
+                  );
+                })
+              )
+            : (
+                null
+              )
+        }
       </div>
     </div>
   );

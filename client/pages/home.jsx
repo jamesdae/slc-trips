@@ -40,7 +40,7 @@ export default function Home() {
       fetch('/api/mylist', myInit)
         .then(res => res.json())
         .then(res => {
-          const myList = res.map(obj => obj.locationId);
+          const myList = res.map(obj => obj);
           setAddedLocations(myList);
         })
         .catch(err => console.error('Error:', err));
@@ -126,14 +126,14 @@ export default function Home() {
                       <div className='row row-cols-1 row-cols-md-2 g-4'>
                         {
                           place.map((location, index) => { // loop through places to find locations saved in database and display matching locations in My List tab
-                            if (addedLocations.includes(location.locationId)) {
-                              return <EachCard location={location} key={index} tab="list" viewCard={viewingId => {
-                                setExtraDetailsOpen(!extraDetailsOpen);
-                                setViewingId(viewingId);
-                              }} />;
-                            } else {
-                              return null;
-                            }
+                            return addedLocations.map(savedlocation => {
+                              if (savedlocation.locationId === location.locationId) {
+                                return <EachCard location={location} key={index} myListItemId={savedlocation.myListItemId} tab="list" viewCard={viewingId => {
+                                  setExtraDetailsOpen(!extraDetailsOpen);
+                                  setViewingId(viewingId);
+                                }} />;
+                              } else return null;
+                            });
                           })
                         }
                       </div>

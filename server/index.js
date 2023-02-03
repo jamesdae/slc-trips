@@ -143,7 +143,7 @@ app.post('/api/mylist', (req, res, next) => {
 app.get('/api/mylist', (req, res, next) => {
   const { userId } = req.user;
   const sql = `
-    select "locationId"
+    select "locationId", "userId", "myListItemsId"
       from "myListItems"
      where "userId" = $1
   `;

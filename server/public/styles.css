@@ -183,6 +183,9 @@
 
 .grey {
   color: gray;
+}
+
+.greytext {
   font-weight: 100;
   font-size: smaller;
 }
@@ -216,16 +219,6 @@
   font-size: xx-large;
 }
 
-.reviewtext {
-  font-size: smaller;
-}
-
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .box {
   display: flex;
   align-items: center;
@@ -237,7 +230,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
+  gap: 0.2em;
 }
 
 .button {

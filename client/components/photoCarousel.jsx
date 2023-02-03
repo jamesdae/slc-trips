@@ -37,7 +37,7 @@ export default function Carousel(props) {
   }
 
   return (
-    <div className="container">
+    <div className="container me-auto">
       <div className='box'>
         <i className='fa-solid fa-angle-left blue' onClick={prevImage}/>
         <div className='center'>
