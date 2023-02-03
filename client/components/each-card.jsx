@@ -28,7 +28,7 @@ export default function EachCard(props) {
                   )
                 : (
                   <div className="d-flex justify-content-around">
-                    {props.tab === 'list' ? <i className='grey align-self-center fa-solid fa-circle-minus pointer' /> : null}
+                    {props.tab === 'list' ? <i className='grey align-self-center fa-solid fa-circle-minus pointer' onClick={() => props.removeLocation(props.myListItemsId)} /> : null}
                     <button className="mybuttons btn btn-primary" type="button" onClick={() => props.viewCard(props.location.locationId)}>Info</button>
                     {props.tab === 'list'
                       ? (

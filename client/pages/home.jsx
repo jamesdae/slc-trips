@@ -82,15 +82,15 @@ export default function Home() {
                                 return;
                               } else {
                                 const newLocations = addedLocations.concat([addedLocationId]);
-                                setAddedLocations(newLocations);
+                                setAddedLocations(newLocations); // sets state after checking if current state has the specified locationId from user clicking it
                               }
-                              const request = {
+                              const request = { // this part is where the add button will POST to database
                                 method: 'POST',
                                 headers: {
                                   'Content-Type': 'application/json',
                                   'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1Mjg1NTEzfQ.ntS-IWHMgGHmtJClWnCaizIAlAEr3dBjKFy0CgjKrXg'
                                 },
-                                body: JSON.stringify({ locationId: addedLocationId })
+                                body: JSON.stringify({ locationId: addedLocationId }) // sends a POST request to index.js with a body including the ID. req.user is inherently there bc user is signed in already.
                               };
                               fetch('/api/mylist', request)
                                 .then(res => res.json())
@@ -128,7 +128,11 @@ export default function Home() {
                           place.map((location, index) => { // loop through places to find locations saved in database and display matching locations in My List tab
                             return addedLocations.map(savedlocation => {
                               if (savedlocation.locationId === location.locationId) {
-                                return <EachCard location={location} key={index} myListItemId={savedlocation.myListItemId} tab="list" viewCard={viewingId => {
+                                return <EachCard location={location} key={index} myListItemsId={savedlocation.myListItemsId} tab="list" removeLocation={removeId => {
+                                  // eslint-disable-next-line no-console
+                                  console.log('remove this myListItemsId from database:', removeId);
+                                }}
+                                viewCard={viewingId => {
                                   setExtraDetailsOpen(!extraDetailsOpen);
                                   setViewingId(viewingId);
                                 }} />;
