@@ -182,11 +182,10 @@
 }
 
 .grey {
-  color: gray;
+  color: #595f65;
 }
 
-.greytext {
-  font-weight: 100;
+.smalltext {
   font-size: smaller;
 }
 
@@ -250,4 +249,8 @@
 
 .button.selected {
   background-color: var(--water-color);
+}
+
+.pointer {
+  cursor: pointer;
 }
