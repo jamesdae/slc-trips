@@ -28,7 +28,31 @@ export default function EachCard(props) {
                   )
                 : (
                   <div className="d-flex justify-content-around">
-                    {props.tab === 'list' ? <i className='grey align-self-center fa-solid fa-circle-minus pointer' onClick={() => props.removeLocation(props.myListItemsId)} /> : null}
+                    {props.tab === 'list'
+                      ? (
+                        <div className='d-flex'>
+                          <i type="button" className='grey align-self-center fa-solid fa-circle-minus pointer' data-bs-toggle="modal" data-bs-target="#exampleModalCenter" />
+
+                          <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div className="modal-dialog modal-dialog-centered" role="document">
+                              <div className="modal-content">
+                                <div className="modal-header">
+                                  <h5 className="modal-title" id="exampleModalLongTitle">Confirm</h5>
+                                  <i aria-hidden="true" type="button" className="close fa-solid fa-xmark" data-bs-dismiss="modal" aria-label="Close"/>
+                                </div>
+                                <div className="modal-body">
+                                  <p>Remove from list?</p>
+                                </div>
+                                <div className="modal-footer">
+                                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                  <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={() => props.removeLocation(props.myListItemsId)}>Remove</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        )
+                      : null}
                     <button className="mybuttons btn btn-primary" type="button" onClick={() => props.viewCard(props.location.locationId)}>Info</button>
                     {props.tab === 'list'
                       ? (
@@ -42,7 +66,7 @@ export default function EachCard(props) {
             }
           </div>
         </div>
-        { // div for list of reviews and authors
+        {
           props.tab === 'extradetails'
             ? (
                 props.location.reviews.map((review, index) => {

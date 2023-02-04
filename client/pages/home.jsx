@@ -23,9 +23,6 @@ export default function Home() {
   const [extraDetailsOpen, setExtraDetailsOpen] = useState(false);
   const [viewingId, setViewingId] = useState(null);
 
-  // eslint-disable-next-line no-console
-  console.log('ADDEDLOCATIONS', addedLocations);
-
   useEffect(() => {
     if (isLoaded && place === null) {
       fetch(`/api/locations/?category=${selectedCategory}`)
@@ -56,7 +53,7 @@ export default function Home() {
     return (
       <div className='bg-light'>
         <nav className='sticky-top col-md-6 col-12 navbar navbar-expand-lg navbar-light bg-light'>
-          <h1 className='m-2 blue heading'>SLCTrips</h1>
+          <h1 className='mx-2 blue heading'>SLCTrips</h1>
         </nav>
         <div className='d-flex flex-wrap flex-column-reverse'>
           <div className='col-md-6 col-12'>
@@ -71,7 +68,7 @@ export default function Home() {
               <div className='tab-content white p-2' id='nav-tabContent'>
                 <div className='tab-pane fade show active' id='nav-places' role='tabpanel' aria-labelledby='nav-places-tab'>
                   {extraDetailsOpen === false
-                    ? ( // if extraDetails are closed, display default Places list with Dropdown Menu
+                    ? (
                       <div>
                         <DropdownMenu selectedCategory={selectedCategory} onSelect={selectedCategory => setSelectedCategory(selectedCategory)} />
                         <div className='row row-cols-1 row-cols-md-2 g-4'>
@@ -105,7 +102,7 @@ export default function Home() {
                         </div>
                       </div>
                       )
-                    : ( // else if extraDetails are open, display single location card with details
+                    : (
                       <div>
                         <button className="mybuttons btn btn-secondary" type="button"
                         onClick={event => {
@@ -114,7 +111,7 @@ export default function Home() {
                         }}>
                           Close Details
                         </button>
-                        { // loop through places to find location with viewingId and replace list of places shown with matching location card
+                        {
                           place.map((location, index) => {
                             if (location.locationId === viewingId) {
                               return <EachCard location={location} key={index} tab="extradetails" />;
@@ -131,7 +128,7 @@ export default function Home() {
                     ? (
                       <div className='row row-cols-1 row-cols-md-2 g-4'>
                         {
-                          place.map((location, index) => { // loop through places to find locations saved in database and display matching locations in My List tab
+                          place.map((location, index) => {
                             const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
                             if (savedlocation === undefined) return null;
                             if (savedlocation.locationId === location.locationId) {
@@ -146,7 +143,7 @@ export default function Home() {
                                   .then(res => res.json())
                                   .then(res => {
                                     const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
-                                    setAddedLocations(reducedLocations); // clicking remove icon in My List cards will set state with new array without removed locations ID
+                                    setAddedLocations(reducedLocations);
                                   })
                                   .catch(err => console.error('Error:', err));
                               }}
