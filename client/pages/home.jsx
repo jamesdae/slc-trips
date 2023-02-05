@@ -34,13 +34,13 @@ export default function Home() {
       const myInit = {
         method: 'GET',
         headers: {
-          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1Mjg1NTEzfQ.ntS-IWHMgGHmtJClWnCaizIAlAEr3dBjKFy0CgjKrXg'
+          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1NDgwODUyfQ.cI392GWQY4sTdUgt3g1pSlI9Wlr-qZQzNeChLs_FEkc'
         }
       };
       fetch('/api/mylist', myInit)
         .then(res => res.json())
         .then(res => {
-          const myList = res.map(obj => obj.locationId);
+          const myList = res.map(obj => obj);
           setAddedLocations(myList);
         })
         .catch(err => console.error('Error:', err));
@@ -53,7 +53,7 @@ export default function Home() {
     return (
       <div className='bg-light'>
         <nav className='sticky-top col-md-6 col-12 navbar navbar-expand-lg navbar-light bg-light'>
-          <h1 className='m-2 blue heading'>SLCTrips</h1>
+          <h1 className='mx-2 blue heading'>SLCTrips</h1>
         </nav>
         <div className='d-flex flex-wrap flex-column-reverse'>
           <div className='col-md-6 col-12'>
@@ -68,7 +68,7 @@ export default function Home() {
               <div className='tab-content white p-2' id='nav-tabContent'>
                 <div className='tab-pane fade show active' id='nav-places' role='tabpanel' aria-labelledby='nav-places-tab'>
                   {extraDetailsOpen === false
-                    ? ( // if extraDetails are closed, display default Places list with Dropdown Menu
+                    ? (
                       <div>
                         <DropdownMenu selectedCategory={selectedCategory} onSelect={selectedCategory => setSelectedCategory(selectedCategory)} />
                         <div className='row row-cols-1 row-cols-md-2 g-4'>
@@ -78,28 +78,31 @@ export default function Home() {
                               setViewingId(viewingId);
                             }}
                             addCard={addedLocationId => {
-                              if (addedLocations.includes(addedLocationId)) {
-                                return;
+                              const existenceCheck = addedLocations.find(savedlocation => savedlocation.locationId === addedLocationId);
+                              if (existenceCheck) {
+                                return null;
                               } else {
-                                const newLocations = addedLocations.concat([addedLocationId]);
-                                setAddedLocations(newLocations);
+                                const request = {
+                                  method: 'POST',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1NDgwODUyfQ.cI392GWQY4sTdUgt3g1pSlI9Wlr-qZQzNeChLs_FEkc'
+                                  },
+                                  body: JSON.stringify({ locationId: addedLocationId })
+                                };
+                                fetch('/api/mylist', request)
+                                  .then(res => res.json())
+                                  .then(newLocation => {
+                                    const newLocations = addedLocations.concat([newLocation]);
+                                    setAddedLocations(newLocations);
+                                  })
+                                  .catch(err => console.error('Error:', err));
                               }
-                              const request = {
-                                method: 'POST',
-                                headers: {
-                                  'Content-Type': 'application/json',
-                                  'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1Mjg1NTEzfQ.ntS-IWHMgGHmtJClWnCaizIAlAEr3dBjKFy0CgjKrXg'
-                                },
-                                body: JSON.stringify({ locationId: addedLocationId })
-                              };
-                              fetch('/api/mylist', request)
-                                .then(res => res.json())
-                                .catch(err => console.error('Error:', err));
                             }} />
                         </div>
                       </div>
                       )
-                    : ( // else if extraDetails are open, display single location card with details
+                    : (
                       <div>
                         <button className="mybuttons btn btn-secondary" type="button"
                         onClick={event => {
@@ -108,7 +111,7 @@ export default function Home() {
                         }}>
                           Close Details
                         </button>
-                        { // loop through places to find location with viewingId and replace list of places shown with matching location card
+                        {
                           place.map((location, index) => {
                             if (location.locationId === viewingId) {
                               return <EachCard location={location} key={index} tab="extradetails" />;
@@ -125,15 +128,30 @@ export default function Home() {
                     ? (
                       <div className='row row-cols-1 row-cols-md-2 g-4'>
                         {
-                          place.map((location, index) => { // loop through places to find locations saved in database and display matching locations in My List tab
-                            if (addedLocations.includes(location.locationId)) {
-                              return <EachCard location={location} key={index} tab="list" viewCard={viewingId => {
+                          place.map((location, index) => {
+                            const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
+                            if (savedlocation === undefined) return null;
+                            if (savedlocation.locationId === location.locationId) {
+                              return <EachCard location={location} key={savedlocation.myListItemsId} myListItemsId={savedlocation.myListItemsId} tab="list" removeLocation={removeId => {
+                                fetch(`/api/mylist/${removeId}`, {
+                                  method: 'DELETE',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1NDgwODUyfQ.cI392GWQY4sTdUgt3g1pSlI9Wlr-qZQzNeChLs_FEkc'
+                                  }
+                                })
+                                  .then(res => res.json())
+                                  .then(res => {
+                                    const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
+                                    setAddedLocations(reducedLocations);
+                                  })
+                                  .catch(err => console.error('Error:', err));
+                              }}
+                              viewCard={viewingId => {
                                 setExtraDetailsOpen(!extraDetailsOpen);
                                 setViewingId(viewingId);
                               }} />;
-                            } else {
-                              return null;
-                            }
+                            } else return null;
                           })
                         }
                       </div>

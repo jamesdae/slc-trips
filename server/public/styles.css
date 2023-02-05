@@ -182,8 +182,10 @@
 }
 
 .grey {
-  color: gray;
-  font-weight: 100;
+  color: #595f65;
+}
+
+.smalltext {
   font-size: smaller;
 }
 
@@ -216,16 +218,6 @@
   font-size: xx-large;
 }
 
-.reviewtext {
-  font-size: smaller;
-}
-
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .box {
   display: flex;
   align-items: center;
@@ -237,7 +229,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
+  gap: 0.2em;
 }
 
 .button {
@@ -257,4 +249,8 @@
 
 .button.selected {
   background-color: var(--water-color);
+}
+
+.pointer {
+  cursor: pointer;
 }
