@@ -96,7 +96,7 @@ export default class MapMarkers extends React.Component {
         }
       });
     } else if (prevProps.viewingId !== this.props.viewingId) {
-      const index = this.props.place.findIndex(location => location.locationId === this.props.viewingId);
+      const index = this.props.place.findIndex(location => location.locationId === this.props.viewingId[0]);
       const center = this.props.place[index].geometry.location;
       // eslint-disable-next-line no-undef
       const map = new google.maps.Map(document.getElementById('map'), {
@@ -105,7 +105,7 @@ export default class MapMarkers extends React.Component {
         mapId: process.env.MAP_ID
       });
       this.props.place.forEach((location, index) => {
-        if (location.locationId === this.props.viewingId) {
+        if (this.props.viewingId.length === 1 && location.locationId === this.props.viewingId[0]) {
           const div = document.createElement('div');
           div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
           const root = ReactDOM.createRoot(div);

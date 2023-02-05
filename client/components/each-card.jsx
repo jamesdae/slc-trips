@@ -56,7 +56,9 @@ export default function EachCard(props) {
                     <button className="mybuttons btn btn-primary" type="button" onClick={() => props.viewCard(props.location.locationId)}>Info</button>
                     {props.tab === 'list'
                       ? (
-                        <button className="mybuttons btn btn-success" type="button">Pin</button>
+                        <button className="mybuttons btn btn-success" type="button" onClick={() => {
+                          props.setPins(props.location.locationId);
+                        }}>Pin</button>
                         )
                       : (
                         <button className="mybuttons btn btn-success" type="button" onClick={() => props.addCard(props.location.locationId)}>Add</button>

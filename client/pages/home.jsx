@@ -22,6 +22,7 @@ export default function Home() {
   const [addedLocations, setAddedLocations] = useState([]);
   const [extraDetailsOpen, setExtraDetailsOpen] = useState(false);
   const [viewingId, setViewingId] = useState(null);
+  // const [pinnedIds, setPinnedIds] = useState([]);
 
   useEffect(() => {
     if (isLoaded && place === null) {
@@ -75,7 +76,7 @@ export default function Home() {
                           <LocationCards place={place} clickedCategory={selectedCategory}
                             viewCard={viewingId => {
                               setExtraDetailsOpen(!extraDetailsOpen);
-                              setViewingId(viewingId);
+                              setViewingId([viewingId]);
                             }}
                             addCard={addedLocationId => {
                               const existenceCheck = addedLocations.find(savedlocation => savedlocation.locationId === addedLocationId);
@@ -113,7 +114,7 @@ export default function Home() {
                         </button>
                         {
                           place.map((location, index) => {
-                            if (location.locationId === viewingId) {
+                            if (viewingId.length === 1 && location.locationId === viewingId[0]) {
                               return <EachCard location={location} key={index} tab="extradetails" />;
                             } else {
                               return null;
@@ -132,7 +133,12 @@ export default function Home() {
                             const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
                             if (savedlocation === undefined) return null;
                             if (savedlocation.locationId === location.locationId) {
-                              return <EachCard location={location} key={savedlocation.myListItemsId} myListItemsId={savedlocation.myListItemsId} tab="list" removeLocation={removeId => {
+                              return <EachCard location={location} key={savedlocation.myListItemsId}
+                              setPins={pinnedId => {
+                                setViewingId([pinnedId]);
+                              }}
+                              myListItemsId={savedlocation.myListItemsId} tab="list"
+                              removeLocation={removeId => {
                                 fetch(`/api/mylist/${removeId}`, {
                                   method: 'DELETE',
                                   headers: {
@@ -149,7 +155,7 @@ export default function Home() {
                               }}
                               viewCard={viewingId => {
                                 setExtraDetailsOpen(!extraDetailsOpen);
-                                setViewingId(viewingId);
+                                setViewingId([viewingId]);
                               }} />;
                             } else return null;
                           })
@@ -167,7 +173,7 @@ export default function Home() {
                         </button>
                         {
                           place.map((location, index) => {
-                            if (location.locationId === viewingId) {
+                            if (viewingId.length === 1 && location.locationId === viewingId[0]) {
                               return <EachCard location={location} key={index} tab="extradetails" />;
                             } else {
                               return null;
