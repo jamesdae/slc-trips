@@ -134,6 +134,35 @@ export default class MapMarkers extends React.Component {
             advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
             advancedMarkerView.element.style.zIndex = '';
           });
+        } else if (this.props.viewingId.includes(location.locationId)) {
+          const div = document.createElement('div');
+          div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
+          const root = ReactDOM.createRoot(div);
+          root.render(getIconsAndDetails(location));
+          // eslint-disable-next-line no-undef
+          const advancedMarkerView = new google.maps.marker.AdvancedMarkerView({
+            map,
+            content: div,
+            position: location.geometry.location,
+            title: location.name
+          });
+          const element = advancedMarkerView.element;
+          element.addEventListener('mouseenter', () => {
+            advancedMarkerView.content.classList.add('highlight', 'hiddenbox');
+            advancedMarkerView.element.style.zIndex = 1;
+          });
+
+          element.addEventListener('mouseleave', () => {
+            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
+            advancedMarkerView.element.style.zIndex = '';
+            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
+            advancedMarkerView.element.style.zIndex = '';
+          });
+
+          advancedMarkerView.addListener('click', event => {
+            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
+            advancedMarkerView.element.style.zIndex = '';
+          });
         }
       });
     }

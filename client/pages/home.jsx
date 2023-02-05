@@ -21,8 +21,8 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [addedLocations, setAddedLocations] = useState([]);
   const [extraDetailsOpen, setExtraDetailsOpen] = useState(false);
-  const [viewingId, setViewingId] = useState(null);
-  // const [pinnedIds, setPinnedIds] = useState([]);
+  const [viewingIds, setViewingIds] = useState(null);
+  const [prevList, setPrevList] = useState(null);
 
   useEffect(() => {
     if (isLoaded && place === null) {
@@ -76,7 +76,8 @@ export default function Home() {
                           <LocationCards place={place} clickedCategory={selectedCategory}
                             viewCard={viewingId => {
                               setExtraDetailsOpen(!extraDetailsOpen);
-                              setViewingId([viewingId]);
+                              setPrevList(viewingIds);
+                              setViewingIds([viewingId]);
                             }}
                             addCard={addedLocationId => {
                               const existenceCheck = addedLocations.find(savedlocation => savedlocation.locationId === addedLocationId);
@@ -108,13 +109,13 @@ export default function Home() {
                         <button className="mybuttons btn btn-secondary" type="button"
                         onClick={event => {
                           setExtraDetailsOpen(!extraDetailsOpen);
-                          setViewingId(null);
+                          setViewingIds(prevList);
                         }}>
                           Close Details
                         </button>
                         {
                           place.map((location, index) => {
-                            if (viewingId.length === 1 && location.locationId === viewingId[0]) {
+                            if (viewingIds.length === 1 && location.locationId === viewingIds[0]) {
                               return <EachCard location={location} key={index} tab="extradetails" />;
                             } else {
                               return null;
@@ -135,7 +136,12 @@ export default function Home() {
                             if (savedlocation.locationId === location.locationId) {
                               return <EachCard location={location} key={savedlocation.myListItemsId}
                               setPins={pinnedId => {
-                                setViewingId([pinnedId]);
+                                if (viewingIds === null) {
+                                  setViewingIds([pinnedId]);
+                                } else if (!viewingIds.includes(pinnedId)) {
+                                  const newPins = viewingIds.concat([pinnedId]);
+                                  setViewingIds(newPins);
+                                }
                               }}
                               myListItemsId={savedlocation.myListItemsId} tab="list"
                               removeLocation={removeId => {
@@ -155,7 +161,8 @@ export default function Home() {
                               }}
                               viewCard={viewingId => {
                                 setExtraDetailsOpen(!extraDetailsOpen);
-                                setViewingId([viewingId]);
+                                setPrevList(viewingIds);
+                                setViewingIds([viewingId]);
                               }} />;
                             } else return null;
                           })
@@ -167,13 +174,13 @@ export default function Home() {
                         <button className="mybuttons btn btn-secondary" type="button"
                           onClick={event => {
                             setExtraDetailsOpen(!extraDetailsOpen);
-                            setViewingId(null);
+                            setViewingIds(prevList);
                           }}>
                           Close Details
                         </button>
                         {
                           place.map((location, index) => {
-                            if (viewingId.length === 1 && location.locationId === viewingId[0]) {
+                            if (viewingIds.length === 1 && location.locationId === viewingIds[0]) {
                               return <EachCard location={location} key={index} tab="extradetails" />;
                             } else {
                               return null;
@@ -192,7 +199,7 @@ export default function Home() {
             </div>
           </div>
           <div className='full backwhite col-md-6 col-12 botpad'>
-            <MapMarkers place={place} clickedCategory={selectedCategory} viewingId={viewingId} extraDetailsOpen={extraDetailsOpen} />
+            <MapMarkers place={place} clickedCategory={selectedCategory} viewingId={viewingIds} extraDetailsOpen={extraDetailsOpen} />
           </div>
         </div>
       </div>
