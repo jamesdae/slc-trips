@@ -71,7 +71,10 @@ export default function Home() {
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        <DropdownMenu selectedCategory={selectedCategory} onSelect={selectedCategory => setSelectedCategory(selectedCategory)} />
+                        <DropdownMenu selectedCategory={selectedCategory} onSelect={selectedCategory => {
+                          setViewingIds(null);
+                          setSelectedCategory(selectedCategory);
+                        }} />
                         <div className='row row-cols-1 row-cols-md-2 g-4'>
                           <LocationCards place={place} clickedCategory={selectedCategory}
                             viewCard={viewingId => {
