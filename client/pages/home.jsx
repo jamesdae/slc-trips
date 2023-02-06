@@ -61,8 +61,8 @@ export default function Home() {
             <div>
               <nav className='stickytab backwhite'>
                 <div className='nav nav-tabs nav-fill' id='nav-tab' role='tablist'>
-                  <button className='nav-link active' id='nav-places-tab' data-bs-toggle='tab' data-bs-target='#nav-places' type='button' role='tab' aria-controls='nav-places' aria-selected='true'>Places</button>
-                  <button className='nav-link' id='nav-mylist-tab' data-bs-toggle='tab' data-bs-target='#nav-mylist' type='button' role='tab' aria-controls='nav-mylist' aria-selected='false'>My List</button>
+                  <button className='nav-link active' id='nav-places-tab' data-bs-toggle='tab' data-bs-target='#nav-places' type='button' role='tab' aria-controls='nav-places' aria-selected='true' onClick={() => setViewingIds(null)}>Places</button>
+                  <button className='nav-link' id='nav-mylist-tab' data-bs-toggle='tab' data-bs-target='#nav-mylist' type='button' role='tab' aria-controls='nav-mylist' aria-selected='false' onClick={() => setViewingIds(addedLocations.map(location => location.locationId))}>My List</button>
                   <button className='nav-link' id='nav-routes-tab' data-bs-toggle='tab' data-bs-target='#nav-routes' type='button' role='tab' aria-controls='nav-routes' aria-selected='false'>My Routes</button>
                 </div>
               </nav>
@@ -118,7 +118,7 @@ export default function Home() {
                         </button>
                         {
                           place.map((location, index) => {
-                            if (viewingIds.length === 1 && location.locationId === viewingIds[0]) {
+                            if (viewingIds !== null && location.locationId === viewingIds[0]) {
                               return <EachCard location={location} key={index} tab="extradetails" />;
                             } else {
                               return null;
@@ -158,7 +158,9 @@ export default function Home() {
                                   .then(res => res.json())
                                   .then(res => {
                                     const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
+                                    const reducedPins = viewingIds.filter(id => id !== res.locationId);
                                     setAddedLocations(reducedLocations);
+                                    setViewingIds(reducedPins);
                                   })
                                   .catch(err => console.error('Error:', err));
                               }}
@@ -183,7 +185,7 @@ export default function Home() {
                         </button>
                         {
                           place.map((location, index) => {
-                            if (viewingIds.length === 1 && location.locationId === viewingIds[0]) {
+                            if (viewingIds !== null && location.locationId === viewingIds[0]) {
                               return <EachCard location={location} key={index} tab="extradetails" />;
                             } else {
                               return null;

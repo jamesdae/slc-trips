@@ -49,7 +49,7 @@ export default class MapMarkers extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.clickedCategory !== this.props.clickedCategory || (this.props.extraDetailsOpen === false && prevProps.extraDetailsOpen === true && this.props.viewingId === null)) {
+    if (prevProps.clickedCategory !== this.props.clickedCategory || (this.props.extraDetailsOpen === false && prevProps.extraDetailsOpen === true && this.props.viewingId === null) || this.props.viewingId === null) {
       let center;
       if (this.props.clickedCategory !== 'All Categories') {
         const index = this.props.place.findIndex(location => location.category === this.props.clickedCategory);
@@ -95,7 +95,7 @@ export default class MapMarkers extends React.Component {
           });
         }
       });
-    } else if (prevProps.viewingId !== this.props.viewingId) {
+    } else if (this.props.viewingId !== null && prevProps.viewingId !== this.props.viewingId) {
       const index = this.props.place.findIndex(location => location.locationId === this.props.viewingId[0]);
       const center = this.props.place[index].geometry.location;
       // eslint-disable-next-line no-undef
