@@ -62,7 +62,7 @@ export default function Home() {
               <nav className='stickytab backwhite'>
                 <div className='nav nav-tabs nav-fill' id='nav-tab' role='tablist'>
                   <button className='nav-link active' id='nav-places-tab' data-bs-toggle='tab' data-bs-target='#nav-places' type='button' role='tab' aria-controls='nav-places' aria-selected='true' onClick={() => setViewingIds(null)}>Places</button>
-                  <button className='nav-link' id='nav-mylist-tab' data-bs-toggle='tab' data-bs-target='#nav-mylist' type='button' role='tab' aria-controls='nav-mylist' aria-selected='false' onClick={() => setViewingIds(null)}>My List</button>
+                  <button className='nav-link' id='nav-mylist-tab' data-bs-toggle='tab' data-bs-target='#nav-mylist' type='button' role='tab' aria-controls='nav-mylist' aria-selected='false' onClick={() => setViewingIds(addedLocations.map(location => location.locationId))}>My List</button>
                   <button className='nav-link' id='nav-routes-tab' data-bs-toggle='tab' data-bs-target='#nav-routes' type='button' role='tab' aria-controls='nav-routes' aria-selected='false'>My Routes</button>
                 </div>
               </nav>
@@ -160,7 +160,11 @@ export default function Home() {
                                     const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
                                     const reducedPins = viewingIds.filter(id => id !== res.locationId);
                                     setAddedLocations(reducedLocations);
-                                    setViewingIds(reducedPins);
+                                    if (reducedPins[0] === undefined) {
+                                      setViewingIds(null);
+                                    } else {
+                                      setViewingIds(reducedPins);
+                                    }
                                   })
                                   .catch(err => console.error('Error:', err));
                               }}

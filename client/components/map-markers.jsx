@@ -95,7 +95,7 @@ export default class MapMarkers extends React.Component {
           });
         }
       });
-    } else if (this.props.viewingId !== null && prevProps.viewingId !== this.props.viewingId) {
+    } else if (this.props.viewingId !== null && prevProps.viewingId !== this.props.viewingId && this.props.viewingId[0] !== undefined) {
       const index = this.props.place.findIndex(location => location.locationId === this.props.viewingId[0]);
       const center = this.props.place[index].geometry.location;
       // eslint-disable-next-line no-undef
