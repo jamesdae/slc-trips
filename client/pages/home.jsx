@@ -19,9 +19,9 @@ export default function Home() {
 
   const [place, setPlace] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
-  const [addedLocations, setAddedLocations] = useState([]);
+  const [addedLocations, setAddedLocations] = useState(null);
   const [extraDetailsOpen, setExtraDetailsOpen] = useState(false);
-  const [viewingIds, setViewingIds] = useState(null);
+  const [viewingIds, setViewingIds] = useState([]);
   const [prevList, setPrevList] = useState(null);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function Home() {
 
   if (loadError) return 'Error loading maps';
 
-  if (place !== null) {
+  if (place !== null && addedLocations !== null) {
     return (
       <div className='bg-light'>
         <nav className='sticky-top col-md-6 col-12 navbar navbar-expand-lg navbar-light bg-light'>
@@ -61,8 +61,11 @@ export default function Home() {
             <div>
               <nav className='stickytab backwhite'>
                 <div className='nav nav-tabs nav-fill' id='nav-tab' role='tablist'>
-                  <button className='nav-link active' id='nav-places-tab' data-bs-toggle='tab' data-bs-target='#nav-places' type='button' role='tab' aria-controls='nav-places' aria-selected='true' onClick={() => setViewingIds(null)}>Places</button>
-                  <button className='nav-link' id='nav-mylist-tab' data-bs-toggle='tab' data-bs-target='#nav-mylist' type='button' role='tab' aria-controls='nav-mylist' aria-selected='false' onClick={() => setViewingIds(addedLocations.map(location => location.locationId))}>My List</button>
+                  <button className='nav-link active' id='nav-places-tab' data-bs-toggle='tab' data-bs-target='#nav-places' type='button' role='tab' aria-controls='nav-places' aria-selected='true' onClick={() => {
+                    setPrevList(viewingIds);
+                    setViewingIds(null);
+                  }}>Places</button>
+                  <button className='nav-link' id='nav-mylist-tab' data-bs-toggle='tab' data-bs-target='#nav-mylist' type='button' role='tab' aria-controls='nav-mylist' aria-selected='false' onClick={() => setViewingIds(prevList)}>My List</button>
                   <button className='nav-link' id='nav-routes-tab' data-bs-toggle='tab' data-bs-target='#nav-routes' type='button' role='tab' aria-controls='nav-routes' aria-selected='false'>My Routes</button>
                 </div>
               </nav>
@@ -79,7 +82,6 @@ export default function Home() {
                           <LocationCards place={place} clickedCategory={selectedCategory}
                             viewCard={viewingId => {
                               setExtraDetailsOpen(!extraDetailsOpen);
-                              setPrevList(viewingIds);
                               setViewingIds([viewingId]);
                             }}
                             addCard={addedLocationId => {
@@ -112,7 +114,7 @@ export default function Home() {
                         <button className="mybuttons btn btn-secondary" type="button"
                         onClick={event => {
                           setExtraDetailsOpen(!extraDetailsOpen);
-                          setViewingIds(prevList);
+                          setViewingIds(null);
                         }}>
                           Close Details
                         </button>
