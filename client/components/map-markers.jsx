@@ -49,7 +49,7 @@ export default class MapMarkers extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.clickedCategory !== this.props.clickedCategory || (this.props.extraDetailsOpen === false && prevProps.extraDetailsOpen === true && this.props.viewingId === null) || (this.props.viewingId === null && prevProps.viewingId !== [])) { // fix this line
+    if (prevProps.clickedCategory !== this.props.clickedCategory || (this.props.extraDetailsOpen === false && prevProps.extraDetailsOpen === true && this.props.viewingId === null) || this.props.viewingId === null) {
       let center;
       if (this.props.clickedCategory !== 'All Categories') {
         const index = this.props.place.findIndex(location => location.category === this.props.clickedCategory);
@@ -95,9 +95,9 @@ export default class MapMarkers extends React.Component {
           });
         }
       });
-    } else if (this.props.viewingId === null || (prevProps.viewingId !== this.props.viewingId && this.props.viewingId[0] !== undefined)) {
+    } else if (prevProps.viewingId !== this.props.viewingId && this.props.viewingId !== null) {
       let center;
-      if (this.props.viewingId === null) {
+      if (this.props.viewingId === false) {
         center = this.props.place[0].geometry.location;
       } else {
         const index = this.props.place.findIndex(location => location.locationId === this.props.viewingId[0]);
@@ -109,6 +109,7 @@ export default class MapMarkers extends React.Component {
         center,
         mapId: process.env.MAP_ID
       });
+      if (this.props.viewingId === false) return;
       this.props.place.forEach((location, index) => {
         if (this.props.viewingId !== null && this.props.viewingId.length === 1 && location.locationId === this.props.viewingId[0]) {
           const div = document.createElement('div');
@@ -139,8 +140,7 @@ export default class MapMarkers extends React.Component {
             advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
             advancedMarkerView.element.style.zIndex = '';
           });
-        } else if (this.props.viewingId === null || this.props.viewingId.includes(location.locationId)) {
-          if (this.props.viewingId === null) return;
+        } else if (this.props.viewingId.includes(location.locationId)) {
           const div = document.createElement('div');
           div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
           const root = ReactDOM.createRoot(div);
