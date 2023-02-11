@@ -141,50 +141,76 @@ export default function Home() {
                 <div className='tab-pane fade' id='nav-mylist' role='tabpanel' aria-labelledby='nav-mylist-tab'>
                   {extraDetailsOpen === false
                     ? (
-                      <div className='row row-cols-1 row-cols-md-2 g-4'>
+                      <div>
                         {
-                          place.map((location, index) => {
-                            const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
-                            if (savedlocation === undefined) return null;
-                            if (savedlocation.locationId === location.locationId) {
-                              return <EachCard location={location} key={savedlocation.myListItemsId}
-                              setPins={pinnedId => {
-                                if (viewingIds === false) {
-                                  setViewingIds([pinnedId]);
-                                } else if (!viewingIds.includes(pinnedId)) {
-                                  const newPins = viewingIds.concat([pinnedId]);
-                                  setViewingIds(newPins);
-                                }
-                              }}
-                              myListItemsId={savedlocation.myListItemsId} tab="list"
-                              removeLocation={removeId => {
-                                fetch(`/api/mylist/${removeId}`, {
-                                  method: 'DELETE',
-                                  headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1NDgwODUyfQ.cI392GWQY4sTdUgt3g1pSlI9Wlr-qZQzNeChLs_FEkc'
-                                  }
-                                })
-                                  .then(res => res.json())
-                                  .then(res => {
-                                    const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
-                                    const reducedPins = viewingIds.filter(id => id !== res.locationId);
-                                    setAddedLocations(reducedLocations);
-                                    if (reducedPins[0] === undefined) {
-                                      setViewingIds(false);
-                                    } else {
-                                      setViewingIds(reducedPins);
-                                    }
+                          addedLocations.length > 0
+                            ? (
+                              <div className='row row-cols-1 row-cols-md-2 g-4'>
+                                {
+                                  place.map((location, index) => {
+                                    const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
+                                    if (savedlocation === undefined) return null;
+                                    if (savedlocation.locationId === location.locationId) {
+                                      return <EachCard location={location} key={savedlocation.myListItemsId}
+                                      setPins={pinnedId => {
+                                        if (viewingIds === false) {
+                                          setViewingIds([pinnedId]);
+                                        } else if (!viewingIds.includes(pinnedId)) {
+                                          const newPins = viewingIds.concat([pinnedId]);
+                                          setViewingIds(newPins);
+                                        }
+                                      }}
+                                      myListItemsId={savedlocation.myListItemsId} tab="list"
+                                      removeLocation={removeId => {
+                                        fetch(`/api/mylist/${removeId}`, {
+                                          method: 'DELETE',
+                                          headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1NDgwODUyfQ.cI392GWQY4sTdUgt3g1pSlI9Wlr-qZQzNeChLs_FEkc'
+                                          }
+                                        })
+                                          .then(res => res.json())
+                                          .then(res => {
+                                            const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
+                                            setAddedLocations(reducedLocations);
+                                            if (reducedLocations[0] === undefined) {
+                                              setViewingIds(false);
+                                            } else {
+                                              if (viewingIds === false) return;
+                                              const reducedPins = viewingIds.filter(id => id !== res.locationId);
+                                              setViewingIds(reducedPins);
+                                            }
+                                          })
+                                          .catch(err => console.error('Error:', err));
+                                      }}
+                                      viewCard={viewingId => {
+                                        setExtraDetailsOpen(!extraDetailsOpen);
+                                        setPrevList(viewingIds);
+                                        setViewingIds([viewingId]);
+                                      }} />;
+                                    } else return null;
                                   })
-                                  .catch(err => console.error('Error:', err));
-                              }}
-                              viewCard={viewingId => {
-                                setExtraDetailsOpen(!extraDetailsOpen);
-                                setPrevList(viewingIds);
-                                setViewingIds([viewingId]);
-                              }} />;
-                            } else return null;
-                          })
+                                  }
+                                <span><div className="alert alert-warning alert-dismissible fade show d-flex justify-content-between" role="alert">
+                                  <p>
+                                    <strong>Tip!</strong> Press{' '}
+                                    <button className="mybuttons btn btn-success" type="button">
+                                      Pin
+                                    </button>{' '}
+                                    to start a new route on the map!
+                                  </p>
+                                  <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
+                                </div></span>
+                              </div>
+                              )
+                            : (
+                              <div className="alert alert-primary" role="alert">
+                                <h4 className="alert-heading">No locations added yet.</h4>
+                                <p className='py-2'>Click Places above, and press <button className="mybuttons btn btn-success" type="button" >Add</button> to see locations here.</p>
+                                <hr />
+                                <p className="mb-0">Sign in <a href="#" className="alert-link">here</a> to save your changes!</p>
+                              </div>
+                              )
                         }
                       </div>
                       )
