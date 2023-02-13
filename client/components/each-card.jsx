@@ -2,6 +2,7 @@ import React from 'react';
 import Carousel from './photoCarousel';
 
 export default function EachCard(props) {
+
   return (
     <div className='col'>
       <div className='card m-2'>
@@ -31,9 +32,9 @@ export default function EachCard(props) {
                     {props.tab === 'list'
                       ? (
                         <div className='d-flex'>
-                          <i type="button" className='grey align-self-center fa-solid fa-circle-minus pointer' data-bs-toggle="modal" data-bs-target="#exampleModalCenter" />
+                          <i type="button" className='grey align-self-center fa-solid fa-circle-minus pointer' data-bs-toggle="modal" data-bs-target={`#exampleModalCenter-${props.location.locationId}`} />
 
-                          <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                          <div className="modal fade" id={`exampleModalCenter-${props.location.locationId}`} tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                             <div className="modal-dialog modal-dialog-centered" role="document">
                               <div className="modal-content">
                                 <div className="modal-header">
@@ -41,7 +42,7 @@ export default function EachCard(props) {
                                   <i aria-hidden="true" type="button" className="close fa-solid fa-xmark" data-bs-dismiss="modal" aria-label="Close"/>
                                 </div>
                                 <div className="modal-body">
-                                  <p>Remove from list?</p>
+                                  <p>Remove {props.location.name} from list?</p>
                                 </div>
                                 <div className="modal-footer">
                                   <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -56,7 +57,9 @@ export default function EachCard(props) {
                     <button className="mybuttons btn btn-primary" type="button" onClick={() => props.viewCard(props.location.locationId)}>Info</button>
                     {props.tab === 'list'
                       ? (
-                        <button className="mybuttons btn btn-success" type="button">Pin</button>
+                        <button className="mybuttons btn btn-success" type="button" onClick={() => {
+                          props.setPins(props.location.locationId);
+                        }}>Pin</button>
                         )
                       : (
                         <button className="mybuttons btn btn-success" type="button" onClick={() => props.addCard(props.location.locationId)}>Add</button>

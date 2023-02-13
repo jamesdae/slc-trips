@@ -19,9 +19,10 @@ export default function Home() {
 
   const [place, setPlace] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
-  const [addedLocations, setAddedLocations] = useState([]);
+  const [addedLocations, setAddedLocations] = useState(null);
   const [extraDetailsOpen, setExtraDetailsOpen] = useState(false);
-  const [viewingId, setViewingId] = useState(null);
+  const [viewingIds, setViewingIds] = useState(null);
+  const [prevList, setPrevList] = useState(null);
 
   useEffect(() => {
     if (isLoaded && place === null) {
@@ -49,7 +50,7 @@ export default function Home() {
 
   if (loadError) return 'Error loading maps';
 
-  if (place !== null) {
+  if (place !== null && addedLocations !== null) {
     return (
       <div className='bg-light'>
         <nav className='sticky-top col-md-6 col-12 navbar navbar-expand-lg navbar-light bg-light'>
@@ -60,8 +61,19 @@ export default function Home() {
             <div>
               <nav className='stickytab backwhite'>
                 <div className='nav nav-tabs nav-fill' id='nav-tab' role='tablist'>
-                  <button className='nav-link active' id='nav-places-tab' data-bs-toggle='tab' data-bs-target='#nav-places' type='button' role='tab' aria-controls='nav-places' aria-selected='true'>Places</button>
-                  <button className='nav-link' id='nav-mylist-tab' data-bs-toggle='tab' data-bs-target='#nav-mylist' type='button' role='tab' aria-controls='nav-mylist' aria-selected='false'>My List</button>
+                  <button className='nav-link active' id='nav-places-tab' data-bs-toggle='tab' data-bs-target='#nav-places' type='button' role='tab' aria-controls='nav-places' aria-selected='true' onClick={() => {
+                    if (viewingIds !== null) {
+                      setPrevList(viewingIds);
+                    }
+                    setViewingIds(null);
+                  }}>Places</button>
+                  <button className='nav-link' id='nav-mylist-tab' data-bs-toggle='tab' data-bs-target='#nav-mylist' type='button' role='tab' aria-controls='nav-mylist' aria-selected='false' onClick={() => {
+                    if (prevList !== null) {
+                      setViewingIds(prevList);
+                    } else {
+                      setViewingIds(false);
+                    }
+                  }}>My List</button>
                   <button className='nav-link' id='nav-routes-tab' data-bs-toggle='tab' data-bs-target='#nav-routes' type='button' role='tab' aria-controls='nav-routes' aria-selected='false'>My Routes</button>
                 </div>
               </nav>
@@ -70,12 +82,15 @@ export default function Home() {
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        <DropdownMenu selectedCategory={selectedCategory} onSelect={selectedCategory => setSelectedCategory(selectedCategory)} />
+                        <DropdownMenu selectedCategory={selectedCategory} onSelect={selectedCategory => {
+                          setViewingIds(null);
+                          setSelectedCategory(selectedCategory);
+                        }} />
                         <div className='row row-cols-1 row-cols-md-2 g-4'>
                           <LocationCards place={place} clickedCategory={selectedCategory}
                             viewCard={viewingId => {
                               setExtraDetailsOpen(!extraDetailsOpen);
-                              setViewingId(viewingId);
+                              setViewingIds([viewingId]);
                             }}
                             addCard={addedLocationId => {
                               const existenceCheck = addedLocations.find(savedlocation => savedlocation.locationId === addedLocationId);
@@ -107,13 +122,13 @@ export default function Home() {
                         <button className="mybuttons btn btn-secondary" type="button"
                         onClick={event => {
                           setExtraDetailsOpen(!extraDetailsOpen);
-                          setViewingId(null);
+                          setViewingIds(null);
                         }}>
                           Close Details
                         </button>
                         {
                           place.map((location, index) => {
-                            if (location.locationId === viewingId) {
+                            if (viewingIds !== null && location.locationId === viewingIds[0]) {
                               return <EachCard location={location} key={index} tab="extradetails" />;
                             } else {
                               return null;
@@ -126,33 +141,76 @@ export default function Home() {
                 <div className='tab-pane fade' id='nav-mylist' role='tabpanel' aria-labelledby='nav-mylist-tab'>
                   {extraDetailsOpen === false
                     ? (
-                      <div className='row row-cols-1 row-cols-md-2 g-4'>
+                      <div>
                         {
-                          place.map((location, index) => {
-                            const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
-                            if (savedlocation === undefined) return null;
-                            if (savedlocation.locationId === location.locationId) {
-                              return <EachCard location={location} key={savedlocation.myListItemsId} myListItemsId={savedlocation.myListItemsId} tab="list" removeLocation={removeId => {
-                                fetch(`/api/mylist/${removeId}`, {
-                                  method: 'DELETE',
-                                  headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1NDgwODUyfQ.cI392GWQY4sTdUgt3g1pSlI9Wlr-qZQzNeChLs_FEkc'
-                                  }
-                                })
-                                  .then(res => res.json())
-                                  .then(res => {
-                                    const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
-                                    setAddedLocations(reducedLocations);
+                          addedLocations.length > 0
+                            ? (
+                              <div className='row row-cols-1 row-cols-md-2 g-4'>
+                                {
+                                  place.map((location, index) => {
+                                    const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
+                                    if (savedlocation === undefined) return null;
+                                    if (savedlocation.locationId === location.locationId) {
+                                      return <EachCard location={location} key={savedlocation.myListItemsId}
+                                      setPins={pinnedId => {
+                                        if (viewingIds === false) {
+                                          setViewingIds([pinnedId]);
+                                        } else if (!viewingIds.includes(pinnedId)) {
+                                          const newPins = viewingIds.concat([pinnedId]);
+                                          setViewingIds(newPins);
+                                        }
+                                      }}
+                                      myListItemsId={savedlocation.myListItemsId} tab="list"
+                                      removeLocation={removeId => {
+                                        fetch(`/api/mylist/${removeId}`, {
+                                          method: 'DELETE',
+                                          headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1NDgwODUyfQ.cI392GWQY4sTdUgt3g1pSlI9Wlr-qZQzNeChLs_FEkc'
+                                          }
+                                        })
+                                          .then(res => res.json())
+                                          .then(res => {
+                                            const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
+                                            setAddedLocations(reducedLocations);
+                                            if (reducedLocations[0] === undefined) {
+                                              setViewingIds(false);
+                                            } else {
+                                              if (viewingIds === false) return;
+                                              const reducedPins = viewingIds.filter(id => id !== res.locationId);
+                                              setViewingIds(reducedPins);
+                                            }
+                                          })
+                                          .catch(err => console.error('Error:', err));
+                                      }}
+                                      viewCard={viewingId => {
+                                        setExtraDetailsOpen(!extraDetailsOpen);
+                                        setPrevList(viewingIds);
+                                        setViewingIds([viewingId]);
+                                      }} />;
+                                    } else return null;
                                   })
-                                  .catch(err => console.error('Error:', err));
-                              }}
-                              viewCard={viewingId => {
-                                setExtraDetailsOpen(!extraDetailsOpen);
-                                setViewingId(viewingId);
-                              }} />;
-                            } else return null;
-                          })
+                                  }
+                                <span><div className="alert alert-warning alert-dismissible fade show d-flex justify-content-between" role="alert">
+                                  <p>
+                                    <strong>Tip!</strong> Press{' '}
+                                    <button className="mybuttons btn btn-success" type="button">
+                                      Pin
+                                    </button>{' '}
+                                    to start a new route on the map!
+                                  </p>
+                                  <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
+                                </div></span>
+                              </div>
+                              )
+                            : (
+                              <div className="alert alert-primary" role="alert">
+                                <h4 className="alert-heading">No locations added yet.</h4>
+                                <p className='py-2'>Click Places above, and press <button className="mybuttons btn btn-success" type="button" >Add</button> to see locations here.</p>
+                                <hr />
+                                <p className="mb-0">Sign in <a href="#" className="alert-link">here</a> to save your changes!</p>
+                              </div>
+                              )
                         }
                       </div>
                       )
@@ -161,13 +219,13 @@ export default function Home() {
                         <button className="mybuttons btn btn-secondary" type="button"
                           onClick={event => {
                             setExtraDetailsOpen(!extraDetailsOpen);
-                            setViewingId(null);
+                            setViewingIds(prevList);
                           }}>
                           Close Details
                         </button>
                         {
                           place.map((location, index) => {
-                            if (location.locationId === viewingId) {
+                            if (viewingIds !== null && location.locationId === viewingIds[0]) {
                               return <EachCard location={location} key={index} tab="extradetails" />;
                             } else {
                               return null;
@@ -186,7 +244,7 @@ export default function Home() {
             </div>
           </div>
           <div className='full backwhite col-md-6 col-12 botpad'>
-            <MapMarkers place={place} clickedCategory={selectedCategory} viewingId={viewingId} extraDetailsOpen={extraDetailsOpen} />
+            <MapMarkers place={place} clickedCategory={selectedCategory} viewingId={viewingIds} extraDetailsOpen={extraDetailsOpen} />
           </div>
         </div>
       </div>
