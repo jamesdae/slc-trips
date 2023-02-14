@@ -140,35 +140,43 @@ export default class MapMarkers extends React.Component {
             advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
             advancedMarkerView.element.style.zIndex = '';
           });
-        } else if (this.props.viewingId.includes(location.locationId)) {
-          const div = document.createElement('div');
-          div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
-          const root = ReactDOM.createRoot(div);
-          root.render(getIconsAndDetails(location));
-          // eslint-disable-next-line no-undef
-          const advancedMarkerView = new google.maps.marker.AdvancedMarkerView({
-            map,
-            content: div,
-            position: location.geometry.location,
-            title: location.name
-          });
-          const element = advancedMarkerView.element;
-          element.addEventListener('mouseenter', () => {
-            advancedMarkerView.content.classList.add('highlight', 'hiddenbox');
-            advancedMarkerView.element.style.zIndex = 1;
-          });
+        }
+      });
 
-          element.addEventListener('mouseleave', () => {
-            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
-            advancedMarkerView.element.style.zIndex = '';
-            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
-            advancedMarkerView.element.style.zIndex = '';
-          });
+      if (this.props.viewingId.length < 2) return;
 
-          advancedMarkerView.addListener('click', event => {
-            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
-            advancedMarkerView.element.style.zIndex = '';
-          });
+      const mappedIds = [];
+      this.props.viewingId.forEach(id => {
+        mappedIds.push(this.props.place.find(location => location.locationId === id));
+      });
+
+      // eslint-disable-next-line no-undef
+      const directionsDisplay = new google.maps.DirectionsRenderer();
+      // eslint-disable-next-line no-undef
+      const directionsService = new google.maps.DirectionsService();
+      directionsDisplay.setMap(map);
+
+      const start = mappedIds[0].geometry.location;
+      const end = mappedIds[mappedIds.length - 1].geometry.location;
+
+      // eslint-disable-next-line no-console
+      console.log(mappedIds);
+
+      const request = {
+        origin: start,
+        waypoints: mappedIds.slice(1, mappedIds.length - 1).map(location => {
+          return { location: location.geometry.location };
+        }),
+        destination: end,
+        travelMode: 'DRIVING'
+      };
+
+      directionsService.route(request, (result, status) => {
+        if (status === 'OK') {
+          directionsDisplay.setDirections(result);
+          directionsDisplay.setPanel(document.getElementById('panel'));
+          // eslint-disable-next-line no-console
+          console.log(result);
         }
       });
     }

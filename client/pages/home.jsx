@@ -6,7 +6,6 @@ import LocationCards from '../components/location-cards';
 import DropdownMenu from '../components/dropdown-menu';
 import EachCard from '../components/each-card';
 import Libraries from '../components/apilibraries';
-import MyList from '../components/my-list';
 import MapMarkers from '../components/map-markers';
 import { fetchPlaces } from '../lib';
 
@@ -35,7 +34,7 @@ export default function Home() {
       const myInit = {
         method: 'GET',
         headers: {
-          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1NDgwODUyfQ.cI392GWQY4sTdUgt3g1pSlI9Wlr-qZQzNeChLs_FEkc'
+          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2MzUwNTQwfQ.-7s7i9P8n3luohxsiRM8sgszdv8wpxo6jY-VBQ7ohz8'
         }
       };
       fetch('/api/mylist', myInit)
@@ -74,7 +73,11 @@ export default function Home() {
                       setViewingIds(false);
                     }
                   }}>My List</button>
-                  <button className='nav-link' id='nav-routes-tab' data-bs-toggle='tab' data-bs-target='#nav-routes' type='button' role='tab' aria-controls='nav-routes' aria-selected='false'>My Routes</button>
+                  <button className='nav-link' id='nav-routes-tab' data-bs-toggle='tab' data-bs-target='#nav-routes' type='button' role='tab' aria-controls='nav-routes' aria-selected='false' onClick={() => {
+                    if (viewingIds !== null) {
+                      setPrevList(viewingIds);
+                    }
+                  }}>My Routes</button>
                 </div>
               </nav>
               <div className='tab-content white p-2' id='nav-tabContent'>
@@ -101,7 +104,7 @@ export default function Home() {
                                   method: 'POST',
                                   headers: {
                                     'Content-Type': 'application/json',
-                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1NDgwODUyfQ.cI392GWQY4sTdUgt3g1pSlI9Wlr-qZQzNeChLs_FEkc'
+                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2MzUwNTQwfQ.-7s7i9P8n3luohxsiRM8sgszdv8wpxo6jY-VBQ7ohz8'
                                   },
                                   body: JSON.stringify({ locationId: addedLocationId })
                                 };
@@ -166,7 +169,7 @@ export default function Home() {
                                           method: 'DELETE',
                                           headers: {
                                             'Content-Type': 'application/json',
-                                            'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1NDgwODUyfQ.cI392GWQY4sTdUgt3g1pSlI9Wlr-qZQzNeChLs_FEkc'
+                                            'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2MzUwNTQwfQ.-7s7i9P8n3luohxsiRM8sgszdv8wpxo6jY-VBQ7ohz8'
                                           }
                                         })
                                           .then(res => res.json())
@@ -237,7 +240,7 @@ export default function Home() {
                 </div>
                 <div className='tab-pane fade' id='nav-routes' role='tabpanel' aria-labelledby='nav-routes-tab'>
                   <div>
-                    <MyList place={place} />
+                    <div id='panel' />
                   </div>
                 </div>
               </div>
