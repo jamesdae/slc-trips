@@ -174,9 +174,11 @@ export default class MapMarkers extends React.Component {
       directionsService.route(request, (result, status) => {
         if (status === 'OK') {
           directionsDisplay.setDirections(result);
-          directionsDisplay.setPanel(document.getElementById('panel'));
           // eslint-disable-next-line no-console
           console.log(result);
+        }
+        if (this.props.directionsOpen === true) {
+          directionsDisplay.setPanel(document.getElementById('panel'));
         }
       });
     }

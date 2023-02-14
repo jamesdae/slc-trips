@@ -22,6 +22,7 @@ export default function Home() {
   const [extraDetailsOpen, setExtraDetailsOpen] = useState(false);
   const [viewingIds, setViewingIds] = useState(null);
   const [prevList, setPrevList] = useState(null);
+  const [directionsOpen, setDirectionsOpen] = useState(null);
 
   useEffect(() => {
     if (isLoaded && place === null) {
@@ -146,6 +147,32 @@ export default function Home() {
                     ? (
                       <div>
                         {
+                          viewingIds !== null && viewingIds.length > 1
+                            ? (
+                              <div>
+                                <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" onClick={() => setDirectionsOpen(true)}>Route Details</button>
+                                <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                  <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                    <div className="modal-content">
+                                      <div className="modal-header">
+                                        <h5 className="modal-title" id="exampleModalLabel">Directions</h5>
+                                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                                      </div>
+
+                                      <div className="modal-body" id='panel' />
+
+                                      <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" className="btn btn-primary">Save changes</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              )
+                            : null
+                        }
+                        {
                           addedLocations.length > 0
                             ? (
                               <div className='row row-cols-1 row-cols-md-2 g-4'>
@@ -240,14 +267,14 @@ export default function Home() {
                 </div>
                 <div className='tab-pane fade' id='nav-routes' role='tabpanel' aria-labelledby='nav-routes-tab'>
                   <div>
-                    <div id='panel' />
+                    {/* <div id='panel' /> */}
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div className='full backwhite col-md-6 col-12 botpad'>
-            <MapMarkers place={place} clickedCategory={selectedCategory} viewingId={viewingIds} extraDetailsOpen={extraDetailsOpen} />
+            <MapMarkers place={place} clickedCategory={selectedCategory} viewingId={viewingIds} extraDetailsOpen={extraDetailsOpen} directionsOpen={directionsOpen} />
           </div>
         </div>
       </div>
