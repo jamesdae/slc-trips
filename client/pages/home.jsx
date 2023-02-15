@@ -218,12 +218,15 @@ export default function Home() {
                                               myListLocations.push(place.find(location => location.locationId === id));
                                             });
                                             setMappedIds(myListLocations);
-                                            if (reducedLocations[0] === undefined) {
+                                            if (viewingIds === false) return;
+                                            const reducedPins = viewingIds.filter(id => id !== res.locationId);
+                                            if (reducedPins[0] === undefined) {
                                               setViewingIds(false);
                                             } else {
-                                              if (viewingIds === false) return;
-                                              const reducedPins = viewingIds.filter(id => id !== res.locationId);
                                               setViewingIds(reducedPins);
+                                            }
+                                            if (reducedLocations[0] === undefined) {
+                                              setViewingIds(false);
                                             }
                                           })
                                           .catch(err => console.error('Error:', err));
