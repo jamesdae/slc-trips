@@ -180,10 +180,32 @@ export default class MapMarkers extends React.Component {
           result.routes.forEach((route, index) => {
             // eslint-disable-next-line no-undef
             const line = new google.maps.Polyline({
-              path: result.routes[index].overview_path,
+              path: route.overview_path,
               strokeColor: '#595f65',
               strokeOpacity: 0.6,
-              strokeWeight: 3
+              strokeWeight: 3,
+              clickable: true
+            });
+            // eslint-disable-next-line no-undef
+            const infowindow = new google.maps.InfoWindow({
+              ariaLabel: 'duration',
+              zIndex: 100
+            });
+            infowindow.setContent(route.legs[0].duration.text);
+            // eslint-disable-next-line no-undef
+            const advancedMarkerView = new google.maps.marker.AdvancedMarkerView({
+              map,
+              position: route.legs[0].end_location
+            });
+            line.addListener('click', event => {
+              infowindow.open(map, advancedMarkerView);
+            });
+
+            line.addListener('click', event => {
+              const routeList = document.querySelectorAll('[jsaction="directionsRouteList.selectRoute"]');
+              if (index < routeList.length) {
+                routeList[index].click();
+              }
             });
             line.setMap(map);
           });

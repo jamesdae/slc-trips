@@ -17,8 +17,8 @@ export default function DirectionsModal({ viewingIds, clearPins }) {
                 More Options
               </button>
               <ul className="dropdown-menu">
-                <li><a className="dropdown-item" href="#">Save Route</a></li>
-                <li><a className="dropdown-item" href="#" onClick={() => clearPins()}>Clear Pins</a></li>
+                <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close">Save Route</a></li>
+                <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => clearPins()}>Clear Pins</a></li>
               </ul>
             </div>
           </div>
