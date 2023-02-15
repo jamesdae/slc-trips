@@ -3,7 +3,7 @@ import React from 'react';
 export default function DirectionsModal({ viewingIds }) {
   if (viewingIds !== null && viewingIds.length > 1) {
     return (
-      <div>
+      <div className='px-2'>
         <button className="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">Route Details</button>
         <div className="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabIndex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasExampleLabel">
           <div className="offcanvas-header">

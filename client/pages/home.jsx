@@ -60,7 +60,7 @@ export default function Home() {
   if (place !== null && addedLocations !== null) {
     return (
       <div className='bg-light'>
-        <nav className='sticky-top col-md-6 col-12 navbar navbar-expand-lg navbar-light bg-light'>
+        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-lg navbar-light bg-light'>
           <h1 className='mx-2 blue heading'>SLCTrips</h1>
         </nav>
         <div className='d-flex flex-wrap flex-column-reverse'>
