@@ -6,7 +6,6 @@ import LocationCards from '../components/location-cards';
 import DropdownMenu from '../components/dropdown-menu';
 import EachCard from '../components/each-card';
 import Libraries from '../components/apilibraries';
-import MyList from '../components/my-list';
 import MapMarkers from '../components/map-markers';
 import { fetchPlaces } from '../lib';
 
@@ -23,6 +22,7 @@ export default function Home() {
   const [extraDetailsOpen, setExtraDetailsOpen] = useState(false);
   const [viewingIds, setViewingIds] = useState(null);
   const [prevList, setPrevList] = useState(null);
+  const [mappedIds, setMappedIds] = useState(null);
 
   useEffect(() => {
     if (isLoaded && place === null) {
@@ -35,14 +35,20 @@ export default function Home() {
       const myInit = {
         method: 'GET',
         headers: {
-          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1NDgwODUyfQ.cI392GWQY4sTdUgt3g1pSlI9Wlr-qZQzNeChLs_FEkc'
+          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2MzUwNTQwfQ.-7s7i9P8n3luohxsiRM8sgszdv8wpxo6jY-VBQ7ohz8'
         }
       };
       fetch('/api/mylist', myInit)
         .then(res => res.json())
         .then(res => {
           const myList = res.map(obj => obj);
+          const addedLocationIds = res.map(obj => obj.locationId);
           setAddedLocations(myList);
+          const myListLocations = [];
+          addedLocationIds.forEach(id => {
+            myListLocations.push(place.find(location => location.locationId === id));
+          });
+          setMappedIds(myListLocations);
         })
         .catch(err => console.error('Error:', err));
     }
@@ -74,7 +80,11 @@ export default function Home() {
                       setViewingIds(false);
                     }
                   }}>My List</button>
-                  <button className='nav-link' id='nav-routes-tab' data-bs-toggle='tab' data-bs-target='#nav-routes' type='button' role='tab' aria-controls='nav-routes' aria-selected='false'>My Routes</button>
+                  <button className='nav-link' id='nav-routes-tab' data-bs-toggle='tab' data-bs-target='#nav-routes' type='button' role='tab' aria-controls='nav-routes' aria-selected='false' onClick={() => {
+                    if (viewingIds !== null) {
+                      setPrevList(viewingIds);
+                    }
+                  }}>My Routes</button>
                 </div>
               </nav>
               <div className='tab-content white p-2' id='nav-tabContent'>
@@ -101,7 +111,7 @@ export default function Home() {
                                   method: 'POST',
                                   headers: {
                                     'Content-Type': 'application/json',
-                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1NDgwODUyfQ.cI392GWQY4sTdUgt3g1pSlI9Wlr-qZQzNeChLs_FEkc'
+                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2MzUwNTQwfQ.-7s7i9P8n3luohxsiRM8sgszdv8wpxo6jY-VBQ7ohz8'
                                   },
                                   body: JSON.stringify({ locationId: addedLocationId })
                                 };
@@ -110,6 +120,12 @@ export default function Home() {
                                   .then(newLocation => {
                                     const newLocations = addedLocations.concat([newLocation]);
                                     setAddedLocations(newLocations);
+                                    const addedLocationIds = newLocations.map(obj => obj.locationId);
+                                    const myListLocations = [];
+                                    addedLocationIds.forEach(id => {
+                                      myListLocations.push(place.find(location => location.locationId === id));
+                                    });
+                                    setMappedIds(myListLocations);
                                   })
                                   .catch(err => console.error('Error:', err));
                               }
@@ -143,13 +159,36 @@ export default function Home() {
                     ? (
                       <div>
                         {
+                          viewingIds !== null && viewingIds.length > 1
+                            ? (
+                              <div>
+                                <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#directionsModal" data-bs-whatever="directions">Route Details</button>
+                                <div className="modal fade" id="directionsModal" tabIndex="-1" aria-labelledby="directionsModalLabel" aria-hidden="true">
+                                  <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                    <div className="modal-content">
+                                      <div className="modal-header">
+                                        <h5 className="modal-title" id="directionsModalLabel">Directions</h5>
+                                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                                      </div>
+                                      <div className="modal-body" id='panel' />
+                                      <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" className="btn btn-primary">Save changes</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              )
+                            : null
+                        }
+                        {
                           addedLocations.length > 0
                             ? (
                               <div className='row row-cols-1 row-cols-md-2 g-4'>
                                 {
-                                  place.map((location, index) => {
+                                  mappedIds.map((location, index) => {
                                     const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
-                                    if (savedlocation === undefined) return null;
                                     if (savedlocation.locationId === location.locationId) {
                                       return <EachCard location={location} key={savedlocation.myListItemsId}
                                       setPins={pinnedId => {
@@ -166,19 +205,28 @@ export default function Home() {
                                           method: 'DELETE',
                                           headers: {
                                             'Content-Type': 'application/json',
-                                            'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc1NDgwODUyfQ.cI392GWQY4sTdUgt3g1pSlI9Wlr-qZQzNeChLs_FEkc'
+                                            'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2MzUwNTQwfQ.-7s7i9P8n3luohxsiRM8sgszdv8wpxo6jY-VBQ7ohz8'
                                           }
                                         })
                                           .then(res => res.json())
                                           .then(res => {
                                             const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
                                             setAddedLocations(reducedLocations);
-                                            if (reducedLocations[0] === undefined) {
+                                            const addedLocationIds = reducedLocations.map(obj => obj.locationId);
+                                            const myListLocations = [];
+                                            addedLocationIds.forEach(id => {
+                                              myListLocations.push(place.find(location => location.locationId === id));
+                                            });
+                                            setMappedIds(myListLocations);
+                                            if (viewingIds === false) return;
+                                            const reducedPins = viewingIds.filter(id => id !== res.locationId);
+                                            if (reducedPins[0] === undefined) {
                                               setViewingIds(false);
                                             } else {
-                                              if (viewingIds === false) return;
-                                              const reducedPins = viewingIds.filter(id => id !== res.locationId);
                                               setViewingIds(reducedPins);
+                                            }
+                                            if (reducedLocations[0] === undefined) {
+                                              setViewingIds(false);
                                             }
                                           })
                                           .catch(err => console.error('Error:', err));
@@ -236,15 +284,13 @@ export default function Home() {
                       )}
                 </div>
                 <div className='tab-pane fade' id='nav-routes' role='tabpanel' aria-labelledby='nav-routes-tab'>
-                  <div>
-                    <MyList place={place} />
-                  </div>
+                  <div/>
                 </div>
               </div>
             </div>
           </div>
           <div className='full backwhite col-md-6 col-12 botpad'>
-            <MapMarkers place={place} clickedCategory={selectedCategory} viewingId={viewingIds} extraDetailsOpen={extraDetailsOpen} />
+            <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} />
           </div>
         </div>
       </div>

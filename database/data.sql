@@ -1,18 +1,10 @@
 insert into "locations" ("name", "placeId", "category")
 values ('Antelope Island State Park', 'ChIJ6bQ5YpQbU4cRCw2g6VuOcUY', 'Parks'),
        ('Park City Mountain', 'ChIJ3-VdWJxyUocRr-MVIgU4Sfs', 'Snow Activities'),
-       ('Snowbird Tram', 'ChIJdb0RxYVwUocReUOoaNI9tNQ', 'Snow Activities'),
        ('Soldier Hollow Nordic Center', 'ChIJXb7C0sGKTYcRHkzCG9NCLlI', 'Snow Activities'),
-       ('Bear Lake State Park', 'ChIJT9xTaOwTVIcRIO57mKinRcQ', 'Parks'),
-       ('Buffalo Peak', 'ChIJW26BygCRTYcRPFZ29PAraGo', 'Viewpoints'),
        ('Bear River Migratory Bird Refuge', 'ChIJ3Uf0iqNdU4cR7QByfoD50QE', 'Viewpoints'),
-       ('Lake Blanche Trailhead', 'ChIJ5wiatOdkUocRNQ3Pf7IpklE', 'Hiking'),
        ('Causey Reservoir', 'ChIJpdQSKNS7U4cRfFlK2NBxkjI', 'Water Activities'),
-       ('Cascade Springs', 'ChIJnSuZDzeKTYcRcrchzZKhSm0', 'Parks'),
        ('Utah Lake State Park', 'ChIJ3_927sGbTYcRPkn3UMYjQws', 'Parks'),
        ('Ensign Peak Trailhead', 'ChIJt-EimLj1UocRVT07VEBe6hQ', 'Hiking'),
-       ('Powder Mountain', 'ChIJhZdzk1yfU4cRJqu8U9Y8ROw', 'Snow Activities'),
        ('Ashton Gardens', 'ChIJO6vYLSeAUocR1xNrMLgFNMc', 'Viewpoints'),
-       ('Pineview Reservoir', 'ChIJiQsytt-mU4cRozcb7tRnJUc', 'Water Activities'),
-       ('Red Pine Lake', 'ChIJIbmdBCF6UocRJJ8FveMPVgw', 'Water Activities'),
        ('Cecret Lake Trail', 'ChIJDTus3i9xUocRzTi75vZcumQ', 'Hiking')

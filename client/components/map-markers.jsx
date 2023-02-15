@@ -49,7 +49,7 @@ export default class MapMarkers extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.clickedCategory !== this.props.clickedCategory || (this.props.extraDetailsOpen === false && prevProps.extraDetailsOpen === true && this.props.viewingId === null) || this.props.viewingId === null) {
+    if (prevProps.clickedCategory !== this.props.clickedCategory || (this.props.extraDetailsOpen === false && prevProps.extraDetailsOpen === true && this.props.viewingIds === null) || this.props.viewingIds === null) {
       let center;
       if (this.props.clickedCategory !== 'All Categories') {
         const index = this.props.place.findIndex(location => location.category === this.props.clickedCategory);
@@ -95,12 +95,12 @@ export default class MapMarkers extends React.Component {
           });
         }
       });
-    } else if (prevProps.viewingId !== this.props.viewingId && this.props.viewingId !== null) {
+    } else if (prevProps.viewingIds !== this.props.viewingIds && this.props.viewingIds !== null) {
       let center;
-      if (this.props.viewingId === false) {
+      if (this.props.viewingIds === false) {
         center = this.props.place[0].geometry.location;
       } else {
-        const index = this.props.place.findIndex(location => location.locationId === this.props.viewingId[0]);
+        const index = this.props.place.findIndex(location => location.locationId === this.props.viewingIds[0]);
         center = this.props.place[index].geometry.location;
       }
       // eslint-disable-next-line no-undef
@@ -109,9 +109,9 @@ export default class MapMarkers extends React.Component {
         center,
         mapId: process.env.MAP_ID
       });
-      if (this.props.viewingId === false) return;
+      if (this.props.viewingIds === false) return;
       this.props.place.forEach((location, index) => {
-        if (this.props.viewingId !== null && this.props.viewingId.length === 1 && location.locationId === this.props.viewingId[0]) {
+        if (this.props.viewingIds !== null && this.props.viewingIds.length === 1 && location.locationId === this.props.viewingIds[0]) {
           const div = document.createElement('div');
           div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
           const root = ReactDOM.createRoot(div);
@@ -140,35 +140,38 @@ export default class MapMarkers extends React.Component {
             advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
             advancedMarkerView.element.style.zIndex = '';
           });
-        } else if (this.props.viewingId.includes(location.locationId)) {
-          const div = document.createElement('div');
-          div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
-          const root = ReactDOM.createRoot(div);
-          root.render(getIconsAndDetails(location));
-          // eslint-disable-next-line no-undef
-          const advancedMarkerView = new google.maps.marker.AdvancedMarkerView({
-            map,
-            content: div,
-            position: location.geometry.location,
-            title: location.name
-          });
-          const element = advancedMarkerView.element;
-          element.addEventListener('mouseenter', () => {
-            advancedMarkerView.content.classList.add('highlight', 'hiddenbox');
-            advancedMarkerView.element.style.zIndex = 1;
-          });
+        }
+      });
 
-          element.addEventListener('mouseleave', () => {
-            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
-            advancedMarkerView.element.style.zIndex = '';
-            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
-            advancedMarkerView.element.style.zIndex = '';
-          });
+      if (this.props.viewingIds.length < 2) return;
 
-          advancedMarkerView.addListener('click', event => {
-            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
-            advancedMarkerView.element.style.zIndex = '';
-          });
+      const mappedIds = [];
+      this.props.viewingIds.forEach(id => {
+        mappedIds.push(this.props.place.find(location => location.locationId === id));
+      });
+
+      // eslint-disable-next-line no-undef
+      const directionsDisplay = new google.maps.DirectionsRenderer();
+      // eslint-disable-next-line no-undef
+      const directionsService = new google.maps.DirectionsService();
+      directionsDisplay.setMap(map);
+
+      const start = mappedIds[0].geometry.location;
+      const end = mappedIds[mappedIds.length - 1].geometry.location;
+
+      const request = {
+        origin: start,
+        waypoints: mappedIds.slice(1, mappedIds.length - 1).map(location => {
+          return { location: location.geometry.location };
+        }),
+        destination: end,
+        travelMode: 'DRIVING'
+      };
+
+      directionsService.route(request, (result, status) => {
+        if (status === 'OK') {
+          directionsDisplay.setDirections(result);
+          directionsDisplay.setPanel(document.getElementById('panel'));
         }
       });
     }
