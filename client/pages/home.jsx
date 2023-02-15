@@ -159,7 +159,7 @@ export default function Home() {
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        <DirectionsModal viewingIds={viewingIds} />
+                        <DirectionsModal viewingIds={viewingIds} clearPins={() => setViewingIds(false)} />
                         {
                           addedLocations.length > 0
                             ? (
