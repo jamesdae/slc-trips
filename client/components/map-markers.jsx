@@ -165,6 +165,7 @@ export default class MapMarkers extends React.Component {
           return { location: location.geometry.location };
         }),
         destination: end,
+        provideRouteAlternatives: true,
         travelMode: 'DRIVING'
       };
 
@@ -172,6 +173,8 @@ export default class MapMarkers extends React.Component {
         if (status === 'OK') {
           directionsDisplay.setDirections(result);
           directionsDisplay.setPanel(document.getElementById('panel'));
+          // eslint-disable-next-line no-console
+          console.log(result);
         }
       });
     }
