@@ -159,9 +159,6 @@ export default class MapMarkers extends React.Component {
       const start = mappedIds[0].geometry.location;
       const end = mappedIds[mappedIds.length - 1].geometry.location;
 
-      // eslint-disable-next-line no-console
-      console.log(mappedIds);
-
       const request = {
         origin: start,
         waypoints: mappedIds.slice(1, mappedIds.length - 1).map(location => {
@@ -177,9 +174,7 @@ export default class MapMarkers extends React.Component {
           // eslint-disable-next-line no-console
           console.log(result);
         }
-        if (this.props.directionsOpen === true) {
-          directionsDisplay.setPanel(document.getElementById('panel'));
-        }
+        directionsDisplay.setPanel(document.getElementById('panel'));
       });
     }
   }

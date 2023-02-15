@@ -22,7 +22,7 @@ export default function Home() {
   const [extraDetailsOpen, setExtraDetailsOpen] = useState(false);
   const [viewingIds, setViewingIds] = useState(null);
   const [prevList, setPrevList] = useState(null);
-  const [directionsOpen, setDirectionsOpen] = useState(null);
+  const [mappedIds, setMappedIds] = useState(null);
 
   useEffect(() => {
     if (isLoaded && place === null) {
@@ -42,7 +42,13 @@ export default function Home() {
         .then(res => res.json())
         .then(res => {
           const myList = res.map(obj => obj);
+          const addedLocationIds = res.map(obj => obj.locationId);
           setAddedLocations(myList);
+          const myListLocations = [];
+          addedLocationIds.forEach(id => {
+            myListLocations.push(place.find(location => location.locationId === id));
+          });
+          setMappedIds(myListLocations);
         })
         .catch(err => console.error('Error:', err));
     }
@@ -114,6 +120,12 @@ export default function Home() {
                                   .then(newLocation => {
                                     const newLocations = addedLocations.concat([newLocation]);
                                     setAddedLocations(newLocations);
+                                    const addedLocationIds = newLocations.map(obj => obj.locationId);
+                                    const myListLocations = [];
+                                    addedLocationIds.forEach(id => {
+                                      myListLocations.push(place.find(location => location.locationId === id));
+                                    });
+                                    setMappedIds(myListLocations);
                                   })
                                   .catch(err => console.error('Error:', err));
                               }
@@ -150,17 +162,15 @@ export default function Home() {
                           viewingIds !== null && viewingIds.length > 1
                             ? (
                               <div>
-                                <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" onClick={() => setDirectionsOpen(true)}>Route Details</button>
-                                <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#directionsModal" data-bs-whatever="directions">Route Details</button>
+                                <div className="modal fade" id="directionsModal" tabIndex="-1" aria-labelledby="directionsModalLabel" aria-hidden="true">
                                   <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                                     <div className="modal-content">
                                       <div className="modal-header">
-                                        <h5 className="modal-title" id="exampleModalLabel">Directions</h5>
+                                        <h5 className="modal-title" id="directionsModalLabel">Directions</h5>
                                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                                       </div>
-
                                       <div className="modal-body" id='panel' />
-
                                       <div className="modal-footer">
                                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         <button type="button" className="btn btn-primary">Save changes</button>
@@ -177,9 +187,8 @@ export default function Home() {
                             ? (
                               <div className='row row-cols-1 row-cols-md-2 g-4'>
                                 {
-                                  place.map((location, index) => {
+                                  mappedIds.map((location, index) => {
                                     const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
-                                    if (savedlocation === undefined) return null;
                                     if (savedlocation.locationId === location.locationId) {
                                       return <EachCard location={location} key={savedlocation.myListItemsId}
                                       setPins={pinnedId => {
@@ -203,6 +212,12 @@ export default function Home() {
                                           .then(res => {
                                             const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
                                             setAddedLocations(reducedLocations);
+                                            const addedLocationIds = reducedLocations.map(obj => obj.locationId);
+                                            const myListLocations = [];
+                                            addedLocationIds.forEach(id => {
+                                              myListLocations.push(place.find(location => location.locationId === id));
+                                            });
+                                            setMappedIds(myListLocations);
                                             if (reducedLocations[0] === undefined) {
                                               setViewingIds(false);
                                             } else {
@@ -274,7 +289,7 @@ export default function Home() {
             </div>
           </div>
           <div className='full backwhite col-md-6 col-12 botpad'>
-            <MapMarkers place={place} clickedCategory={selectedCategory} viewingId={viewingIds} extraDetailsOpen={extraDetailsOpen} directionsOpen={directionsOpen} />
+            <MapMarkers place={place} clickedCategory={selectedCategory} viewingId={viewingIds} extraDetailsOpen={extraDetailsOpen} />
           </div>
         </div>
       </div>
