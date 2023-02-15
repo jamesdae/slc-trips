@@ -172,13 +172,17 @@ export default class MapMarkers extends React.Component {
       directionsService.route(request, (result, status) => {
         if (status === 'OK') {
           directionsDisplay.setDirections(result);
-          directionsDisplay.setPanel(document.getElementById('panel'));
+          const panelDiv = document.getElementById('panel');
+          while (panelDiv.firstChild) {
+            panelDiv.removeChild(panelDiv.firstChild);
+          }
+          directionsDisplay.setPanel(panelDiv);
           result.routes.forEach((route, index) => {
             // eslint-disable-next-line no-undef
             const line = new google.maps.Polyline({
               path: result.routes[index].overview_path,
               strokeColor: '#595f65',
-              strokeOpacity: 0.4,
+              strokeOpacity: 0.6,
               strokeWeight: 3
             });
             line.setMap(map);
@@ -191,6 +195,6 @@ export default class MapMarkers extends React.Component {
   }
 
   render() {
-    return <div className='map-container' id='map'/>;
+    return <div className='map-container' id='map' />;
   }
 }
