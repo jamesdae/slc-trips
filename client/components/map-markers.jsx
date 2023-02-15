@@ -42,8 +42,7 @@ export default class MapMarkers extends React.Component {
       });
 
       advancedMarkerView.addListener('click', event => {
-        advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
-        advancedMarkerView.element.style.zIndex = '';
+        this.props.openExtraDetailsForId(location.locationId);
       });
     });
   }
@@ -90,8 +89,7 @@ export default class MapMarkers extends React.Component {
           });
 
           advancedMarkerView.addListener('click', event => {
-            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
-            advancedMarkerView.element.style.zIndex = '';
+            this.props.openExtraDetailsForId(location.locationId);
           });
         }
       });
@@ -137,8 +135,7 @@ export default class MapMarkers extends React.Component {
           });
 
           advancedMarkerView.addListener('click', event => {
-            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
-            advancedMarkerView.element.style.zIndex = '';
+            this.props.openExtraDetailsForId(location.locationId);
           });
         }
       });
@@ -189,16 +186,17 @@ export default class MapMarkers extends React.Component {
             // eslint-disable-next-line no-undef
             const infowindow = new google.maps.InfoWindow({
               ariaLabel: 'duration',
-              zIndex: 100
+              zIndex: 100,
+              position: route.legs[0].steps[Math.round((route.legs[0].steps.length - 1) / 2)].end_location
             });
             infowindow.setContent(route.legs[0].duration.text);
-            // eslint-disable-next-line no-undef
-            const advancedMarkerView = new google.maps.marker.AdvancedMarkerView({
-              map,
-              position: route.legs[0].end_location
+
+            line.addListener('mouseover', event => {
+              infowindow.open(map);
+
             });
-            line.addListener('click', event => {
-              infowindow.open(map, advancedMarkerView);
+            line.addListener('mouseout', event => {
+              infowindow.close(map);
             });
 
             line.addListener('click', event => {

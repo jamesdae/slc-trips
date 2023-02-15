@@ -268,7 +268,11 @@ export default function Home() {
             </div>
           </div>
           <div className='full backwhite col-md-6 col-12 botpad'>
-            <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} />
+            <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {
+              setPrevList(viewingIds);
+              setExtraDetailsOpen(!extraDetailsOpen);
+              setViewingIds([id]);
+            }}/>
           </div>
         </div>
       </div>
