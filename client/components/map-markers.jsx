@@ -173,6 +173,16 @@ export default class MapMarkers extends React.Component {
         if (status === 'OK') {
           directionsDisplay.setDirections(result);
           directionsDisplay.setPanel(document.getElementById('panel'));
+          result.routes.forEach((route, index) => {
+            // eslint-disable-next-line no-undef
+            const line = new google.maps.Polyline({
+              path: result.routes[index].overview_path,
+              strokeColor: '#595f65',
+              strokeOpacity: 0.4,
+              strokeWeight: 3
+            });
+            line.setMap(map);
+          });
           // eslint-disable-next-line no-console
           console.log(result);
         }
