@@ -49,7 +49,7 @@ export default class MapMarkers extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.clickedCategory !== this.props.clickedCategory || (this.props.extraDetailsOpen === false && prevProps.extraDetailsOpen === true && this.props.viewingId === null) || this.props.viewingId === null) {
+    if (prevProps.clickedCategory !== this.props.clickedCategory || (this.props.extraDetailsOpen === false && prevProps.extraDetailsOpen === true && this.props.viewingIds === null) || this.props.viewingIds === null) {
       let center;
       if (this.props.clickedCategory !== 'All Categories') {
         const index = this.props.place.findIndex(location => location.category === this.props.clickedCategory);
@@ -95,12 +95,12 @@ export default class MapMarkers extends React.Component {
           });
         }
       });
-    } else if (prevProps.viewingId !== this.props.viewingId && this.props.viewingId !== null) {
+    } else if (prevProps.viewingIds !== this.props.viewingIds && this.props.viewingIds !== null) {
       let center;
-      if (this.props.viewingId === false) {
+      if (this.props.viewingIds === false) {
         center = this.props.place[0].geometry.location;
       } else {
-        const index = this.props.place.findIndex(location => location.locationId === this.props.viewingId[0]);
+        const index = this.props.place.findIndex(location => location.locationId === this.props.viewingIds[0]);
         center = this.props.place[index].geometry.location;
       }
       // eslint-disable-next-line no-undef
@@ -109,9 +109,9 @@ export default class MapMarkers extends React.Component {
         center,
         mapId: process.env.MAP_ID
       });
-      if (this.props.viewingId === false) return;
+      if (this.props.viewingIds === false) return;
       this.props.place.forEach((location, index) => {
-        if (this.props.viewingId !== null && this.props.viewingId.length === 1 && location.locationId === this.props.viewingId[0]) {
+        if (this.props.viewingIds !== null && this.props.viewingIds.length === 1 && location.locationId === this.props.viewingIds[0]) {
           const div = document.createElement('div');
           div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
           const root = ReactDOM.createRoot(div);
@@ -143,10 +143,10 @@ export default class MapMarkers extends React.Component {
         }
       });
 
-      if (this.props.viewingId.length < 2) return;
+      if (this.props.viewingIds.length < 2) return;
 
       const mappedIds = [];
-      this.props.viewingId.forEach(id => {
+      this.props.viewingIds.forEach(id => {
         mappedIds.push(this.props.place.find(location => location.locationId === id));
       });
 
@@ -171,10 +171,8 @@ export default class MapMarkers extends React.Component {
       directionsService.route(request, (result, status) => {
         if (status === 'OK') {
           directionsDisplay.setDirections(result);
-          // eslint-disable-next-line no-console
-          console.log(result);
+          directionsDisplay.setPanel(document.getElementById('panel'));
         }
-        directionsDisplay.setPanel(document.getElementById('panel'));
       });
     }
   }
