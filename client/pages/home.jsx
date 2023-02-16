@@ -57,7 +57,7 @@ export default function Home() {
 
   if (loadError) return 'Error loading maps';
 
-  if (place !== null && addedLocations !== null) {
+  if (place !== null && addedLocations !== null && isLoaded) {
     return (
       <div className='bg-light'>
         <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-lg navbar-light bg-light'>
@@ -273,6 +273,7 @@ export default function Home() {
               setExtraDetailsOpen(!extraDetailsOpen);
               setViewingIds([id]);
             }}/>
+            <div id='content' />
           </div>
         </div>
       </div>

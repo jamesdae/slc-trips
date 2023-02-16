@@ -254,3 +254,7 @@
 .pointer {
   cursor: pointer;
 }
+
+.multiline {
+  white-space: pre-line;
+}

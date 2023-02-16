@@ -179,22 +179,22 @@ export default class MapMarkers extends React.Component {
             const line = new google.maps.Polyline({
               path: route.overview_path,
               strokeColor: '#595f65',
-              strokeOpacity: 0.6,
+              strokeOpacity: 0.7,
               strokeWeight: 3,
               clickable: true
             });
+
             // eslint-disable-next-line no-undef
             const infowindow = new google.maps.InfoWindow({
               ariaLabel: 'duration',
-              zIndex: 100,
+              content: `Route ${index + 1} | Distance: ${route.legs[0].distance.text} | Duration: ${route.legs[0].duration.text}`,
               position: route.legs[0].steps[Math.round((route.legs[0].steps.length - 1) / 2)].end_location
             });
-            infowindow.setContent(route.legs[0].duration.text);
 
             line.addListener('mouseover', event => {
               infowindow.open(map);
-
             });
+
             line.addListener('mouseout', event => {
               infowindow.close(map);
             });
@@ -207,8 +207,6 @@ export default class MapMarkers extends React.Component {
             });
             line.setMap(map);
           });
-          // eslint-disable-next-line no-console
-          console.log(result);
         }
       });
     }
