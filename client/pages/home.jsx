@@ -8,6 +8,7 @@ import EachCard from '../components/each-card';
 import Libraries from '../components/apilibraries';
 import MapMarkers from '../components/map-markers';
 import { fetchPlaces } from '../lib';
+import DirectionsModal from '../components/directions-modal';
 
 export default function Home() {
   const { isLoaded, loadError } = useLoadScript({
@@ -56,10 +57,10 @@ export default function Home() {
 
   if (loadError) return 'Error loading maps';
 
-  if (place !== null && addedLocations !== null) {
+  if (place !== null && addedLocations !== null && isLoaded) {
     return (
       <div className='bg-light'>
-        <nav className='sticky-top col-md-6 col-12 navbar navbar-expand-lg navbar-light bg-light'>
+        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-lg navbar-light bg-light'>
           <h1 className='mx-2 blue heading'>SLCTrips</h1>
         </nav>
         <div className='d-flex flex-wrap flex-column-reverse'>
@@ -158,30 +159,7 @@ export default function Home() {
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        {
-                          viewingIds !== null && viewingIds.length > 1
-                            ? (
-                              <div>
-                                <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#directionsModal" data-bs-whatever="directions">Route Details</button>
-                                <div className="modal fade" id="directionsModal" tabIndex="-1" aria-labelledby="directionsModalLabel" aria-hidden="true">
-                                  <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                    <div className="modal-content">
-                                      <div className="modal-header">
-                                        <h5 className="modal-title" id="directionsModalLabel">Directions</h5>
-                                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-                                      </div>
-                                      <div className="modal-body" id='panel' />
-                                      <div className="modal-footer">
-                                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" className="btn btn-primary">Save changes</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              )
-                            : null
-                        }
+                        <DirectionsModal viewingIds={viewingIds} clearPins={() => setViewingIds(false)} />
                         {
                           addedLocations.length > 0
                             ? (
@@ -290,7 +268,12 @@ export default function Home() {
             </div>
           </div>
           <div className='full backwhite col-md-6 col-12 botpad'>
-            <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} />
+            <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {
+              setPrevList(viewingIds);
+              setExtraDetailsOpen(!extraDetailsOpen);
+              setViewingIds([id]);
+            }}/>
+            <div id='content' />
           </div>
         </div>
       </div>

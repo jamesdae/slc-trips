@@ -42,8 +42,7 @@ export default class MapMarkers extends React.Component {
       });
 
       advancedMarkerView.addListener('click', event => {
-        advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
-        advancedMarkerView.element.style.zIndex = '';
+        this.props.openExtraDetailsForId(location.locationId);
       });
     });
   }
@@ -90,8 +89,7 @@ export default class MapMarkers extends React.Component {
           });
 
           advancedMarkerView.addListener('click', event => {
-            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
-            advancedMarkerView.element.style.zIndex = '';
+            this.props.openExtraDetailsForId(location.locationId);
           });
         }
       });
@@ -137,8 +135,7 @@ export default class MapMarkers extends React.Component {
           });
 
           advancedMarkerView.addListener('click', event => {
-            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
-            advancedMarkerView.element.style.zIndex = '';
+            this.props.openExtraDetailsForId(location.locationId);
           });
         }
       });
@@ -165,19 +162,57 @@ export default class MapMarkers extends React.Component {
           return { location: location.geometry.location };
         }),
         destination: end,
+        provideRouteAlternatives: true,
         travelMode: 'DRIVING'
       };
 
       directionsService.route(request, (result, status) => {
         if (status === 'OK') {
           directionsDisplay.setDirections(result);
-          directionsDisplay.setPanel(document.getElementById('panel'));
+          const panelDiv = document.getElementById('panel');
+          while (panelDiv.firstChild) {
+            panelDiv.removeChild(panelDiv.firstChild);
+          }
+          directionsDisplay.setPanel(panelDiv);
+          result.routes.forEach((route, index) => {
+            // eslint-disable-next-line no-undef
+            const line = new google.maps.Polyline({
+              path: route.overview_path,
+              strokeColor: '#595f65',
+              strokeOpacity: 0.7,
+              strokeWeight: 3,
+              clickable: true
+            });
+
+            // eslint-disable-next-line no-undef
+            const infowindow = new google.maps.InfoWindow({
+              ariaLabel: 'duration',
+              content: `Route ${index + 1} | Distance: ${route.legs[0].distance.text} | Duration: ${route.legs[0].duration.text}`,
+              position: route.legs[0].steps[Math.round((route.legs[0].steps.length - 1) / 2)].end_location
+            });
+
+            line.addListener('mouseover', event => {
+              infowindow.open(map);
+            });
+
+            line.addListener('mouseout', event => {
+              infowindow.close(map);
+            });
+
+            line.addListener('click', event => {
+              const routeList = document.querySelectorAll('[jsaction="directionsRouteList.selectRoute"]');
+              if (index < routeList.length) {
+                routeList[index].click();
+              }
+            });
+            line.setMap(map);
+          });
         }
       });
     }
   }
 
   render() {
-    return <div className='map-container' id='map'/>;
+    return <div className='map-container' id='map' />;
   }
 }
