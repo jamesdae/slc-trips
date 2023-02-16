@@ -262,7 +262,70 @@ export default function Home() {
                       )}
                 </div>
                 <div className='tab-pane fade' id='nav-routes' role='tabpanel' aria-labelledby='nav-routes-tab'>
-                  <div/>
+                  {
+                    viewingIds !== null && viewingIds !== false
+                      ? (
+                          mappedIds.map((location, index) => {
+                            const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
+                            if (savedlocation.locationId === location.locationId && viewingIds.includes(location.locationId)) {
+                              return <EachCard location={location} key={savedlocation.myListItemsId}
+                              setPins={pinnedId => {
+                                if (viewingIds === false) {
+                                  setViewingIds([pinnedId]);
+                                } else if (!viewingIds.includes(pinnedId)) {
+                                  const newPins = viewingIds.concat([pinnedId]);
+                                  setViewingIds(newPins);
+                                }
+                              }}
+                              myListItemsId={savedlocation.myListItemsId} tab="route"
+                              removeLocation={removeId => {
+                                fetch(`/api/mylist/${removeId}`, {
+                                  method: 'DELETE',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2MzUwNTQwfQ.-7s7i9P8n3luohxsiRM8sgszdv8wpxo6jY-VBQ7ohz8'
+                                  }
+                                })
+                                  .then(res => res.json())
+                                  .then(res => {
+                                    const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
+                                    setAddedLocations(reducedLocations);
+                                    const addedLocationIds = reducedLocations.map(obj => obj.locationId);
+                                    const myListLocations = [];
+                                    addedLocationIds.forEach(id => {
+                                      myListLocations.push(place.find(location => location.locationId === id));
+                                    });
+                                    setMappedIds(myListLocations);
+                                    if (viewingIds === false) return;
+                                    const reducedPins = viewingIds.filter(id => id !== res.locationId);
+                                    if (reducedPins[0] === undefined) {
+                                      setViewingIds(false);
+                                    } else {
+                                      setViewingIds(reducedPins);
+                                    }
+                                    if (reducedLocations[0] === undefined) {
+                                      setViewingIds(false);
+                                    }
+                                  })
+                                  .catch(err => console.error('Error:', err));
+                              }}
+                              viewCard={viewingId => {
+                                setExtraDetailsOpen(!extraDetailsOpen);
+                                setPrevList(viewingIds);
+                                setViewingIds([viewingId]);
+                              }} />;
+                            } else return null;
+                          })
+                        )
+                      : (
+                        <div className="alert alert-primary" role="alert">
+                          <h4 className="alert-heading">No locations pinned yet.</h4>
+                          <p className='py-2'>Add locations to My List, then click <button className="mybuttons btn btn-success" type="button" >Pin</button> to see locations here.</p>
+                          <hr />
+                          <p className="mb-0">Sign in <a href="#" className="alert-link">here</a> to save your changes!</p>
+                        </div>
+                        )
+                  }
                 </div>
               </div>
             </div>
@@ -273,7 +336,6 @@ export default function Home() {
               setExtraDetailsOpen(!extraDetailsOpen);
               setViewingIds([id]);
             }}/>
-            <div id='content' />
           </div>
         </div>
       </div>

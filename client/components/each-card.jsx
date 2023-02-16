@@ -61,9 +61,13 @@ export default function EachCard(props) {
                           props.setPins(props.location.locationId);
                         }}>Pin</button>
                         )
-                      : (
-                        <button className="mybuttons btn btn-success" type="button" onClick={() => props.addCard(props.location.locationId)}>Add</button>
-                        )}
+                      : props.tab === 'route'
+                        ? (
+                          <button className="mybuttons btn btn-danger" type="button">Unpin</button>
+                          )
+                        : (
+                          <button className="mybuttons btn btn-success" type="button" onClick={() => props.addCard(props.location.locationId)}>Add</button>
+                          )}
                   </div>
                   )
             }
