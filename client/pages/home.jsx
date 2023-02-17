@@ -69,12 +69,14 @@ export default function Home() {
               <nav className='stickytab backwhite'>
                 <div className='nav nav-tabs nav-fill' id='nav-tab' role='tablist'>
                   <button className='nav-link active' id='nav-places-tab' data-bs-toggle='tab' data-bs-target='#nav-places' type='button' role='tab' aria-controls='nav-places' aria-selected='true' onClick={() => {
+                    if (extraDetailsOpen) return;
                     if (viewingIds !== null) {
                       setPrevList(viewingIds);
                     }
                     setViewingIds(null);
                   }}>Places</button>
                   <button className='nav-link' id='nav-mylist-tab' data-bs-toggle='tab' data-bs-target='#nav-mylist' type='button' role='tab' aria-controls='nav-mylist' aria-selected='false' onClick={() => {
+                    if (extraDetailsOpen) return;
                     if (prevList !== null) {
                       setViewingIds(prevList);
                     } else {
@@ -82,8 +84,11 @@ export default function Home() {
                     }
                   }}>My List</button>
                   <button className='nav-link' id='nav-routes-tab' data-bs-toggle='tab' data-bs-target='#nav-routes' type='button' role='tab' aria-controls='nav-routes' aria-selected='false' onClick={() => {
+                    if (extraDetailsOpen) return;
                     if (viewingIds !== null) {
                       setPrevList(viewingIds);
+                    } else {
+                      setViewingIds(prevList);
                     }
                   }}>My Routes</button>
                 </div>
