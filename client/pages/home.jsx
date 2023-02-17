@@ -57,7 +57,7 @@ export default function Home() {
 
   if (loadError) return 'Error loading maps';
 
-  if (place !== null && addedLocations !== null && isLoaded) {
+  if (place !== null && addedLocations !== null) {
     return (
       <div className='bg-light'>
         <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-lg navbar-light bg-light'>
@@ -173,7 +173,7 @@ export default function Home() {
                                   mappedIds.map((location, index) => {
                                     const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
                                     if (savedlocation.locationId === location.locationId) {
-                                      return <EachCard location={location} key={savedlocation.myListItemsId}
+                                      return <EachCard location={location} key={savedlocation.myListItemsId} viewingIds={viewingIds}
                                       setPins={pinnedId => {
                                         if (viewingIds === false) {
                                           setViewingIds([pinnedId]);
@@ -278,8 +278,8 @@ export default function Home() {
                                   mappedIds.map((location, index) => {
                                     const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
                                     if (savedlocation.locationId === location.locationId && viewingIds.includes(location.locationId)) {
-                                      return <EachCard location={location} key={savedlocation.myListItemsId}
-                                      myListItemsId={savedlocation.myListItemsId} tab="route"
+                                      return <EachCard location={location} key={savedlocation.myListItemsId} viewingIds={viewingIds}
+                                      myListItemsId={savedlocation.myListItemsId}
                                       viewCard={viewingId => {
                                         setExtraDetailsOpen(!extraDetailsOpen);
                                         setPrevList(viewingIds);
