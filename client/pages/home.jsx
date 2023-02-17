@@ -262,7 +262,8 @@ export default function Home() {
                       )}
                 </div>
                 <div className='tab-pane fade' id='nav-routes' role='tabpanel' aria-labelledby='nav-routes-tab'>
-                  {
+                  <div className='row row-cols-1 row-cols-md-2 g-4'>
+                    {
                     viewingIds !== null && viewingIds !== false
                       ? (
                           mappedIds.map((location, index) => {
@@ -318,7 +319,7 @@ export default function Home() {
                           })
                         )
                       : (
-                        <div className="alert alert-primary" role="alert">
+                        <div className="alert alert-primary flex-fill" role="alert">
                           <h4 className="alert-heading">No locations pinned yet.</h4>
                           <p className='py-2'>Add locations to My List, then click <button className="mybuttons btn btn-success" type="button" >Pin</button> to see locations here.</p>
                           <hr />
@@ -326,6 +327,7 @@ export default function Home() {
                         </div>
                         )
                   }
+                  </div>
                 </div>
               </div>
             </div>
