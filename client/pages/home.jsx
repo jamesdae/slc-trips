@@ -182,6 +182,15 @@ export default function Home() {
                                           setViewingIds(newPins);
                                         }
                                       }}
+                                      unpinLocation={id => {
+                                        const remainingPins = viewingIds.filter(viewingId => viewingId !== id);
+                                        if (remainingPins[0] === undefined) {
+                                          setViewingIds(false);
+                                          setPrevList(false);
+                                        } else {
+                                          setViewingIds(remainingPins);
+                                        }
+                                      }}
                                       myListItemsId={savedlocation.myListItemsId} tab="list"
                                       removeLocation={removeId => {
                                         fetch(`/api/mylist/${removeId}`, {
@@ -280,6 +289,15 @@ export default function Home() {
                                     if (savedlocation.locationId === location.locationId && viewingIds.includes(location.locationId)) {
                                       return <EachCard location={location} key={savedlocation.myListItemsId} viewingIds={viewingIds}
                                       myListItemsId={savedlocation.myListItemsId}
+                                      unpinLocation={id => {
+                                        const remainingPins = viewingIds.filter(viewingId => viewingId !== id);
+                                        if (remainingPins[0] === undefined) {
+                                          setViewingIds(false);
+                                          setPrevList(false);
+                                        } else {
+                                          setViewingIds(remainingPins);
+                                        }
+                                      }}
                                       viewCard={viewingId => {
                                         setExtraDetailsOpen(!extraDetailsOpen);
                                         setPrevList(viewingIds);
@@ -338,7 +356,10 @@ export default function Home() {
                 </button>
                 <ul className="dropdown-menu">
                   <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close">Save Route</a></li>
-                  <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => setViewingIds(false)}>Clear Pins</a></li>
+                  <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => {
+                    setPrevList(false);
+                    setViewingIds(false);
+                  }}>Clear Pins</a></li>
                   <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" >See route in Google Maps</a></li>
                 </ul>
               </div>
