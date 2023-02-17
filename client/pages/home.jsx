@@ -164,7 +164,7 @@ export default function Home() {
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        <DirectionsModal viewingIds={viewingIds} clearPins={() => setViewingIds(false)} />
+                        <DirectionsModal viewingIds={viewingIds} />
                         {
                           addedLocations.length > 0
                             ? (
@@ -269,32 +269,35 @@ export default function Home() {
                 <div className='tab-pane fade' id='nav-routes' role='tabpanel' aria-labelledby='nav-routes-tab'>
                   {extraDetailsOpen === false
                     ? (
-                      <div className='row row-cols-1 row-cols-md-2 g-4'>
-                        {
-                          viewingIds !== null && viewingIds !== false
-                            ? (
-                                mappedIds.map((location, index) => {
-                                  const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
-                                  if (savedlocation.locationId === location.locationId && viewingIds.includes(location.locationId)) {
-                                    return <EachCard location={location} key={savedlocation.myListItemsId}
-                                    myListItemsId={savedlocation.myListItemsId} tab="route"
-                                    viewCard={viewingId => {
-                                      setExtraDetailsOpen(!extraDetailsOpen);
-                                      setPrevList(viewingIds);
-                                      setViewingIds([viewingId]);
-                                    }} />;
-                                  } else return null;
-                                })
-                              )
-                            : (
-                              <div className="alert alert-primary flex-fill" role="alert">
-                                <h4 className="alert-heading">No locations pinned yet.</h4>
-                                <p className='py-2'>Add locations to My List, then click <button className="mybuttons btn btn-success" type="button" >Pin</button> to see locations here.</p>
-                                <hr />
-                                <p className="mb-0">Sign in <a href="#" className="alert-link">here</a> to save your changes!</p>
-                              </div>
-                              )
-                        }
+                      <div>
+                        <DirectionsModal viewingIds={viewingIds} />
+                        <div className='row row-cols-1 row-cols-md-2 g-4'>
+                          {
+                            viewingIds !== null && viewingIds !== false
+                              ? (
+                                  mappedIds.map((location, index) => {
+                                    const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
+                                    if (savedlocation.locationId === location.locationId && viewingIds.includes(location.locationId)) {
+                                      return <EachCard location={location} key={savedlocation.myListItemsId}
+                                      myListItemsId={savedlocation.myListItemsId} tab="route"
+                                      viewCard={viewingId => {
+                                        setExtraDetailsOpen(!extraDetailsOpen);
+                                        setPrevList(viewingIds);
+                                        setViewingIds([viewingId]);
+                                      }} />;
+                                    } else return null;
+                                  })
+                                )
+                              : (
+                                <div className="alert alert-primary flex-fill" role="alert">
+                                  <h4 className="alert-heading">No locations pinned yet.</h4>
+                                  <p className='py-2'>Add locations to My List, then click <button className="mybuttons btn btn-success" type="button" >Pin</button> to see locations here.</p>
+                                  <hr />
+                                  <p className="mb-0">Sign in <a href="#" className="alert-link">here</a> to save your changes!</p>
+                                </div>
+                                )
+                          }
+                        </div>
                       </div>
                       )
                     : (
@@ -319,6 +322,25 @@ export default function Home() {
                       )}
 
                 </div>
+              </div>
+            </div>
+          </div>
+          <div className="offcanvas offcanvas-start" data-bs-backdrop="false" tabIndex="-1" id="offcanvasDirections" aria-labelledby="offcanvasHeader">
+            <div className="offcanvas-header">
+              <h5 className="offcanvas-title" id="offcanvasHeader">Route Options</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" />
+            </div>
+            <div className="offcanvas-body">
+              <div id='panel' />
+              <div className="dropdown mt-3">
+                <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  More Options
+                </button>
+                <ul className="dropdown-menu">
+                  <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close">Save Route</a></li>
+                  <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => setViewingIds(false)}>Clear Pins</a></li>
+                  <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" >See route in Google Maps</a></li>
+                </ul>
               </div>
             </div>
           </div>
