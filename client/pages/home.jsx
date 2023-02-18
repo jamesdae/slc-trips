@@ -11,6 +11,7 @@ import { fetchPlaces } from '../lib';
 import DirectionsModal from '../components/directions-modal';
 import ExtraDetails from '../components/extra-details';
 import DirectionsPanel from '../components/directions-panel';
+import EmptyTabAlert from '../components/empty-tab';
 
 export default function Home() {
   const { isLoaded, loadError } = useLoadScript({
@@ -220,24 +221,13 @@ export default function Home() {
                                   })
                                   }
                                 <span><div className="alert alert-warning alert-dismissible fade show d-flex justify-content-between" role="alert">
-                                  <p>
-                                    <i className="fa-solid fa-circle-info" />Press{' '}
-                                    <button className="mybuttons btn btn-success" type="button">
-                                      Pin
-                                    </button>{' '}
-                                    to start a new route on the map!
-                                  </p>
+                                  <p><i className="fa-solid fa-circle-info" /> Press{' '}<button className="mybuttons btn btn-success" type="button">Pin</button> to start a new route on the map!</p>
                                   <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
                                 </div></span>
                               </div>
                               )
                             : (
-                              <div className="alert alert-primary" role="alert">
-                                <h4 className="alert-heading">No locations added yet.</h4>
-                                <p className='py-2'>Click Places above, and press <button className="mybuttons btn btn-success" type="button" >Add</button> to see locations here.</p>
-                                <hr />
-                                <p className="mb-0">Sign in <a href="#" className="alert-link">here</a> to save your changes!</p>
-                              </div>
+                              <EmptyTabAlert tab='list'/>
                               )
                         }
                       </div>
@@ -278,14 +268,7 @@ export default function Home() {
                                   })
                                 )
                               : (
-                                <div className='flex-fill'>
-                                  <div className="alert alert-primary" role="alert">
-                                    <h4 className="alert-heading">No locations pinned yet.</h4>
-                                    <p className='py-2'>Add locations to My List, then click <button className="mybuttons btn btn-success" type="button" >Pin</button> to see locations here.</p>
-                                    <hr />
-                                    <p className="mb-0">Sign in <a href="#" className="alert-link">here</a> to save your changes!</p>
-                                  </div>
-                                </div>
+                                <EmptyTabAlert tab='routes'/>
                                 )
                           }
                         </div>
