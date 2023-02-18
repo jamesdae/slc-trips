@@ -10,15 +10,23 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
       <div className="offcanvas-body">
         <div id='panel' />
         <div className="dropdown mt-3">
-          <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
             More Options
           </button>
           <ul className="dropdown-menu">
-            <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close">Save Route</a></li>
+            <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close"><i className="fa-solid fa-road-circle-check listicon" />Save Route</a></li>
             <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => {
               setPrevList();
               setViewingIds();
-            }}>Clear Pins</a></li>
+            }}><i className="fa-solid fa-trash-can listicon" />Clear Pins</a></li>
+            {Array.isArray(viewingIds) && viewingIds.length > 1
+              ? (
+                <li><a className="dropdown-item" href={`https://maps.google.com?saddr=${mappedIds[mappedIds.findIndex(location => location.locationId === viewingIds[0])].geometry.location.lat()},${mappedIds[mappedIds.findIndex(location => location.locationId === viewingIds[0])].geometry.location.lng()}&daddr=${mappedIds[mappedIds.findIndex(location => location.locationId === viewingIds[1])].geometry.location.lat()},${mappedIds[mappedIds.findIndex(location => location.locationId === viewingIds[1])].geometry.location.lng()}`} target="_blank" rel="noopener noreferrer" aria-label="Close"><i className="fa-brands fa-google listicon" />Open route in Google Maps </a></li>
+                )
+              : (
+                  null
+                )
+            }
           </ul>
         </div>
       </div>

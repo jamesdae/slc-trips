@@ -221,7 +221,7 @@ export default function Home() {
                                   }
                                 <span><div className="alert alert-warning alert-dismissible fade show d-flex justify-content-between" role="alert">
                                   <p>
-                                    <strong>Tip!</strong> Press{' '}
+                                    <i className="fa-solid fa-circle-info" />Press{' '}
                                     <button className="mybuttons btn btn-success" type="button">
                                       Pin
                                     </button>{' '}
@@ -294,7 +294,6 @@ export default function Home() {
                     : (
                       <ExtraDetails place={place} viewingIds={viewingIds} setExtraDetailsOpen={flippedValue => setExtraDetailsOpen(flippedValue)} setViewingIds={ids => setViewingIds(ids)} extraDetailsOpen={extraDetailsOpen} prevList={prevList}/>
                       )}
-
                 </div>
               </div>
             </div>

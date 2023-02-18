@@ -25,7 +25,7 @@
 }
 
 .detailimage {
-  width: 58%;
+  width: 54%;
   object-fit: cover;
 }
 
@@ -257,4 +257,8 @@
 
 .multiline {
   white-space: pre-line;
+}
+
+.listicon {
+  width: 2em;
 }
