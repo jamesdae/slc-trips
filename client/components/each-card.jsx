@@ -54,7 +54,10 @@ export default function EachCard(props) {
                         </div>
                         )
                       : null}
-                    <button className="mybuttons btn btn-primary" type="button" onClick={() => props.viewCard(props.location.locationId)}>Info</button>
+                    <button className="mybuttons btn btn-primary" type="button" onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'auto' });
+                      props.viewCard(props.location.locationId);
+                    }}>Info</button>
                     {Array.isArray(props.viewingIds) && props.viewingIds.includes(props.location.locationId)
                       ? (
                         <button className="mybuttons btn btn-danger" type="button" onClick={() => props.unpinLocation(props.location.locationId)}>Unpin</button>
