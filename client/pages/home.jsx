@@ -9,6 +9,8 @@ import Libraries from '../components/apilibraries';
 import MapMarkers from '../components/map-markers';
 import { fetchPlaces } from '../lib';
 import DirectionsModal from '../components/directions-modal';
+import ExtraDetails from '../components/extra-details';
+import DirectionsPanel from '../components/directions-panel';
 
 export default function Home() {
   const { isLoaded, loadError } = useLoadScript({
@@ -57,7 +59,7 @@ export default function Home() {
 
   if (loadError) return 'Error loading maps';
 
-  if (place !== null && addedLocations !== null && isLoaded) {
+  if (place !== null && addedLocations !== null) {
     return (
       <div className='bg-light'>
         <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-lg navbar-light bg-light'>
@@ -69,12 +71,16 @@ export default function Home() {
               <nav className='stickytab backwhite'>
                 <div className='nav nav-tabs nav-fill' id='nav-tab' role='tablist'>
                   <button className='nav-link active' id='nav-places-tab' data-bs-toggle='tab' data-bs-target='#nav-places' type='button' role='tab' aria-controls='nav-places' aria-selected='true' onClick={() => {
+                    window.scrollTo({ top: 0 });
+                    if (extraDetailsOpen) return;
                     if (viewingIds !== null) {
                       setPrevList(viewingIds);
                     }
                     setViewingIds(null);
                   }}>Places</button>
                   <button className='nav-link' id='nav-mylist-tab' data-bs-toggle='tab' data-bs-target='#nav-mylist' type='button' role='tab' aria-controls='nav-mylist' aria-selected='false' onClick={() => {
+                    window.scrollTo({ top: 0 });
+                    if (extraDetailsOpen) return;
                     if (prevList !== null) {
                       setViewingIds(prevList);
                     } else {
@@ -82,8 +88,12 @@ export default function Home() {
                     }
                   }}>My List</button>
                   <button className='nav-link' id='nav-routes-tab' data-bs-toggle='tab' data-bs-target='#nav-routes' type='button' role='tab' aria-controls='nav-routes' aria-selected='false' onClick={() => {
+                    window.scrollTo({ top: 0 });
+                    if (extraDetailsOpen) return;
                     if (viewingIds !== null) {
                       setPrevList(viewingIds);
+                    } else {
+                      setViewingIds(prevList);
                     }
                   }}>My Routes</button>
                 </div>
@@ -135,31 +145,14 @@ export default function Home() {
                       </div>
                       )
                     : (
-                      <div>
-                        <button className="mybuttons btn btn-secondary" type="button"
-                        onClick={event => {
-                          setExtraDetailsOpen(!extraDetailsOpen);
-                          setViewingIds(null);
-                        }}>
-                          Close Details
-                        </button>
-                        {
-                          place.map((location, index) => {
-                            if (viewingIds !== null && location.locationId === viewingIds[0]) {
-                              return <EachCard location={location} key={index} tab="extradetails" />;
-                            } else {
-                              return null;
-                            }
-                          })
-                        }
-                      </div>
+                      <ExtraDetails place={place} viewingIds={viewingIds} setExtraDetailsOpen={flippedValue => setExtraDetailsOpen(flippedValue)} setViewingIds={ids => setViewingIds(ids)} extraDetailsOpen={extraDetailsOpen} prevList={prevList} />
                       )}
                 </div>
                 <div className='tab-pane fade' id='nav-mylist' role='tabpanel' aria-labelledby='nav-mylist-tab'>
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        <DirectionsModal viewingIds={viewingIds} clearPins={() => setViewingIds(false)} />
+                        <DirectionsModal viewingIds={viewingIds} />
                         {
                           addedLocations.length > 0
                             ? (
@@ -168,7 +161,7 @@ export default function Home() {
                                   mappedIds.map((location, index) => {
                                     const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
                                     if (savedlocation.locationId === location.locationId) {
-                                      return <EachCard location={location} key={savedlocation.myListItemsId}
+                                      return <EachCard location={location} key={savedlocation.myListItemsId} viewingIds={viewingIds} myListItemsId={savedlocation.myListItemsId} tab="list"
                                       setPins={pinnedId => {
                                         if (viewingIds === false) {
                                           setViewingIds([pinnedId]);
@@ -177,7 +170,16 @@ export default function Home() {
                                           setViewingIds(newPins);
                                         }
                                       }}
-                                      myListItemsId={savedlocation.myListItemsId} tab="list"
+                                      unpinLocation={id => {
+                                        const remainingPins = viewingIds.filter(viewingId => viewingId !== id);
+                                        if (remainingPins[0] === undefined) {
+                                          setViewingIds(false);
+                                          setPrevList(false);
+                                        } else {
+                                          setViewingIds(remainingPins);
+                                          setPrevList(remainingPins);
+                                        }
+                                      }}
                                       removeLocation={removeId => {
                                         fetch(`/api/mylist/${removeId}`, {
                                           method: 'DELETE',
@@ -241,39 +243,70 @@ export default function Home() {
                       </div>
                       )
                     : (
-                      <div>
-                        <button className="mybuttons btn btn-secondary" type="button"
-                          onClick={event => {
-                            setExtraDetailsOpen(!extraDetailsOpen);
-                            setViewingIds(prevList);
-                          }}>
-                          Close Details
-                        </button>
-                        {
-                          place.map((location, index) => {
-                            if (viewingIds !== null && location.locationId === viewingIds[0]) {
-                              return <EachCard location={location} key={index} tab="extradetails" />;
-                            } else {
-                              return null;
-                            }
-                          })
-                        }
-                      </div>
+                      <ExtraDetails place={place} viewingIds={viewingIds} setExtraDetailsOpen={flippedValue => setExtraDetailsOpen(flippedValue)} setViewingIds={ids => setViewingIds(ids)} extraDetailsOpen={extraDetailsOpen} prevList={prevList} />
                       )}
                 </div>
                 <div className='tab-pane fade' id='nav-routes' role='tabpanel' aria-labelledby='nav-routes-tab'>
-                  <div/>
+                  {extraDetailsOpen === false
+                    ? (
+                      <div>
+                        <DirectionsModal viewingIds={viewingIds} />
+                        <div className='row row-cols-1 row-cols-md-2 g-4'>
+                          {
+                            viewingIds !== null && viewingIds !== false
+                              ? (
+                                  mappedIds.map((location, index) => {
+                                    const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
+                                    if (savedlocation.locationId === location.locationId && viewingIds.includes(location.locationId)) {
+                                      return <EachCard location={location} key={savedlocation.myListItemsId} viewingIds={viewingIds} myListItemsId={savedlocation.myListItemsId}
+                                      unpinLocation={id => {
+                                        const remainingPins = viewingIds.filter(viewingId => viewingId !== id);
+                                        if (remainingPins[0] === undefined) {
+                                          setViewingIds(false);
+                                          setPrevList(false);
+                                        } else {
+                                          setViewingIds(remainingPins);
+                                          setPrevList(remainingPins);
+                                        }
+                                      }}
+                                      viewCard={viewingId => {
+                                        setExtraDetailsOpen(!extraDetailsOpen);
+                                        setPrevList(viewingIds);
+                                        setViewingIds([viewingId]);
+                                      }} />;
+                                    } else return null;
+                                  })
+                                )
+                              : (
+                                <div className='flex-fill'>
+                                  <div className="alert alert-primary" role="alert">
+                                    <h4 className="alert-heading">No locations pinned yet.</h4>
+                                    <p className='py-2'>Add locations to My List, then click <button className="mybuttons btn btn-success" type="button" >Pin</button> to see locations here.</p>
+                                    <hr />
+                                    <p className="mb-0">Sign in <a href="#" className="alert-link">here</a> to save your changes!</p>
+                                  </div>
+                                </div>
+                                )
+                          }
+                        </div>
+                      </div>
+                      )
+                    : (
+                      <ExtraDetails place={place} viewingIds={viewingIds} setExtraDetailsOpen={flippedValue => setExtraDetailsOpen(flippedValue)} setViewingIds={ids => setViewingIds(ids)} extraDetailsOpen={extraDetailsOpen} prevList={prevList}/>
+                      )}
+
                 </div>
               </div>
             </div>
           </div>
+          <DirectionsPanel setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
           <div className='full backwhite col-md-6 col-12 botpad'>
             <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {
+              if (extraDetailsOpen === true) return;
               setPrevList(viewingIds);
-              setExtraDetailsOpen(!extraDetailsOpen);
+              setExtraDetailsOpen(true);
               setViewingIds([id]);
             }}/>
-            <div id='content' />
           </div>
         </div>
       </div>
