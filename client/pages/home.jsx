@@ -281,7 +281,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <DirectionsPanel setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
+          <DirectionsPanel addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
           <div className='full backwhite col-md-6 col-12 botpad'>
             <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {
               if (extraDetailsOpen === true) return;

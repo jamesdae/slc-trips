@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds, viewingIds }) {
+export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds, viewingIds, addedLocations }) {
   if (!Array.isArray(viewingIds) || !viewingIds.length > 1) return;
   const coordinatesWithNulls = mappedIds.map(place => {
     if (viewingIds.includes(place.locationId)) {
@@ -13,6 +13,8 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
   const waypoints = coordinates.slice(1, -1).map(coord => ({ location: coord }));
   const daddr = coordinates[coordinates.length - 1];
   const origin = coordinates[0];
+
+  const savedroute = viewingIds.map(id => addedLocations.find(location => location.locationId === id));
 
   const link = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${daddr}&waypoints=${waypoints.map(waypoint => waypoint.location).join('|')}`;
 
@@ -29,7 +31,10 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
             More Options
           </button>
           <ul className="dropdown-menu">
-            <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close"><i className="fa-solid fa-road-circle-check listicon" />Save Route</a></li>
+            <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => {
+              // eslint-disable-next-line no-console
+              console.log(savedroute);
+            }}><i className="fa-solid fa-road-circle-check listicon" />Save Route</a></li>
             <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => {
               setPrevList();
               setViewingIds();
