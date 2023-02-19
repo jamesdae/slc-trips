@@ -1,6 +1,21 @@
 import React from 'react';
 
 export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds, viewingIds }) {
+  if (!Array.isArray(viewingIds) || !viewingIds.length > 1) return;
+  const coordinatesWithNulls = mappedIds.map(place => {
+    if (viewingIds.includes(place.locationId)) {
+      return `${place.geometry.location.lat()}, ${place.geometry.location.lng()}`;
+    } else {
+      return null;
+    }
+  });
+  const coordinates = coordinatesWithNulls.filter(coordinate => coordinate !== null);
+  const waypoints = coordinates.slice(1, -1).map(coord => ({ location: coord }));
+  const daddr = coordinates[coordinates.length - 1];
+  const origin = coordinates[0];
+
+  const link = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${daddr}&waypoints=${waypoints.map(waypoint => waypoint.location).join('|')}`;
+
   return (
     <div className="offcanvas offcanvas-start" data-bs-backdrop="false" tabIndex="-1" id="offcanvasDirections" aria-labelledby="offcanvasHeader">
       <div className="offcanvas-header">
@@ -10,15 +25,23 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
       <div className="offcanvas-body">
         <div id='panel' />
         <div className="dropdown mt-3">
-          <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
             More Options
           </button>
           <ul className="dropdown-menu">
-            <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close">Save Route</a></li>
+            <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close"><i className="fa-solid fa-road-circle-check listicon" />Save Route</a></li>
             <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => {
               setPrevList();
               setViewingIds();
-            }}>Clear Pins</a></li>
+            }}><i className="fa-solid fa-trash-can listicon" />Clear Pins</a></li>
+            {Array.isArray(viewingIds) && viewingIds.length > 1
+              ? (
+                <li><a className="dropdown-item" href={link} target="_blank" rel="noopener noreferrer" aria-label="Close"><i className="fa-brands fa-google listicon" />Open route in Google Maps </a></li>
+                )
+              : (
+                  null
+                )
+            }
           </ul>
         </div>
       </div>

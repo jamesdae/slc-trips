@@ -13,7 +13,7 @@ export default function EachCard(props) {
                 <Carousel images={props.location.photos} />
                 )
               : (
-                <img className='p-2 detailimage align-self-center align-self-md-stretch' src={props.location.photos[0].getUrl()} alt='photo from Google Places' />
+                <img className='px-1 detailimage align-self-center align-self-md-stretch' src={props.location.photos[0].getUrl()} alt='photo from Google Places' />
                 )
           }
           <div className='card-body'>
@@ -28,7 +28,7 @@ export default function EachCard(props) {
                     null
                   )
                 : (
-                  <div className="d-flex justify-content-around">
+                  <div className="d-flex justify-content-evenly">
                     {props.tab === 'list'
                       ? (
                         <div className='d-flex'>
