@@ -140,6 +140,22 @@ app.post('/api/mylist', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.post('/api/routelocations', (req, res, next) => {
+  const { myListItemsId } = req.body;
+  const sql = `
+    insert into "routeLocations" ("myListItemsId")
+    values ($1)
+    returning *
+  `;
+  const params = [myListItemsId];
+  db.query(sql, params)
+    .then(result => {
+      const [myListItem] = result.rows;
+      res.status(201).json(myListItem);
+    })
+    .catch(err => next(err));
+});
+
 app.delete('/api/mylist/:removeId', (req, res, next) => {
   const removeId = Number(req.params.removeId);
   const sql = `

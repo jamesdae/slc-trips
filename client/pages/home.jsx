@@ -39,7 +39,7 @@ export default function Home() {
       const myInit = {
         method: 'GET',
         headers: {
-          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2MzUwNTQwfQ.-7s7i9P8n3luohxsiRM8sgszdv8wpxo6jY-VBQ7ohz8'
+          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2ODU1MjEyfQ.FtJD2rQSLeEKLrJ6EWEJZBE9JYYf0ENjYbcWF9arKno'
         }
       };
       fetch('/api/mylist', myInit)
@@ -123,7 +123,7 @@ export default function Home() {
                                   method: 'POST',
                                   headers: {
                                     'Content-Type': 'application/json',
-                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2MzUwNTQwfQ.-7s7i9P8n3luohxsiRM8sgszdv8wpxo6jY-VBQ7ohz8'
+                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2ODU1MjEyfQ.FtJD2rQSLeEKLrJ6EWEJZBE9JYYf0ENjYbcWF9arKno'
                                   },
                                   body: JSON.stringify({ locationId: addedLocationId })
                                 };
@@ -186,7 +186,7 @@ export default function Home() {
                                           method: 'DELETE',
                                           headers: {
                                             'Content-Type': 'application/json',
-                                            'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2MzUwNTQwfQ.-7s7i9P8n3luohxsiRM8sgszdv8wpxo6jY-VBQ7ohz8'
+                                            'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2ODU1MjEyfQ.FtJD2rQSLeEKLrJ6EWEJZBE9JYYf0ENjYbcWF9arKno'
                                           }
                                         })
                                           .then(res => res.json())

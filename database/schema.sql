@@ -54,8 +54,9 @@ CREATE TABLE "public"."myRoutesItems" (
 
 
 CREATE TABLE "public"."routeLocations" (
-	"routeId" integer NOT NULL,
-	"myListItemsId" integer NOT NULL
+	"routeId" serial NOT NULL,
+	"myListItemsId" integer NOT NULL,
+	CONSTRAINT "routeLocations_pk" PRIMARY KEY ("routeId")
 ) WITH (
   OIDS=FALSE
 );
@@ -69,5 +70,5 @@ ALTER TABLE "myListItems" ADD CONSTRAINT "myListItems_fk1" FOREIGN KEY ("locatio
 
 ALTER TABLE "myRoutesItems" ADD CONSTRAINT "myRoutesItems_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
 
-ALTER TABLE "routeLocations" ADD CONSTRAINT "routeLocations_fk0" FOREIGN KEY ("routeId") REFERENCES "myRoutesItems"("routeId");
+-- ALTER TABLE "routeLocations" ADD CONSTRAINT "routeLocations_fk0" FOREIGN KEY ("routeId") REFERENCES "myRoutesItems"("routeId");
 ALTER TABLE "routeLocations" ADD CONSTRAINT "routeLocations_fk1" FOREIGN KEY ("myListItemsId") REFERENCES "myListItems"("myListItemsId");
