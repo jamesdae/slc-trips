@@ -2,15 +2,17 @@ import React from 'react';
 
 export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds, viewingIds, addedLocations }) {
   if (!Array.isArray(viewingIds) || !viewingIds.length > 1) return;
-  const coordinatesWithNulls = mappedIds.map(place => {
-    if (viewingIds.includes(place.locationId)) {
-      return `${place.geometry.location.lat()}, ${place.geometry.location.lng()}`;
+  const coordinates = viewingIds.map(id => {
+    const pinnedIndex = mappedIds.findIndex(place => place.locationId === id);
+    if (pinnedIndex >= 0) {
+      return `${mappedIds[pinnedIndex].geometry.location.lat()}, ${mappedIds[pinnedIndex].geometry.location.lng()}`;
     } else {
       return null;
     }
   });
-  const coordinates = coordinatesWithNulls.filter(coordinate => coordinate !== null);
   const waypoints = coordinates.slice(1, -1).map(coord => ({ location: coord }));
+  // eslint-disable-next-line no-console
+  console.log(coordinates);
   const daddr = coordinates[coordinates.length - 1];
   const origin = coordinates[0];
 
