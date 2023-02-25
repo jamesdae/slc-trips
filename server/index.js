@@ -141,7 +141,8 @@ app.post('/api/mylist', (req, res, next) => {
 });
 
 app.post('/api/routes', (req, res, next) => {
-  const { viewingIds, userId, routeName } = req.body;
+  const { viewingIds, routeName } = req.body;
+  const { userId } = req.user;
   const sql = `
     INSERT INTO "routes" ("userId", "routeName")
     VALUES ($1, $2)
@@ -157,11 +158,12 @@ app.post('/api/routes', (req, res, next) => {
         FROM "myListItems"
         WHERE "userId" = $2 AND "locationId" = ANY($3)
         ORDER BY array_position($3, "locationId")
+        RETURNING *
       `;
       const routeLocationsParams = [routeId, userId, viewingIds];
       return db.query(routeLocationsSql, routeLocationsParams);
     })
-    .then(result2 => res.status(201).json({ message: 'Route created successfully', result2 }))
+    .then(result2 => res.status(201).json(result2.rows))
     .catch(err => next(err));
 });
 

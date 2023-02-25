@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds, viewingIds, addedLocations }) {
+  const [savedRoutes, setSavedRoutes] = useState([]);
+
   if (!Array.isArray(viewingIds) || !viewingIds.length > 1) return;
   const coordinates = viewingIds.map(id => {
     const pinnedIndex = mappedIds.findIndex(place => place.locationId === id);
@@ -32,21 +34,24 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
           </button>
           <ul className="dropdown-menu">
             <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => {
-              const routeName = 'New Route';
-              const userId = addedLocations[0].userId;
+              const routeName = 'Custom Route 4';
               const request = {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
                   'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzA0MTUxfQ._A-eG-7NxgmxFMtXqie57xvASppdZBV7OUTSHb26-7c'
                 },
-                body: JSON.stringify({ viewingIds, userId, routeName })
+                body: JSON.stringify({ viewingIds, routeName })
               };
               fetch('/api/routes', request)
                 .then(res => res.json())
                 .then(newLocation => {
+                  const newRoutes = savedRoutes.concat([newLocation]);
                   // eslint-disable-next-line no-console
-                  console.log(newLocation);
+                  console.log('newRoutes', newRoutes);
+                  setSavedRoutes(newRoutes);
+                  // eslint-disable-next-line no-console
+                  console.log('savedRoutes', savedRoutes);
                 })
                 .catch(err => console.error('Error:', err));
 
