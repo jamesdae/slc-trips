@@ -34,24 +34,27 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
           </button>
           <ul className="dropdown-menu">
             <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => {
-              // eslint-disable-next-line no-console
-              console.log(savedroute);
-              savedroute.forEach(location => {
-                const request = {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2ODU1MjEyfQ.FtJD2rQSLeEKLrJ6EWEJZBE9JYYf0ENjYbcWF9arKno'
-                  },
-                  body: JSON.stringify({ myListItemsId: location.myListItemsId })
-                };
-                fetch('/api/routelocations', request)
-                  .then(res => res.json())
-                  // .then(newLocation => {
-                  //   console.log(newLocation);
-                  // })
-                  .catch(err => console.error('Error:', err));
-              });
+              const routeName = 'Good Route 3';
+              const userId = savedroute[0].userId;
+              const request = {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzA0MTUxfQ._A-eG-7NxgmxFMtXqie57xvASppdZBV7OUTSHb26-7c'
+                },
+                body: JSON.stringify({ viewingIds, userId, routeName })
+              };
+              fetch('/api/routes', request)
+                .then(res => res.json())
+                .then(newLocation => {
+                  // eslint-disable-next-line no-console
+                  console.log(newLocation);
+                  // eslint-disable-next-line no-console
+                  console.log('savedroute', savedroute);
+
+                })
+                .catch(err => console.error('Error:', err));
+
             }}><i className="fa-solid fa-road-circle-check listicon" />Save Route</a></li>
             <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => {
               setPrevList();
