@@ -16,8 +16,6 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
   const daddr = coordinates[coordinates.length - 1];
   const origin = coordinates[0];
 
-  const savedroute = viewingIds.map(id => addedLocations.find(location => location.locationId === id));
-
   const link = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${daddr}&waypoints=${waypoints.map(waypoint => waypoint.location).join('|')}`;
 
   return (
@@ -34,8 +32,8 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
           </button>
           <ul className="dropdown-menu">
             <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => {
-              const routeName = 'Good Route 3';
-              const userId = savedroute[0].userId;
+              const routeName = 'New Route';
+              const userId = addedLocations[0].userId;
               const request = {
                 method: 'POST',
                 headers: {
@@ -49,9 +47,6 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
                 .then(newLocation => {
                   // eslint-disable-next-line no-console
                   console.log(newLocation);
-                  // eslint-disable-next-line no-console
-                  console.log('savedroute', savedroute);
-
                 })
                 .catch(err => console.error('Error:', err));
 

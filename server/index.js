@@ -156,6 +156,7 @@ app.post('/api/routes', (req, res, next) => {
         SELECT $1, "myListItemsId"
         FROM "myListItems"
         WHERE "userId" = $2 AND "locationId" = ANY($3)
+        ORDER BY array_position($3, "locationId")
       `;
       const routeLocationsParams = [routeId, userId, viewingIds];
       return db.query(routeLocationsSql, routeLocationsParams);
