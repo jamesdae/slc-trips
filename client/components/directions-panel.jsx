@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds, viewingIds, addedLocations }) {
-  const [savedRoutes, setSavedRoutes] = useState([]);
+export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds, viewingIds, addedLocations, homeRoutes, setHomeRoutes }) {
 
   if (!Array.isArray(viewingIds) || !viewingIds.length > 1) return;
   const coordinates = viewingIds.map(id => {
@@ -34,24 +33,24 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
           </button>
           <ul className="dropdown-menu">
             <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => {
-              const routeName = 'Custom Route 4';
+              const routeName = 'Custom Route Name';
               const request = {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzA0MTUxfQ._A-eG-7NxgmxFMtXqie57xvASppdZBV7OUTSHb26-7c'
+                  'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
                 },
                 body: JSON.stringify({ viewingIds, routeName })
               };
               fetch('/api/routes', request)
                 .then(res => res.json())
-                .then(newLocation => {
-                  const newRoutes = savedRoutes.concat([newLocation]);
-                  // eslint-disable-next-line no-console
-                  console.log('newRoutes', newRoutes);
-                  setSavedRoutes(newRoutes);
-                  // eslint-disable-next-line no-console
-                  console.log('savedRoutes', savedRoutes);
+                .then(route => {
+                  const newRoute = {
+                    routeId: route[0].routeId,
+                    myListItemsIds: route.map(location => location.myListItemsId)
+                  };
+                  const newRoutes = homeRoutes.concat(newRoute);
+                  setHomeRoutes(newRoutes);
                 })
                 .catch(err => console.error('Error:', err));
 

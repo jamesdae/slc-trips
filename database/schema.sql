@@ -45,7 +45,7 @@ CREATE TABLE "public"."myListItems" (
 CREATE TABLE "public"."routes" (
 	"routeId" serial NOT NULL,
 	"userId" integer NOT NULL,
-	"routeName" TEXT NOT NULL UNIQUE,
+	"routeName" TEXT NOT NULL,
 	CONSTRAINT "routes_pk" PRIMARY KEY ("routeId")
 ) WITH (
   OIDS=FALSE

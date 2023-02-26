@@ -198,6 +198,32 @@ app.get('/api/mylist', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/routes', (req, res, next) => {
+  const { userId } = req.user;
+  const sql = `
+    select "routeId", "routeName"
+      from "routes"
+     where "userId" = $1
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      const routeIds = result.rows.map(route => route.routeId);
+      const routeLocationsSql = `
+      select "routeId", ARRAY_AGG("myListItemsId") as "myListItemsIds"
+        from "routeLocations"
+       where "routeId" = ANY($1)
+       GROUP BY "routeId"
+      `;
+      const routeLocationsParams = [routeIds];
+      return db.query(routeLocationsSql, routeLocationsParams);
+    })
+    .then(results => {
+      res.status(201).json(results.rows);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {

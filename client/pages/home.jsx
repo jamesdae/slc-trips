@@ -27,6 +27,7 @@ export default function Home() {
   const [viewingIds, setViewingIds] = useState(null);
   const [prevList, setPrevList] = useState(null);
   const [mappedIds, setMappedIds] = useState(null);
+  const [homeRoutes, setHomeRoutes] = useState([]);
 
   useEffect(() => {
     if (isLoaded && place === null) {
@@ -39,7 +40,7 @@ export default function Home() {
       const myInit = {
         method: 'GET',
         headers: {
-          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzA0MTUxfQ._A-eG-7NxgmxFMtXqie57xvASppdZBV7OUTSHb26-7c'
+          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
         }
       };
       fetch('/api/mylist', myInit)
@@ -53,6 +54,12 @@ export default function Home() {
             myListLocations.push(place.find(location => location.locationId === id));
           });
           setMappedIds(myListLocations);
+          fetch('/api/routes', myInit)
+            .then(response => response.json())
+            .then(oldRoutes => {
+              setHomeRoutes(oldRoutes);
+            });
+
         })
         .catch(err => console.error('Error:', err));
     }
@@ -123,7 +130,7 @@ export default function Home() {
                                   method: 'POST',
                                   headers: {
                                     'Content-Type': 'application/json',
-                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzA0MTUxfQ._A-eG-7NxgmxFMtXqie57xvASppdZBV7OUTSHb26-7c'
+                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
                                   },
                                   body: JSON.stringify({ locationId: addedLocationId })
                                 };
@@ -186,7 +193,7 @@ export default function Home() {
                                           method: 'DELETE',
                                           headers: {
                                             'Content-Type': 'application/json',
-                                            'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzA0MTUxfQ._A-eG-7NxgmxFMtXqie57xvASppdZBV7OUTSHb26-7c'
+                                            'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
                                           }
                                         })
                                           .then(res => res.json())
@@ -281,7 +288,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <DirectionsPanel addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
+          <DirectionsPanel homeRoutes={homeRoutes} setHomeRoutes={newRoutes => setHomeRoutes(newRoutes)} addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
           <div className='full backwhite col-md-6 col-12 botpad'>
             <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {
               if (extraDetailsOpen === true) return;
