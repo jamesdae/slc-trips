@@ -248,8 +248,8 @@ export default function Home() {
                     ? (
                       <div>
                         <DirectionsModal viewingIds={viewingIds} />
-                        <div className='row row-cols-1 row-cols-md-2 g-4'>
-                          {
+                        <div className='row row-cols-1 g-4'>
+                          {/* {
                             viewingIds !== null && viewingIds !== false
                               ? (
                                   mappedIds.map((location, index) => {
@@ -276,6 +276,44 @@ export default function Home() {
                                 )
                               : (
                                 <EmptyTabAlert tab='routes'/>
+                                )
+                          } */}
+                          {
+                            homeRoutes[0] !== undefined
+                              ? (
+                                <div>
+                                  {
+                                    homeRoutes.map(route => {
+                                      const locationIds = [route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId), route.routeId];
+                                      // eslint-disable-next-line no-console
+                                      console.log('locationIds', locationIds);
+                                      return (
+                                        <div className="card-group border border-success m-2" key={route.routeId}>
+                                          <p>Route {route.routeId}</p>
+                                          {
+                                            mappedIds.map((location, index) => {
+                                              if (locationIds[0].includes(location.locationId)) {
+                                                return (
+                                                  <div className="card" key={index}>
+                                                    <img src={location.photos[0].getUrl()} className="card-img-top" alt="..." />
+                                                    <div className="card-body">
+                                                      <h5 className="card-title">{location.name}</h5>
+                                                      <p className="card-text">{location.category}</p>
+                                                      <p className="card-text"><small className="text-muted">Last updated 3 mins ago</small></p>
+                                                    </div>
+                                                  </div>
+                                                );
+                                              } else return null;
+                                            })
+                                          }
+                                        </div>
+                                      );
+                                    })
+                                  }
+                                </div>
+                                )
+                              : (
+                                  null
                                 )
                           }
                         </div>

@@ -214,6 +214,7 @@ app.get('/api/routes', (req, res, next) => {
         from "routeLocations"
        where "routeId" = ANY($1)
        GROUP BY "routeId"
+       ORDER BY "routeId"
       `;
       const routeLocationsParams = [routeIds];
       return db.query(routeLocationsSql, routeLocationsParams);
