@@ -289,12 +289,12 @@ export default function Home() {
                                       return (
                                         <div className='m-2' key={route.routeId}>
                                           <p className='my-0'>Route {route.routeId}</p>
-                                          <div className="card-group border border-success">
+                                          <div className="card-group d-flex flex-row border border-success">
                                             {
                                               locationIds[0].map((id, index) => {
                                                 const eachId = mappedIds.find(location => location.locationId === id);
                                                 return (
-                                                  <div className="card" key={index}>
+                                                  <div className="card routecard" key={index}>
                                                     <img src={eachId.photos[0].getUrl()} className="card-img-top detailimage" alt="..." />
                                                     <div className="card-body">
                                                       <h5 className="card-title">{eachId.name}</h5>
