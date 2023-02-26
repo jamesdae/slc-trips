@@ -59,7 +59,6 @@ export default function Home() {
             .then(oldRoutes => {
               setHomeRoutes(oldRoutes);
             });
-
         })
         .catch(err => console.error('Error:', err));
     }
@@ -288,24 +287,25 @@ export default function Home() {
                                       // eslint-disable-next-line no-console
                                       console.log('locationIds', locationIds);
                                       return (
-                                        <div className="card-group border border-success m-2" key={route.routeId}>
-                                          <p>Route {route.routeId}</p>
-                                          {
-                                            mappedIds.map((location, index) => {
-                                              if (locationIds[0].includes(location.locationId)) {
+                                        <div className='m-2' key={route.routeId}>
+                                          <p className='my-0'>Route {route.routeId}</p>
+                                          <div className="card-group border border-success">
+                                            {
+                                              locationIds[0].map((id, index) => {
+                                                const eachId = mappedIds.find(location => location.locationId === id);
                                                 return (
                                                   <div className="card" key={index}>
-                                                    <img src={location.photos[0].getUrl()} className="card-img-top" alt="..." />
+                                                    <img src={eachId.photos[0].getUrl()} className="card-img-top detailimage" alt="..." />
                                                     <div className="card-body">
-                                                      <h5 className="card-title">{location.name}</h5>
-                                                      <p className="card-text">{location.category}</p>
+                                                      <h5 className="card-title">{eachId.name}</h5>
+                                                      <p className="card-text">{eachId.category}</p>
                                                       <p className="card-text"><small className="text-muted">Last updated 3 mins ago</small></p>
                                                     </div>
                                                   </div>
                                                 );
-                                              } else return null;
-                                            })
-                                          }
+                                              })
+                                            }
+                                          </div>
                                         </div>
                                       );
                                     })
