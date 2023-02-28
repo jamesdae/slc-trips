@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLoadScript } from '@react-google-maps/api';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -28,6 +28,8 @@ export default function Home() {
   const [prevList, setPrevList] = useState(null);
   const [mappedIds, setMappedIds] = useState(null);
   const [homeRoutes, setHomeRoutes] = useState([]);
+
+  const routeNameRef = useRef(null);
 
   useEffect(() => {
     if (isLoaded && place === null) {
@@ -338,13 +340,13 @@ export default function Home() {
                 <form>
                   <div className="mb-3">
                     <label htmlFor="recipient-name" className="col-form-label">Custom Route Name</label>
-                    <input type="text" className="form-control" id="recipient-name" />
+                    <input type="text" className="form-control" id="recipient-name" ref={routeNameRef} />
                   </div>
                 </form>
               </div>
               <div className="mb-3">
                 <button className="btn btn-primary" data-bs-dismiss="offcanvas" onClick={() => {
-                  const routeName = 'Custom Route Name';
+                  const routeName = routeNameRef.current.value;
                   const request = {
                     method: 'POST',
                     headers: {
