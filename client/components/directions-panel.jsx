@@ -51,6 +51,8 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
                   };
                   const newRoutes = homeRoutes.concat(newRoute);
                   setHomeRoutes(newRoutes);
+                  setPrevList();
+                  setViewingIds();
                 })
                 .catch(err => console.error('Error:', err));
 

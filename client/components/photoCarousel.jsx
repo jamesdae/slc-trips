@@ -42,7 +42,7 @@ export default function Carousel(props) {
         <i className='fa-solid fa-angle-left blue pointer' onClick={prevImage}/>
         <div className='center d-flex flex-column justify-content-center'>
           <a href='#'>
-            <img src={props.images[activeIndex].getUrl()} className='p-2 carouselimg align-self-center align-self-md-stretch' />
+            <img src={props.images[activeIndex].getUrl()} className='p-2 carouselimg align-self-stretch' />
             {}
           </a>
           <div className="dots">
