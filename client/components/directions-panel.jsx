@@ -32,7 +32,7 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
             More Options
           </button>
           <ul className="dropdown-menu">
-            <li><a className="dropdown-item" data-bs-dismiss="offcanvas" href="#exampleModalToggle" aria-label="Close" data-bs-toggle="modal"><i className="fa-solid fa-road-circle-check listicon" />Save Route</a></li>
+            <li><a className="dropdown-item" href="#offcanvasExample" aria-label="Close" data-bs-toggle="offcanvas"><i className="fa-solid fa-road-circle-check listicon" />Save Route</a></li>
             <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => {
               setPrevList();
               setViewingIds();
