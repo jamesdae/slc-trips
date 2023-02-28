@@ -54,11 +54,11 @@ export default function Home() {
             myListLocations.push(place.find(location => location.locationId === id));
           });
           setMappedIds(myListLocations);
-          // fetch('/api/routes', myInit)
-          //   .then(response => response.json())
-          //   .then(oldRoutes => {
-          //     setHomeRoutes(oldRoutes);
-          //   });
+          fetch('/api/routes', myInit)
+            .then(response => response.json())
+            .then(oldRoutes => {
+              setHomeRoutes(oldRoutes);
+            });
         })
         .catch(err => console.error('Error:', err));
     }
