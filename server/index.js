@@ -140,6 +140,33 @@ app.post('/api/mylist', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.post('/api/routes', (req, res, next) => {
+  const { viewingIds, routeName } = req.body;
+  const { userId } = req.user;
+  const sql = `
+    INSERT INTO "routes" ("userId", "routeName")
+    VALUES ($1, $2)
+    RETURNING "routeId"
+  `;
+  const params = [userId, routeName];
+  db.query(sql, params)
+    .then(result => {
+      const routeId = result.rows[0].routeId;
+      const routeLocationsSql = `
+      INSERT INTO "routeLocations" ("routeId", "myListItemsId")
+        SELECT $1, "myListItemsId"
+        FROM "myListItems"
+        WHERE "userId" = $2 AND "locationId" = ANY($3)
+        ORDER BY array_position($3, "locationId")
+        RETURNING *
+      `;
+      const routeLocationsParams = [routeId, userId, viewingIds];
+      return db.query(routeLocationsSql, routeLocationsParams);
+    })
+    .then(result2 => res.status(201).json(result2.rows))
+    .catch(err => next(err));
+});
+
 app.delete('/api/mylist/:removeId', (req, res, next) => {
   const removeId = Number(req.params.removeId);
   const sql = `
@@ -167,6 +194,33 @@ app.get('/api/mylist', (req, res, next) => {
   db.query(sql, params)
     .then(result => {
       res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/routes', (req, res, next) => {
+  const { userId } = req.user;
+  const sql = `
+    select "routeId", "routeName"
+      from "routes"
+     where "userId" = $1
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      const routeIds = result.rows.map(route => route.routeId);
+      const routeLocationsSql = `
+      select "routeId", ARRAY_AGG("myListItemsId") as "myListItemsIds"
+        from "routeLocations"
+       where "routeId" = ANY($1)
+       GROUP BY "routeId"
+       ORDER BY "routeId"
+      `;
+      const routeLocationsParams = [routeIds];
+      return db.query(routeLocationsSql, routeLocationsParams);
+    })
+    .then(results => {
+      res.status(201).json(results.rows);
     })
     .catch(err => next(err));
 });

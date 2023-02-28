@@ -6,7 +6,7 @@ drop schema "public" cascade;
 
 create schema "public";
 
-CREATE TABLE "public"."locations" (
+ CREATE TABLE "public"."locations" (
 	"locationId" serial NOT NULL,
 	"placeId" TEXT NOT NULL,
 	"name" TEXT NOT NULL,
@@ -42,11 +42,11 @@ CREATE TABLE "public"."myListItems" (
 
 
 
-CREATE TABLE "public"."myRoutesItems" (
+CREATE TABLE "public"."routes" (
 	"routeId" serial NOT NULL,
 	"userId" integer NOT NULL,
-	"routeName" TEXT NOT NULL UNIQUE,
-	CONSTRAINT "myRoutesItems_pk" PRIMARY KEY ("routeId")
+	"routeName" TEXT NOT NULL,
+	CONSTRAINT "routes_pk" PRIMARY KEY ("routeId")
 ) WITH (
   OIDS=FALSE
 );
@@ -67,7 +67,7 @@ CREATE TABLE "public"."routeLocations" (
 ALTER TABLE "myListItems" ADD CONSTRAINT "myListItems_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
 ALTER TABLE "myListItems" ADD CONSTRAINT "myListItems_fk1" FOREIGN KEY ("locationId") REFERENCES "locations"("locationId");
 
-ALTER TABLE "myRoutesItems" ADD CONSTRAINT "myRoutesItems_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
+ALTER TABLE "routes" ADD CONSTRAINT "routes_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
 
-ALTER TABLE "routeLocations" ADD CONSTRAINT "routeLocations_fk0" FOREIGN KEY ("routeId") REFERENCES "myRoutesItems"("routeId");
+ALTER TABLE "routeLocations" ADD CONSTRAINT "routeLocations_fk0" FOREIGN KEY ("routeId") REFERENCES "routes"("routeId");
 ALTER TABLE "routeLocations" ADD CONSTRAINT "routeLocations_fk1" FOREIGN KEY ("myListItemsId") REFERENCES "myListItems"("myListItemsId");

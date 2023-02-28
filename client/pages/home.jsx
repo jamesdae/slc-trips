@@ -27,6 +27,7 @@ export default function Home() {
   const [viewingIds, setViewingIds] = useState(null);
   const [prevList, setPrevList] = useState(null);
   const [mappedIds, setMappedIds] = useState(null);
+  const [homeRoutes, setHomeRoutes] = useState([]);
 
   useEffect(() => {
     if (isLoaded && place === null) {
@@ -39,7 +40,7 @@ export default function Home() {
       const myInit = {
         method: 'GET',
         headers: {
-          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2MzUwNTQwfQ.-7s7i9P8n3luohxsiRM8sgszdv8wpxo6jY-VBQ7ohz8'
+          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
         }
       };
       fetch('/api/mylist', myInit)
@@ -53,6 +54,11 @@ export default function Home() {
             myListLocations.push(place.find(location => location.locationId === id));
           });
           setMappedIds(myListLocations);
+          fetch('/api/routes', myInit)
+            .then(response => response.json())
+            .then(oldRoutes => {
+              setHomeRoutes(oldRoutes);
+            });
         })
         .catch(err => console.error('Error:', err));
     }
@@ -108,7 +114,7 @@ export default function Home() {
                           setViewingIds(null);
                           setSelectedCategory(selectedCategory);
                         }} />
-                        <div className='row row-cols-1 row-cols-md-2 g-4'>
+                        <div className='row row-cols-1 row-cols-md-2 g-1'>
                           <LocationCards place={place} clickedCategory={selectedCategory}
                             viewCard={viewingId => {
                               setExtraDetailsOpen(!extraDetailsOpen);
@@ -123,7 +129,7 @@ export default function Home() {
                                   method: 'POST',
                                   headers: {
                                     'Content-Type': 'application/json',
-                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2MzUwNTQwfQ.-7s7i9P8n3luohxsiRM8sgszdv8wpxo6jY-VBQ7ohz8'
+                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
                                   },
                                   body: JSON.stringify({ locationId: addedLocationId })
                                 };
@@ -157,7 +163,7 @@ export default function Home() {
                         {
                           addedLocations.length > 0
                             ? (
-                              <div className='row row-cols-1 row-cols-md-2 g-4'>
+                              <div className='row row-cols-1 row-cols-md-2 g-1'>
                                 {
                                   mappedIds.map((location, index) => {
                                     const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
@@ -186,7 +192,7 @@ export default function Home() {
                                           method: 'DELETE',
                                           headers: {
                                             'Content-Type': 'application/json',
-                                            'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc2MzUwNTQwfQ.-7s7i9P8n3luohxsiRM8sgszdv8wpxo6jY-VBQ7ohz8'
+                                            'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
                                           }
                                         })
                                           .then(res => res.json())
@@ -241,37 +247,77 @@ export default function Home() {
                     ? (
                       <div>
                         <DirectionsModal viewingIds={viewingIds} />
-                        <div className='row row-cols-1 row-cols-md-2 g-4'>
-                          {
-                            viewingIds !== null && viewingIds !== false
-                              ? (
-                                  mappedIds.map((location, index) => {
-                                    const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
-                                    if (savedlocation.locationId === location.locationId && viewingIds.includes(location.locationId)) {
-                                      return <EachCard location={location} key={savedlocation.myListItemsId} viewingIds={viewingIds} myListItemsId={savedlocation.myListItemsId}
-                                      unpinLocation={id => {
-                                        const remainingPins = viewingIds.filter(viewingId => viewingId !== id);
-                                        if (remainingPins[0] === undefined) {
-                                          setViewingIds(false);
-                                          setPrevList(false);
-                                        } else {
-                                          setViewingIds(remainingPins);
-                                          setPrevList(remainingPins);
-                                        }
-                                      }}
-                                      viewCard={viewingId => {
-                                        setExtraDetailsOpen(!extraDetailsOpen);
-                                        setPrevList(viewingIds);
-                                        setViewingIds([viewingId]);
-                                      }} />;
-                                    } else return null;
-                                  })
-                                )
-                              : (
-                                <EmptyTabAlert tab='routes'/>
-                                )
+                        <div className='row row-cols-1 row-cols-md-2 g-1'>
+                          {viewingIds !== null && viewingIds !== false
+                            ? (
+                                mappedIds.map((location, index) => {
+                                  const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
+                                  if (savedlocation.locationId === location.locationId && viewingIds.includes(location.locationId)) {
+                                    return <EachCard location={location} key={savedlocation.myListItemsId} viewingIds={viewingIds} myListItemsId={savedlocation.myListItemsId}
+                                    unpinLocation={id => {
+                                      const remainingPins = viewingIds.filter(viewingId => viewingId !== id);
+                                      if (remainingPins[0] === undefined) {
+                                        setViewingIds(false);
+                                        setPrevList(false);
+                                      } else {
+                                        setViewingIds(remainingPins);
+                                        setPrevList(remainingPins);
+                                      }
+                                    }}
+                                    viewCard={viewingId => {
+                                      setExtraDetailsOpen(!extraDetailsOpen);
+                                      setPrevList(viewingIds);
+                                      setViewingIds([viewingId]);
+                                    }} />;
+                                  } else return null;
+                                })
+                              )
+                            : (
+                              <div className='flex-fill'>
+                                {homeRoutes[0] === undefined ? <EmptyTabAlert tab='routes' /> : null}
+                              </div>
+                              )
                           }
                         </div>
+                        {homeRoutes[0] !== undefined
+                          ? (
+                            <div className='row row-cols-1'>
+                              <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                View Saved Routes
+                              </button>
+                              <div className="collapse" id="collapseExample">
+                                {
+                                homeRoutes.map(route => {
+                                  const locationIds = [route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId), route.routeId];
+                                  // eslint-disable-next-line no-console
+                                  console.log('locationIds', locationIds);
+                                  return (
+                                    <div className='m-2' key={route.routeId}>
+                                      <p className='my-0'>Route {route.routeId}</p>
+                                      <div className="card-group d-flex flex-row">
+                                        {
+                                          locationIds[0].map((id, index) => {
+                                            const eachId = mappedIds.find(location => location.locationId === id);
+                                            return (
+                                              <div className="card routecard" key={index}>
+                                                <img src={eachId.photos[0].getUrl()} className="card-img-top detailimage" alt="..." />
+                                                <div className="card-body">
+                                                  <h6 className="card-title">{eachId.name}</h6>
+                                                  <p className="card-text"><small className="text-muted">{eachId.category}</small></p>
+                                                </div>
+                                              </div>
+                                            );
+                                          })
+                                        }
+                                      </div>
+                                    </div>
+                                  );
+                                })
+                              }
+                              </div>
+                            </div>
+                            )
+                          : null}
                       </div>
                       )
                     : (
@@ -281,7 +327,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <DirectionsPanel setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
+          <DirectionsPanel homeRoutes={homeRoutes} setHomeRoutes={newRoutes => setHomeRoutes(newRoutes)} addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
           <div className='full backwhite col-md-6 col-12 botpad'>
             <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {
               if (extraDetailsOpen === true) return;
