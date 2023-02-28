@@ -32,31 +32,7 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
             More Options
           </button>
           <ul className="dropdown-menu">
-            <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => {
-              const routeName = 'Custom Route Name';
-              const request = {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
-                },
-                body: JSON.stringify({ viewingIds, routeName })
-              };
-              fetch('/api/routes', request)
-                .then(res => res.json())
-                .then(route => {
-                  const newRoute = {
-                    routeId: route[0].routeId,
-                    myListItemsIds: route.map(location => location.myListItemsId)
-                  };
-                  const newRoutes = homeRoutes.concat(newRoute);
-                  setHomeRoutes(newRoutes);
-                  setPrevList();
-                  setViewingIds();
-                })
-                .catch(err => console.error('Error:', err));
-
-            }}><i className="fa-solid fa-road-circle-check listicon" />Save Route</a></li>
+            <li><a className="dropdown-item" data-bs-dismiss="offcanvas" href="#exampleModalToggle" aria-label="Close" data-bs-toggle="modal"><i className="fa-solid fa-road-circle-check listicon" />Save Route</a></li>
             <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => {
               setPrevList();
               setViewingIds();

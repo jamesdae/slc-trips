@@ -327,6 +327,51 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <div className="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabIndex="-1">
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="exampleModalToggleLabel">Save Route</h5>
+                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                </div>
+                <div className="modal-body">
+                  <form>
+                    <div className="mb-3">
+                      <label htmlFor="recipient-name" className="col-form-label">Custom Route Name</label>
+                      <input type="text" className="form-control" id="recipient-name" />
+                    </div>
+                  </form>
+                </div>
+                <div className="modal-footer">
+                  <button className="btn btn-primary" data-bs-dismiss="modal" onClick={() => {
+                    const routeName = 'Custom Route Name';
+                    const request = {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
+                      },
+                      body: JSON.stringify({ viewingIds, routeName })
+                    };
+                    fetch('/api/routes', request)
+                      .then(res => res.json())
+                      .then(route => {
+                        const newRoute = {
+                          routeId: route[0].routeId,
+                          myListItemsIds: route.map(location => location.myListItemsId)
+                        };
+                        const newRoutes = homeRoutes.concat(newRoute);
+                        setHomeRoutes(newRoutes);
+                        setPrevList(false);
+                        setViewingIds(false);
+                      })
+                      .catch(err => console.error('Error:', err));
+
+                  }}>Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <DirectionsPanel homeRoutes={homeRoutes} setHomeRoutes={newRoutes => setHomeRoutes(newRoutes)} addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
           <div className='full backwhite col-md-6 col-12 botpad'>
             <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {
