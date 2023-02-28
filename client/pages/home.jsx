@@ -31,6 +31,8 @@ export default function Home() {
 
   const routeNameRef = useRef(null);
 
+  const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew';
+
   useEffect(() => {
     if (isLoaded && place === null) {
       fetch(`/api/locations/?category=${selectedCategory}`)
@@ -42,7 +44,7 @@ export default function Home() {
       const myInit = {
         method: 'GET',
         headers: {
-          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
+          'X-Access-Token': accessToken
         }
       };
       fetch('/api/mylist', myInit)
@@ -131,7 +133,7 @@ export default function Home() {
                                   method: 'POST',
                                   headers: {
                                     'Content-Type': 'application/json',
-                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
+                                    'X-Access-Token': accessToken
                                   },
                                   body: JSON.stringify({ locationId: addedLocationId })
                                 };
@@ -194,7 +196,7 @@ export default function Home() {
                                           method: 'DELETE',
                                           headers: {
                                             'Content-Type': 'application/json',
-                                            'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
+                                            'X-Access-Token': accessToken
                                           }
                                         })
                                           .then(res => res.json())
@@ -291,11 +293,9 @@ export default function Home() {
                                 {
                                 homeRoutes.map(route => {
                                   const locationIds = [route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId), route.routeId];
-                                  // eslint-disable-next-line no-console
-                                  console.log('locationIds', locationIds);
                                   return (
                                     <div className='m-2' key={route.routeId}>
-                                      <p className='my-0'>Route {route.routeId}</p>
+                                      <p className='my-0'>{route.routeName}</p>
                                       <div className="card-group d-flex flex-row">
                                         {
                                           locationIds[0].map((id, index) => {
@@ -351,7 +351,7 @@ export default function Home() {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
-                      'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
+                      'X-Access-Token': accessToken
                     },
                     body: JSON.stringify({ viewingIds, routeName })
                   };
@@ -360,6 +360,7 @@ export default function Home() {
                     .then(route => {
                       const newRoute = {
                         routeId: route[0].routeId,
+                        routeName,
                         myListItemsIds: route.map(location => location.myListItemsId)
                       };
                       const newRoutes = homeRoutes.concat(newRoute);

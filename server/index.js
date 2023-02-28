@@ -201,24 +201,15 @@ app.get('/api/mylist', (req, res, next) => {
 app.get('/api/routes', (req, res, next) => {
   const { userId } = req.user;
   const sql = `
-    select "routeId", "routeName"
-      from "routes"
-     where "userId" = $1
-  `;
-  const params = [userId];
-  db.query(sql, params)
-    .then(result => {
-      const routeIds = result.rows.map(route => route.routeId);
-      const routeLocationsSql = `
-      select "routeId", ARRAY_AGG("myListItemsId") as "myListItemsIds"
-        from "routeLocations"
-       where "routeId" = ANY($1)
-       GROUP BY "routeId"
+      select "routeId", "routeName", ARRAY_AGG("myListItemsId") as "myListItemsIds"
+        from "routes"
+        join "routeLocations" USING ("routeId")
+       where "userId" = $1
+       GROUP BY "routeId", "routeName"
        ORDER BY "routeId"
       `;
-      const routeLocationsParams = [routeIds];
-      return db.query(routeLocationsSql, routeLocationsParams);
-    })
+  const params = [userId];
+  db.query(sql, params)
     .then(results => {
       res.status(201).json(results.rows);
     })
