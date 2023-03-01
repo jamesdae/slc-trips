@@ -32,7 +32,7 @@ export default function Home() {
 
   const routeNameRef = useRef(null);
 
-  const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew';
+  const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3NzExMDAwfQ.kROhQMt9i1HcX3rTt2TFfk5AewEe61-mF-3FNDkDksA';
 
   useEffect(() => {
     if (isLoaded && place === null) {
