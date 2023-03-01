@@ -216,6 +216,27 @@ app.get('/api/routes', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.put('/api/routes', (req, res, next) => {
+  const { userId } = req.user;
+  const { routeId } = req.body;
+  const { newRouteName } = req.body;
+  const sql = `
+  UPDATE "routes"
+    SET "routeName" = $1
+    WHERE "userId" = $2 AND "routeId" = $3
+    RETURNING *
+  `;
+  const params = [newRouteName, userId, routeId];
+  db.query(sql, params)
+    .then(result => {
+      if (result.rowCount === 0) {
+        throw new Error(`Route ${routeId} does not exist or user does not have permission to edit`);
+      }
+      res.json(result.rows[0]);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {

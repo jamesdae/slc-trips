@@ -12,6 +12,7 @@ import DirectionsModal from '../components/directions-modal';
 import ExtraDetails from '../components/extra-details';
 import DirectionsPanel from '../components/directions-panel';
 import EmptyTabAlert from '../components/empty-tab';
+import SavedRoutes from '../components/saved-routes';
 
 export default function Home() {
   const { isLoaded, loadError } = useLoadScript({
@@ -293,27 +294,7 @@ export default function Home() {
                                 {
                                 homeRoutes.map(route => {
                                   const locationIds = [route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId), route.routeId];
-                                  return (
-                                    <div className='m-2' key={route.routeId}>
-                                      <p className='my-0 mx-2'>{route.routeName}<i className="mx-2 fa-solid fa-pen-to-square" /></p>
-                                      <div className="card-group d-flex flex-row">
-                                        {
-                                          locationIds[0].map((id, index) => {
-                                            const eachId = mappedIds.find(location => location.locationId === id);
-                                            return (
-                                              <div className="card routecard" key={index}>
-                                                <img src={eachId.photos[0].getUrl()} className="card-img-top detailimage" alt="..." />
-                                                <div className="card-body">
-                                                  <h6 className="card-title">{eachId.name}</h6>
-                                                  <p className="card-text"><small className="text-muted">{eachId.category}</small></p>
-                                                </div>
-                                              </div>
-                                            );
-                                          })
-                                        }
-                                      </div>
-                                    </div>
-                                  );
+                                  return <SavedRoutes key={route.routeId} route={route} locationIds={locationIds} mappedIds={mappedIds} accessToken={accessToken} />;
                                 })
                               }
                               </div>
@@ -369,7 +350,6 @@ export default function Home() {
                       setViewingIds(false);
                     })
                     .catch(err => console.error('Error:', err));
-
                 }}>Save</button>
               </div>
             </div>
