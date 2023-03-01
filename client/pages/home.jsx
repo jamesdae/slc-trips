@@ -295,7 +295,7 @@ export default function Home() {
                                   const locationIds = [route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId), route.routeId];
                                   return (
                                     <div className='m-2' key={route.routeId}>
-                                      <p className='my-0'>{route.routeName}</p>
+                                      <p className='my-0 mx-2'>{route.routeName}<i className="mx-2 fa-solid fa-pen-to-square" /></p>
                                       <div className="card-group d-flex flex-row">
                                         {
                                           locationIds[0].map((id, index) => {
