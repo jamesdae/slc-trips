@@ -250,24 +250,29 @@ export default function Home() {
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        <DirectionsModal viewingIds={viewingIds} />
-                        <div className='row row-cols-1 row-cols-md-2 g-1'>
-                          {viewingIds !== null && viewingIds !== false
-                            ? (
+                        {viewingIds !== null && viewingIds !== false
+                          ? (
+                            <div className='row row-cols-1 row-cols-md-2 g-1'>
+                              <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePins" aria-expanded="true" aria-controls="collapsePins">
+                                New Route Details
+                              </button>
+                              <div className="collapse show" id="collapsePins">
+                                <DirectionsModal viewingIds={viewingIds} />
+                                {
                                 mappedIds.map((location, index) => {
                                   const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
                                   if (savedlocation.locationId === location.locationId && viewingIds.includes(location.locationId)) {
                                     return <EachCard location={location} key={savedlocation.myListItemsId} viewingIds={viewingIds} myListItemsId={savedlocation.myListItemsId}
-                                    unpinLocation={id => {
-                                      const remainingPins = viewingIds.filter(viewingId => viewingId !== id);
-                                      if (remainingPins[0] === undefined) {
-                                        setViewingIds(false);
-                                        setPrevList(false);
-                                      } else {
-                                        setViewingIds(remainingPins);
-                                        setPrevList(remainingPins);
-                                      }
-                                    }}
+                                      unpinLocation={id => {
+                                        const remainingPins = viewingIds.filter(viewingId => viewingId !== id);
+                                        if (remainingPins[0] === undefined) {
+                                          setViewingIds(false);
+                                          setPrevList(false);
+                                        } else {
+                                          setViewingIds(remainingPins);
+                                          setPrevList(remainingPins);
+                                        }
+                                      }}
                                     viewCard={viewingId => {
                                       setExtraDetailsOpen(!extraDetailsOpen);
                                       setPrevList(viewingIds);
@@ -275,21 +280,23 @@ export default function Home() {
                                     }} />;
                                   } else return null;
                                 })
-                              )
-                            : (
-                              <div className='flex-fill'>
-                                {homeRoutes[0] === undefined ? <EmptyTabAlert tab='routes' /> : null}
+                                }
                               </div>
-                              )
+                            </div>
+                            )
+                          : (
+                            <div className='flex-fill'>
+                              {homeRoutes[0] === undefined ? <EmptyTabAlert tab='routes' /> : null}
+                            </div>
+                            )
                           }
-                        </div>
                         {homeRoutes[0] !== undefined
                           ? (
                             <div className='row row-cols-1'>
-                              <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                View Saved Routes
+                              <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRoutes" aria-expanded="false" aria-controls="collapseRoutes">
+                                My Saved Routes
                               </button>
-                              <div className="collapse" id="collapseExample">
+                              <div className="collapse" id="collapseRoutes">
                                 {
                                 homeRoutes.map(route => {
                                   const locationIds = route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId);
@@ -309,9 +316,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-
           <NewRouteForm accessToken={accessToken} viewingIds={viewingIds} homeRoutes={homeRoutes} setHomeRoutes={routes => setHomeRoutes(routes)} setPrevList={list => setPrevList(list)} setViewingIds={ids => setViewingIds(ids)}/>
-
           <DirectionsPanel homeRoutes={homeRoutes} setHomeRoutes={newRoutes => setHomeRoutes(newRoutes)} addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
           <div className='full backwhite col-md-6 col-12 botpad'>
             <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {
