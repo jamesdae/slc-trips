@@ -18,16 +18,8 @@ export default function NewRouteForm({ accessToken, viewingIds, homeRoutes, setH
       </div>
       <div className="offcanvas-body">
         <div>
-          <form autoComplete="off">
-            <div className="mb-3">
-              <label htmlFor="recipient-name" className="col-form-label">Custom Route Name</label>
-              <input type="text" className={`form-control ${(!isValid && isTouched) ? 'is-invalid' : ''} ${isValid ? 'is-valid' : ''}`} id="recipient-name" ref={routeNameRef} onBlur={() => setIsTouched(false)} onChange={handleInputChange} onClick={() => setIsTouched(true)} />
-              {(!isValid && isTouched) && <div className="invalid-feedback">Route name is required.</div>}
-            </div>
-          </form>
-        </div>
-        <div className="mb-3">
-          <button className="btn btn-primary" data-bs-dismiss="offcanvas" disabled={!isValid} onClick={() => {
+          <form autoComplete="off" onSubmit={event => {
+            event.preventDefault();
             const routeName = routeNameRef.current.value;
             const request = {
               method: 'POST',
@@ -49,9 +41,20 @@ export default function NewRouteForm({ accessToken, viewingIds, homeRoutes, setH
                 setHomeRoutes(newRoutes);
                 setPrevList(false);
                 setViewingIds(false);
+                routeNameRef.current.value = '';
+                setIsValid(false);
               })
               .catch(err => console.error('Error:', err));
-          }}>Save</button>
+          }}>
+            <div className="mb-3">
+              <label htmlFor="recipient-name" className="col-form-label">Custom Route Name</label>
+              <input type="text" className={`form-control ${(!isValid && isTouched) ? 'is-invalid' : ''} ${isValid ? 'is-valid' : ''}`} id="recipient-name" ref={routeNameRef} onBlur={() => setIsTouched(false)} onChange={handleInputChange} onClick={() => setIsTouched(true)} />
+              {(!isValid && isTouched) && <div className="invalid-feedback">Route name is required.</div>}
+            </div>
+            <div className="mb-3">
+              <button className="btn btn-primary" data-bs-dismiss="offcanvas" disabled={!isValid} type="submit">Save</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

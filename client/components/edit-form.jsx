@@ -32,7 +32,10 @@ export default function EditForm({ setRouteName, route, accessToken }) {
                 };
                 fetch('/api/routes', request)
                   .then(res => res.json())
-                  .then(() => setRouteName(newRouteName))
+                  .then(() => {
+                    setRouteName(newRouteName);
+                    setInputValue('');
+                  })
                   .catch(err => console.error('Error:', err));
               }
             }}>
