@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLoadScript } from '@react-google-maps/api';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -12,6 +12,7 @@ import DirectionsModal from '../components/directions-modal';
 import ExtraDetails from '../components/extra-details';
 import DirectionsPanel from '../components/directions-panel';
 import EmptyTabAlert from '../components/empty-tab';
+import SavedRoutes from '../components/saved-routes';
 
 export default function Home() {
   const { isLoaded, loadError } = useLoadScript({
@@ -29,6 +30,10 @@ export default function Home() {
   const [mappedIds, setMappedIds] = useState(null);
   const [homeRoutes, setHomeRoutes] = useState([]);
 
+  const routeNameRef = useRef(null);
+
+  const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3NzExMDAwfQ.kROhQMt9i1HcX3rTt2TFfk5AewEe61-mF-3FNDkDksA';
+
   useEffect(() => {
     if (isLoaded && place === null) {
       fetch(`/api/locations/?category=${selectedCategory}`)
@@ -40,7 +45,7 @@ export default function Home() {
       const myInit = {
         method: 'GET',
         headers: {
-          'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
+          'X-Access-Token': accessToken
         }
       };
       fetch('/api/mylist', myInit)
@@ -129,7 +134,7 @@ export default function Home() {
                                   method: 'POST',
                                   headers: {
                                     'Content-Type': 'application/json',
-                                    'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
+                                    'X-Access-Token': accessToken
                                   },
                                   body: JSON.stringify({ locationId: addedLocationId })
                                 };
@@ -192,7 +197,7 @@ export default function Home() {
                                           method: 'DELETE',
                                           headers: {
                                             'Content-Type': 'application/json',
-                                            'X-Access-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3MzYxOTc0fQ.9p4NlHoT3QvjyzDEWDDPjkbsvC2sWN8B4y5WaIqtZew'
+                                            'X-Access-Token': accessToken
                                           }
                                         })
                                           .then(res => res.json())
@@ -289,29 +294,7 @@ export default function Home() {
                                 {
                                 homeRoutes.map(route => {
                                   const locationIds = [route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId), route.routeId];
-                                  // eslint-disable-next-line no-console
-                                  console.log('locationIds', locationIds);
-                                  return (
-                                    <div className='m-2' key={route.routeId}>
-                                      <p className='my-0'>Route {route.routeId}</p>
-                                      <div className="card-group d-flex flex-row">
-                                        {
-                                          locationIds[0].map((id, index) => {
-                                            const eachId = mappedIds.find(location => location.locationId === id);
-                                            return (
-                                              <div className="card routecard" key={index}>
-                                                <img src={eachId.photos[0].getUrl()} className="card-img-top detailimage" alt="..." />
-                                                <div className="card-body">
-                                                  <h6 className="card-title">{eachId.name}</h6>
-                                                  <p className="card-text"><small className="text-muted">{eachId.category}</small></p>
-                                                </div>
-                                              </div>
-                                            );
-                                          })
-                                        }
-                                      </div>
-                                    </div>
-                                  );
+                                  return <SavedRoutes key={route.routeId} route={route} locationIds={locationIds} mappedIds={mappedIds} accessToken={accessToken} />;
                                 })
                               }
                               </div>
@@ -327,6 +310,51 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div className="offcanvas-header">
+              <h5 className="offcanvas-title" id="offcanvasExampleLabel">Save Route?</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" />
+            </div>
+            <div className="offcanvas-body">
+              <div>
+                <form>
+                  <div className="mb-3">
+                    <label htmlFor="recipient-name" className="col-form-label">Custom Route Name</label>
+                    <input type="text" className="form-control" id="recipient-name" ref={routeNameRef} />
+                  </div>
+                </form>
+              </div>
+              <div className="mb-3">
+                <button className="btn btn-primary" data-bs-dismiss="offcanvas" onClick={() => {
+                  const routeName = routeNameRef.current.value;
+                  const request = {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'X-Access-Token': accessToken
+                    },
+                    body: JSON.stringify({ viewingIds, routeName })
+                  };
+                  fetch('/api/routes', request)
+                    .then(res => res.json())
+                    .then(route => {
+                      const newRoute = {
+                        routeId: route[0].routeId,
+                        routeName,
+                        myListItemsIds: route.map(location => location.myListItemsId)
+                      };
+                      const newRoutes = homeRoutes.concat(newRoute);
+                      setHomeRoutes(newRoutes);
+                      setPrevList(false);
+                      setViewingIds(false);
+                    })
+                    .catch(err => console.error('Error:', err));
+                }}>Save</button>
+              </div>
+            </div>
+          </div>
+
           <DirectionsPanel homeRoutes={homeRoutes} setHomeRoutes={newRoutes => setHomeRoutes(newRoutes)} addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
           <div className='full backwhite col-md-6 col-12 botpad'>
             <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {

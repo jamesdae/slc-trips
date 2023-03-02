@@ -19,8 +19,7 @@ export default function EachCard(props) {
           <div className='card-body d-flex flex-column justify-content-center'>
             <p className='card-title'>{props.location.name}</p>
             <p className='grey smalltext'>{props.location.category}</p>
-            <span>Rating: {props.location.rating}/5 </span>
-            <i className='fa-solid fa-star gold' />
+            <span>Rating: {props.location.rating}/5 <i className='fa-solid fa-star gold' /></span>
             <a href={props.location.url} target='_blank' rel="noreferrer" className='d-block py-2'>{props.location.user_ratings_total} reviews</a>
             {
               props.tab === 'extradetails'
