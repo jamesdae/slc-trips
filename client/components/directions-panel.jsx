@@ -12,8 +12,6 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
     }
   });
   const waypoints = coordinates.slice(1, -1).map(coord => ({ location: coord }));
-  // eslint-disable-next-line no-console
-  console.log(coordinates);
   const daddr = coordinates[coordinates.length - 1];
   const origin = coordinates[0];
 

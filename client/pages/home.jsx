@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLoadScript } from '@react-google-maps/api';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -8,11 +8,12 @@ import EachCard from '../components/each-card';
 import Libraries from '../components/apilibraries';
 import MapMarkers from '../components/map-markers';
 import { fetchPlaces } from '../lib';
-import DirectionsModal from '../components/directions-modal';
+import RouteOptionsButton from '../components/route-options-button';
 import ExtraDetails from '../components/extra-details';
 import DirectionsPanel from '../components/directions-panel';
 import EmptyTabAlert from '../components/empty-tab';
-import SavedRoutes from '../components/saved-routes';
+import SavedRoute from '../components/saved-routes';
+import NewRouteForm from '../components/new-route-form';
 
 export default function Home() {
   const { isLoaded, loadError } = useLoadScript({
@@ -29,8 +30,6 @@ export default function Home() {
   const [prevList, setPrevList] = useState(null);
   const [mappedIds, setMappedIds] = useState(null);
   const [homeRoutes, setHomeRoutes] = useState([]);
-
-  const routeNameRef = useRef(null);
 
   const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3NzExMDAwfQ.kROhQMt9i1HcX3rTt2TFfk5AewEe61-mF-3FNDkDksA';
 
@@ -164,7 +163,7 @@ export default function Home() {
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        <DirectionsModal viewingIds={viewingIds} />
+                        <RouteOptionsButton viewingIds={viewingIds} />
                         {
                           addedLocations.length > 0
                             ? (
@@ -251,50 +250,60 @@ export default function Home() {
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        <DirectionsModal viewingIds={viewingIds} />
-                        <div className='row row-cols-1 row-cols-md-2 g-1'>
-                          {viewingIds !== null && viewingIds !== false
-                            ? (
-                                mappedIds.map((location, index) => {
-                                  const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
-                                  if (savedlocation.locationId === location.locationId && viewingIds.includes(location.locationId)) {
-                                    return <EachCard location={location} key={savedlocation.myListItemsId} viewingIds={viewingIds} myListItemsId={savedlocation.myListItemsId}
-                                    unpinLocation={id => {
-                                      const remainingPins = viewingIds.filter(viewingId => viewingId !== id);
-                                      if (remainingPins[0] === undefined) {
-                                        setViewingIds(false);
-                                        setPrevList(false);
-                                      } else {
-                                        setViewingIds(remainingPins);
-                                        setPrevList(remainingPins);
-                                      }
-                                    }}
-                                    viewCard={viewingId => {
-                                      setExtraDetailsOpen(!extraDetailsOpen);
-                                      setPrevList(viewingIds);
-                                      setViewingIds([viewingId]);
-                                    }} />;
-                                  } else return null;
-                                })
-                              )
-                            : (
-                              <div className='flex-fill'>
-                                {homeRoutes[0] === undefined ? <EmptyTabAlert tab='routes' /> : null}
+                        {viewingIds !== null && viewingIds !== false
+                          ? (
+                            <div className='row rows-cols-1'>
+                              <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePins" aria-expanded="true" aria-controls="collapsePins">
+                                New Route Details
+                              </button>
+                              <div className="collapse show" id="collapsePins">
+                                <RouteOptionsButton viewingIds={viewingIds} />
+                                <div className='row row-cols-1 row-cols-md-2 g-1'>
+                                  {
+                                    mappedIds.map((location, index) => {
+                                      const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
+                                      if (savedlocation.locationId === location.locationId && viewingIds.includes(location.locationId)) {
+                                        return (
+                                          <EachCard location={location} key={savedlocation.myListItemsId} viewingIds={viewingIds} myListItemsId={savedlocation.myListItemsId} unpinLocation={id => {
+                                            const remainingPins = viewingIds.filter(viewingId => viewingId !== id);
+                                            if (remainingPins[0] === undefined) {
+                                              setViewingIds(false);
+                                              setPrevList(false);
+                                            } else {
+                                              setViewingIds(remainingPins);
+                                              setPrevList(remainingPins);
+                                            }
+                                          }}
+                                            viewCard={viewingId => {
+                                              setExtraDetailsOpen(!extraDetailsOpen);
+                                              setPrevList(viewingIds);
+                                              setViewingIds([viewingId]);
+                                            }} />
+                                        );
+                                      } else return null;
+                                    })
+                                  }
+                                </div>
                               </div>
-                              )
+                            </div>
+                            )
+                          : (
+                            <div className='flex-fill'>
+                              {homeRoutes[0] === undefined ? <EmptyTabAlert tab='routes' /> : null}
+                            </div>
+                            )
                           }
-                        </div>
                         {homeRoutes[0] !== undefined
                           ? (
                             <div className='row row-cols-1'>
-                              <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                View Saved Routes
+                              <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRoutes" aria-expanded="false" aria-controls="collapseRoutes">
+                                My Saved Routes
                               </button>
-                              <div className="collapse" id="collapseExample">
+                              <div className="collapse" id="collapseRoutes">
                                 {
                                 homeRoutes.map(route => {
-                                  const locationIds = [route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId), route.routeId];
-                                  return <SavedRoutes key={route.routeId} route={route} locationIds={locationIds} mappedIds={mappedIds} accessToken={accessToken} />;
+                                  const locationIds = route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId);
+                                  return <SavedRoute key={route.routeId} route={route} locationIds={locationIds} mappedIds={mappedIds} accessToken={accessToken} setViewingIds={ids => setViewingIds(ids)} setPrevList={ids => setPrevList(ids)} viewingIds={viewingIds}/>;
                                 })
                               }
                               </div>
@@ -310,51 +319,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-            <div className="offcanvas-header">
-              <h5 className="offcanvas-title" id="offcanvasExampleLabel">Save Route?</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" />
-            </div>
-            <div className="offcanvas-body">
-              <div>
-                <form>
-                  <div className="mb-3">
-                    <label htmlFor="recipient-name" className="col-form-label">Custom Route Name</label>
-                    <input type="text" className="form-control" id="recipient-name" ref={routeNameRef} />
-                  </div>
-                </form>
-              </div>
-              <div className="mb-3">
-                <button className="btn btn-primary" data-bs-dismiss="offcanvas" onClick={() => {
-                  const routeName = routeNameRef.current.value;
-                  const request = {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      'X-Access-Token': accessToken
-                    },
-                    body: JSON.stringify({ viewingIds, routeName })
-                  };
-                  fetch('/api/routes', request)
-                    .then(res => res.json())
-                    .then(route => {
-                      const newRoute = {
-                        routeId: route[0].routeId,
-                        routeName,
-                        myListItemsIds: route.map(location => location.myListItemsId)
-                      };
-                      const newRoutes = homeRoutes.concat(newRoute);
-                      setHomeRoutes(newRoutes);
-                      setPrevList(false);
-                      setViewingIds(false);
-                    })
-                    .catch(err => console.error('Error:', err));
-                }}>Save</button>
-              </div>
-            </div>
-          </div>
-
+          <NewRouteForm accessToken={accessToken} viewingIds={viewingIds} homeRoutes={homeRoutes} setHomeRoutes={routes => setHomeRoutes(routes)} setPrevList={list => setPrevList(list)} setViewingIds={ids => setViewingIds(ids)}/>
           <DirectionsPanel homeRoutes={homeRoutes} setHomeRoutes={newRoutes => setHomeRoutes(newRoutes)} addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
           <div className='full backwhite col-md-6 col-12 botpad'>
             <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {
