@@ -8,7 +8,7 @@ import EachCard from '../components/each-card';
 import Libraries from '../components/apilibraries';
 import MapMarkers from '../components/map-markers';
 import { fetchPlaces } from '../lib';
-import DirectionsModal from '../components/directions-modal';
+import RouteOptionsButton from '../components/route-options-button';
 import ExtraDetails from '../components/extra-details';
 import DirectionsPanel from '../components/directions-panel';
 import EmptyTabAlert from '../components/empty-tab';
@@ -163,7 +163,7 @@ export default function Home() {
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        <DirectionsModal viewingIds={viewingIds} />
+                        <RouteOptionsButton viewingIds={viewingIds} />
                         {
                           addedLocations.length > 0
                             ? (
@@ -252,35 +252,38 @@ export default function Home() {
                       <div>
                         {viewingIds !== null && viewingIds !== false
                           ? (
-                            <div className='row row-cols-1 row-cols-md-2 g-1'>
+                            <div className='row rows-cols-1'>
                               <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePins" aria-expanded="true" aria-controls="collapsePins">
                                 New Route Details
                               </button>
                               <div className="collapse show" id="collapsePins">
-                                <DirectionsModal viewingIds={viewingIds} />
-                                {
-                                mappedIds.map((location, index) => {
-                                  const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
-                                  if (savedlocation.locationId === location.locationId && viewingIds.includes(location.locationId)) {
-                                    return <EachCard location={location} key={savedlocation.myListItemsId} viewingIds={viewingIds} myListItemsId={savedlocation.myListItemsId}
-                                      unpinLocation={id => {
-                                        const remainingPins = viewingIds.filter(viewingId => viewingId !== id);
-                                        if (remainingPins[0] === undefined) {
-                                          setViewingIds(false);
-                                          setPrevList(false);
-                                        } else {
-                                          setViewingIds(remainingPins);
-                                          setPrevList(remainingPins);
-                                        }
-                                      }}
-                                    viewCard={viewingId => {
-                                      setExtraDetailsOpen(!extraDetailsOpen);
-                                      setPrevList(viewingIds);
-                                      setViewingIds([viewingId]);
-                                    }} />;
-                                  } else return null;
-                                })
-                                }
+                                <RouteOptionsButton viewingIds={viewingIds} />
+                                <div className='row row-cols-1 row-cols-md-2 g-1'>
+                                  {
+                                    mappedIds.map((location, index) => {
+                                      const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
+                                      if (savedlocation.locationId === location.locationId && viewingIds.includes(location.locationId)) {
+                                        return (
+                                          <EachCard location={location} key={savedlocation.myListItemsId} viewingIds={viewingIds} myListItemsId={savedlocation.myListItemsId} unpinLocation={id => {
+                                            const remainingPins = viewingIds.filter(viewingId => viewingId !== id);
+                                            if (remainingPins[0] === undefined) {
+                                              setViewingIds(false);
+                                              setPrevList(false);
+                                            } else {
+                                              setViewingIds(remainingPins);
+                                              setPrevList(remainingPins);
+                                            }
+                                          }}
+                                            viewCard={viewingId => {
+                                              setExtraDetailsOpen(!extraDetailsOpen);
+                                              setPrevList(viewingIds);
+                                              setViewingIds([viewingId]);
+                                            }} />
+                                        );
+                                      } else return null;
+                                    })
+                                  }
+                                </div>
                               </div>
                             </div>
                             )

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function DirectionsModal({ viewingIds }) {
+export default function RouteOptionsButton({ viewingIds }) {
   if (viewingIds !== null && viewingIds.length > 1) {
     return (
       <div className='p-2'>
