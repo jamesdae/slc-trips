@@ -1,7 +1,14 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 export default function NewRouteForm({ accessToken, viewingIds, homeRoutes, setHomeRoutes, setPrevList, setViewingIds }) {
   const routeNameRef = useRef(null);
+  const [isValid, setIsValid] = useState(false);
+  const [isTouched, setIsTouched] = useState(false);
+
+  function handleInputChange() {
+    const checkRouteName = routeNameRef.current.value.trim();
+    setIsValid(checkRouteName.length > 0);
+  }
 
   return (
     <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -14,12 +21,13 @@ export default function NewRouteForm({ accessToken, viewingIds, homeRoutes, setH
           <form autoComplete="off">
             <div className="mb-3">
               <label htmlFor="recipient-name" className="col-form-label">Custom Route Name</label>
-              <input type="text" className="form-control" id="recipient-name" ref={routeNameRef} />
+              <input type="text" className={`form-control ${(!isValid && isTouched) ? 'is-invalid' : ''} ${isValid ? 'is-valid' : ''}`} id="recipient-name" ref={routeNameRef} onBlur={() => setIsTouched(false)} onChange={handleInputChange} onClick={() => setIsTouched(true)} />
+              {(!isValid && isTouched) && <div className="invalid-feedback">Route name is required.</div>}
             </div>
           </form>
         </div>
         <div className="mb-3">
-          <button className="btn btn-primary" data-bs-dismiss="offcanvas" onClick={() => {
+          <button className="btn btn-primary" data-bs-dismiss="offcanvas" disabled={!isValid} onClick={() => {
             const routeName = routeNameRef.current.value;
             const request = {
               method: 'POST',

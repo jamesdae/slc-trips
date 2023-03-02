@@ -39,7 +39,7 @@ export default function EditForm({ setRouteName, route, accessToken }) {
               <div>
                 <label htmlFor="validationCustomUsername" className="form-label">Route Name</label>
                 <div className="input-group has-validation">
-                  <input type="text" className={`form-control ${routeNameValid ? '' : 'is-invalid'}`} id="validationCustomUsername" required={true} value={inputValue} onChange={event => setInputValue(event.target.value)} />
+                  <input type="text" className={`form-control ${routeNameValid ? '' : 'is-invalid'}`} id="validationCustomUsername" required={true} value={inputValue} onChange={event => setInputValue(event.target.value)} autoComplete="off"/>
                   <div className="invalid-feedback">
                     Route name is required.
                   </div>
