@@ -293,7 +293,7 @@ export default function Home() {
                               <div className="collapse" id="collapseExample">
                                 {
                                 homeRoutes.map(route => {
-                                  const locationIds = [route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId), route.routeId];
+                                  const locationIds = route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId);
                                   return <SavedRoutes key={route.routeId} route={route} locationIds={locationIds} mappedIds={mappedIds} accessToken={accessToken} />;
                                 })
                               }

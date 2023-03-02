@@ -9,9 +9,12 @@ export default function SavedRoutes({ route, locationIds, mappedIds, accessToken
   return (
     <div className='m-2'>
       <p className='my-0 mx-2'>{routeName}<i className="mx-2 fa-solid fa-pen-to-square pointer" data-bs-toggle="modal" data-bs-target={`#editingModal-${route.routeId}`} /></p>
-      <div className="card-group d-flex flex-row">
+      <div className="card-group d-flex flex-row pointer" onClick={() => {
+        // eslint-disable-next-line no-console
+        console.log(locationIds);
+      }}>
         {
-          locationIds[0].map((id, index) => {
+          locationIds.map((id, index) => {
             const eachId = mappedIds.find(location => location.locationId === id);
             return (
               <div className="card routecard" key={index}>
