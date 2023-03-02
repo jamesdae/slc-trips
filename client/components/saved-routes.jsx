@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 
-export default function SavedRoutes({ route, locationIds, mappedIds, accessToken }) {
+export default function SavedRoutes({ route, locationIds, mappedIds, accessToken, setPrevList, setViewingIds, viewingIds }) {
   const newRouteNameRef = useRef(null);
   const [routeName, setRouteName] = useState(route.routeName);
   const [routeNameValid, setRouteNameValid] = useState(true);
@@ -10,8 +10,10 @@ export default function SavedRoutes({ route, locationIds, mappedIds, accessToken
     <div className='m-2'>
       <p className='my-0 mx-2'>{routeName}<i className="mx-2 fa-solid fa-pen-to-square pointer" data-bs-toggle="modal" data-bs-target={`#editingModal-${route.routeId}`} /></p>
       <div className="card-group d-flex flex-row pointer" onClick={() => {
-        // eslint-disable-next-line no-console
-        console.log(locationIds);
+        if (JSON.stringify(viewingIds) !== JSON.stringify(locationIds)) {
+          setViewingIds(locationIds);
+          setPrevList(locationIds);
+        } else return null;
       }}>
         {
           locationIds.map((id, index) => {
