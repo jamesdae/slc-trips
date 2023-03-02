@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLoadScript } from '@react-google-maps/api';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -12,7 +12,8 @@ import DirectionsModal from '../components/directions-modal';
 import ExtraDetails from '../components/extra-details';
 import DirectionsPanel from '../components/directions-panel';
 import EmptyTabAlert from '../components/empty-tab';
-import SavedRoutes from '../components/saved-routes';
+import SavedRoute from '../components/saved-routes';
+import NewRouteForm from '../components/new-route-form';
 
 export default function Home() {
   const { isLoaded, loadError } = useLoadScript({
@@ -29,8 +30,6 @@ export default function Home() {
   const [prevList, setPrevList] = useState(null);
   const [mappedIds, setMappedIds] = useState(null);
   const [homeRoutes, setHomeRoutes] = useState([]);
-
-  const routeNameRef = useRef(null);
 
   const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3NzExMDAwfQ.kROhQMt9i1HcX3rTt2TFfk5AewEe61-mF-3FNDkDksA';
 
@@ -294,7 +293,7 @@ export default function Home() {
                                 {
                                 homeRoutes.map(route => {
                                   const locationIds = route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId);
-                                  return <SavedRoutes key={route.routeId} route={route} locationIds={locationIds} mappedIds={mappedIds} accessToken={accessToken} setViewingIds={ids => setViewingIds(ids)} setPrevList={ids => setPrevList(ids)} viewingIds={viewingIds}/>;
+                                  return <SavedRoute key={route.routeId} route={route} locationIds={locationIds} mappedIds={mappedIds} accessToken={accessToken} setViewingIds={ids => setViewingIds(ids)} setPrevList={ids => setPrevList(ids)} viewingIds={viewingIds}/>;
                                 })
                               }
                               </div>
@@ -311,49 +310,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-            <div className="offcanvas-header">
-              <h5 className="offcanvas-title" id="offcanvasExampleLabel">Save Route?</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" />
-            </div>
-            <div className="offcanvas-body">
-              <div>
-                <form>
-                  <div className="mb-3">
-                    <label htmlFor="recipient-name" className="col-form-label">Custom Route Name</label>
-                    <input type="text" className="form-control" id="recipient-name" ref={routeNameRef} />
-                  </div>
-                </form>
-              </div>
-              <div className="mb-3">
-                <button className="btn btn-primary" data-bs-dismiss="offcanvas" onClick={() => {
-                  const routeName = routeNameRef.current.value;
-                  const request = {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      'X-Access-Token': accessToken
-                    },
-                    body: JSON.stringify({ viewingIds, routeName })
-                  };
-                  fetch('/api/routes', request)
-                    .then(res => res.json())
-                    .then(route => {
-                      const newRoute = {
-                        routeId: route[0].routeId,
-                        routeName,
-                        myListItemsIds: route.map(location => location.myListItemsId)
-                      };
-                      const newRoutes = homeRoutes.concat(newRoute);
-                      setHomeRoutes(newRoutes);
-                      setPrevList(false);
-                      setViewingIds(false);
-                    })
-                    .catch(err => console.error('Error:', err));
-                }}>Save</button>
-              </div>
-            </div>
-          </div>
+          <NewRouteForm accessToken={accessToken} viewingIds={viewingIds} homeRoutes={homeRoutes} setHomeRoutes={routes => setHomeRoutes(routes)} setPrevList={list => setPrevList(list)} setViewingIds={ids => setViewingIds(ids)}/>
 
           <DirectionsPanel homeRoutes={homeRoutes} setHomeRoutes={newRoutes => setHomeRoutes(newRoutes)} addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
           <div className='full backwhite col-md-6 col-12 botpad'>
