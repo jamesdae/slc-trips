@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import EditForm from './edit-form';
 import ConfirmDeleteModal from './confirm-delete-modal';
 
-export default function SavedRoute({ route, locationIds, mappedIds, accessToken, setPrevList, setViewingIds, viewingIds }) {
+export default function SavedRoute({ route, locationIds, mappedIds, accessToken, setPrevList, setViewingIds, viewingIds, setHomeRoutes, homeRoutes }) {
   const [routeName, setRouteName] = useState(route.routeName);
 
   function handleClick() {
@@ -33,7 +33,7 @@ export default function SavedRoute({ route, locationIds, mappedIds, accessToken,
           })
         }
         <EditForm route={route} accessToken={accessToken} routeName={routeName} setRouteName={newName => setRouteName(newName)} />
-        <ConfirmDeleteModal route={route} accessToken={accessToken} routeName={routeName} locationIds={locationIds} mappedIds={mappedIds} />
+        <ConfirmDeleteModal route={route} accessToken={accessToken} routeName={routeName} locationIds={locationIds} mappedIds={mappedIds} homeRoutes={homeRoutes} setHomeRoutes={remainingRoutes => setHomeRoutes(remainingRoutes)} setViewingIds={reset => setViewingIds(reset)} setPrevList={reset => setPrevList(reset)}/>
       </div>
     </div>
   );

@@ -73,7 +73,7 @@ export default function Home() {
   if (place !== null && addedLocations !== null) {
     return (
       <div className='bg-light'>
-        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-lg navbar-light bg-light'>
+        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md navbar-light bg-light'>
           <h1 className='mx-2 blue heading'>SLCTrips</h1>
         </nav>
         <div className='d-flex flex-wrap flex-column-reverse'>
@@ -303,7 +303,7 @@ export default function Home() {
                                 {
                                 homeRoutes.map(route => {
                                   const locationIds = route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId);
-                                  return <SavedRoute key={route.routeId} route={route} locationIds={locationIds} mappedIds={mappedIds} accessToken={accessToken} setViewingIds={ids => setViewingIds(ids)} setPrevList={ids => setPrevList(ids)} viewingIds={viewingIds}/>;
+                                  return <SavedRoute key={route.routeId} route={route} homeRoutes={homeRoutes} setHomeRoutes={remainingRoutes => setHomeRoutes(remainingRoutes)} locationIds={locationIds} mappedIds={mappedIds} accessToken={accessToken} setViewingIds={ids => setViewingIds(ids)} setPrevList={ids => setPrevList(ids)} viewingIds={viewingIds}/>;
                                 })
                               }
                               </div>

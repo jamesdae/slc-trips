@@ -195,8 +195,8 @@ app.delete('/api/routes/:routeId', (req, res, next) => {
   db.query(sql1, params)
     .then(() => db.query(sql2, params))
     .then(result => {
-      const route = result.rows;
-      res.status(200).json(route);
+      const [deletedRoute] = result.rows;
+      res.status(200).json(deletedRoute);
     })
     .catch(err => next(err));
 });

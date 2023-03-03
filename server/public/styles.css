@@ -42,7 +42,7 @@
 }
 
 .carddetails {
-  width: 40%;
+  width: 45%;
 }
 
 @media screen and (width < 430px) {
@@ -244,8 +244,8 @@
 
 .button {
   padding: 0;
-  height: 1.5vh;
-  width: 1.5vh;
+  height: 0.8em;
+  width: 0.8em;
   border-radius: 50%;
   border-color: var(--water-color);
   background-color: white;
@@ -253,9 +253,9 @@
 
 .carouselimg {
   width: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: 50% 50%;
-  max-height: 28vh;
+  max-height: 29vh;
 }
 
 .button.selected {
