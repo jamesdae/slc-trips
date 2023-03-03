@@ -2,6 +2,24 @@ import React from 'react';
 
 export default function ConfirmDeleteModal({ route, accessToken, locationIds, routeName, mappedIds, homeRoutes, setHomeRoutes, setPrevList, setViewingIds }) {
 
+  function handleDelete() {
+    fetch(`/api/routes/${route.routeId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Access-Token': accessToken
+      }
+    })
+      .then(res => res.json())
+      .then(deletedRoute => {
+        const remainingRoutes = homeRoutes.filter(route => route.routeId !== deletedRoute.routeId);
+        setHomeRoutes(remainingRoutes);
+        setViewingIds(false);
+        setPrevList(false);
+      })
+      .catch(err => console.error('Error:', err));
+  }
+
   return (
     <div className="modal fade" id={`confirmDeleteModal-${route.routeId}`} tabIndex="-1" aria-labelledby="editingModalLabel" aria-hidden="true">
       <div className="modal-dialog modal-dialog-centered">
@@ -35,25 +53,7 @@ export default function ConfirmDeleteModal({ route, accessToken, locationIds, ro
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" data-bs-target={`#editingModal-${route.routeId}`} data-bs-toggle="modal">Back</button>
-              <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={() => {
-                fetch(`/api/routes/${route.routeId}`, {
-                  method: 'DELETE',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'X-Access-Token': accessToken
-                  }
-                })
-                  .then(res => res.json())
-                  .then(deletedRoute => {
-                    // eslint-disable-next-line no-console
-                    console.log('deletedRoute', deletedRoute);
-                    const remainingRoutes = homeRoutes.filter(route => route.routeId !== deletedRoute.routeId);
-                    setHomeRoutes(remainingRoutes);
-                    setViewingIds(false);
-                    setPrevList(false);
-                  })
-                  .catch(err => console.error('Error:', err));
-              }}>Delete</button>
+              <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={handleDelete}>Delete</button>
             </div>
           </div>
         </div>
