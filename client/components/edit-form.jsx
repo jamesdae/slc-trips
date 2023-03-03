@@ -1,19 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
-export default function EditForm({ setRouteName, route, accessToken }) {
-  const [routeNameValid, setRouteNameValid] = useState(true);
-  const [inputValue, setInputValue] = useState('');
+export default function EditForm({ setRouteName, route, accessToken, routeName }) {
+  const [routeNameValid, setRouteNameValid] = useState(false);
+
+  const newNameRef = useRef(null);
+
+  const [isTouched, setIsTouched] = useState(false);
+
+  function handleInputChange() {
+    const checkRouteName = newNameRef.current.value.trim();
+    setRouteNameValid(checkRouteName.length > 0);
+  }
 
   return (
     <div className="modal fade" id={`editingModal-${route.routeId}`} tabIndex="-1" aria-labelledby="editingModalLabel" aria-hidden="true">
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <h1 className="modal-title fs-5" id="exampleModalLabel">Edit Route: {route.routeName}</h1>
+            <h1 className="modal-title fs-5" id="exampleModalLabel">Edit Route: {routeName}</h1>
             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
           </div>
           <div className="modal-body">
-            <form className="row g-3 needs-validation" noValidate onSubmit={event => {
+            <form className="row g-3" onSubmit={event => {
               event.preventDefault();
               event.stopPropagation();
               const form = event.currentTarget;
@@ -21,7 +29,7 @@ export default function EditForm({ setRouteName, route, accessToken }) {
                 return null;
               } else {
                 setRouteNameValid(true);
-                const newRouteName = inputValue;
+                const newRouteName = newNameRef.current.value;
                 const request = {
                   method: 'PUT',
                   headers: {
@@ -34,7 +42,8 @@ export default function EditForm({ setRouteName, route, accessToken }) {
                   .then(res => res.json())
                   .then(() => {
                     setRouteName(newRouteName);
-                    setInputValue('');
+                    newNameRef.current.value = '';
+                    setRouteNameValid(false);
                   })
                   .catch(err => console.error('Error:', err));
               }
@@ -42,7 +51,7 @@ export default function EditForm({ setRouteName, route, accessToken }) {
               <div>
                 <label htmlFor="validationCustomUsername" className="form-label">Enter New Route Name:</label>
                 <div className="input-group has-validation">
-                  <input type="text" className={`form-control ${routeNameValid ? '' : 'is-invalid'}`} id="validationCustomUsername" required={true} value={inputValue} onBlur={() => setRouteNameValid(true)} onChange={event => setInputValue(event.target.value)} autoComplete="off" onClick={() => setRouteNameValid(false)} />
+                  <input type="text" className={`form-control ${(!routeNameValid && isTouched) ? 'is-invalid' : ''} ${routeNameValid ? 'is-valid' : ''}`} id="validationCustomUsername" required={true} ref={newNameRef} onBlur={() => setIsTouched(false)} onChange={handleInputChange} autoComplete="off" onClick={() => setIsTouched(true)} />
                   <div className="invalid-feedback">
                     Route name is required.
                   </div>
@@ -51,13 +60,7 @@ export default function EditForm({ setRouteName, route, accessToken }) {
               <div className="modal-footer d-flex gap-2">
                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" className="btn btn-danger" data-bs-target={`#confirmDeleteModal-${route.routeId}`} data-bs-toggle="modal" data-bs-dismiss="modal">Delete Route</button>
-                {inputValue.trim().length > 0
-                  ? (
-                    <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
-                    )
-                  : (
-                    <button type="button" className="btn btn-primary" onClick={() => setRouteNameValid(false)}>Save changes</button>
-                    )}
+                <button type="submit" className="btn btn-primary" disabled={!routeNameValid} data-bs-dismiss="modal">Save changes</button>
               </div>
             </form>
           </div>

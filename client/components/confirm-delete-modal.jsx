@@ -14,7 +14,7 @@ export default function ConfirmDeleteModal({ route, accessToken, locationIds, ro
             <div className="modal-body">
               <p>Are you sure you want to delete this route?</p>
               <div className='m-2'>
-                <p className='my-0 mx-2'>{routeName}</p>
+                <h6 className='card-title my-0 mx-2'>{routeName}</h6>
                 <div className="card-group d-flex flex-row">
                   {
                     locationIds.map((id, index) => {

@@ -16,7 +16,7 @@ export default function SavedRoute({ route, locationIds, mappedIds, accessToken,
 
   return (
     <div className='m-2'>
-      <p className='my-0 mx-2'>{routeName}<i className="mx-2 fa-solid fa-pen-to-square pointer" data-bs-toggle="modal" data-bs-target={`#editingModal-${route.routeId}`} onClick={() => handleClick()} /></p>
+      <h6 className='my-0 mx-2 card-title'>{routeName}<i className="mx-2 fa-solid fa-pen-to-square pointer" data-bs-toggle="modal" data-bs-target={`#editingModal-${route.routeId}`} onClick={() => handleClick()} /></h6>
       <div className="card-group d-flex flex-row pointer" onClick={() => handleClick()}>
         {
           locationIds.map((id, index) => {
@@ -32,7 +32,7 @@ export default function SavedRoute({ route, locationIds, mappedIds, accessToken,
             );
           })
         }
-        <EditForm route={route} accessToken={accessToken} setRouteName={newName => setRouteName(newName)} />
+        <EditForm route={route} accessToken={accessToken} routeName={routeName} setRouteName={newName => setRouteName(newName)} />
         <ConfirmDeleteModal route={route} accessToken={accessToken} routeName={routeName} locationIds={locationIds} mappedIds={mappedIds} />
       </div>
     </div>
