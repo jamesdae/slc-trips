@@ -34,7 +34,7 @@ export default function ConfirmDeleteModal({ route, accessToken, locationIds, ro
               </div>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" data-bs-target={`#editingModal-${route.routeId}`} data-bs-toggle="modal">Back</button>
               <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={() => {
                 // eslint-disable-next-line no-console
                 console.log(route.routeId);
