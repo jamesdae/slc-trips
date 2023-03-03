@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import EditForm from './edit-form';
+import ConfirmDeleteModal from './confirm-delete-modal';
 
-export default function SavedRoute({ route, locationIds, mappedIds, accessToken, setPrevList, setViewingIds, viewingIds }) {
+export default function SavedRoute({ route, locationIds, mappedIds, accessToken, setPrevList, setViewingIds, viewingIds, setHomeRoutes, homeRoutes }) {
   const [routeName, setRouteName] = useState(route.routeName);
 
-  function handleClick() {
+  function openRoute() {
     if (JSON.stringify(viewingIds) !== JSON.stringify(locationIds)) {
-      // eslint-disable-next-line no-console
-      console.log(locationIds, viewingIds);
       setViewingIds(locationIds);
       setPrevList(locationIds);
     } else return null;
@@ -15,8 +14,8 @@ export default function SavedRoute({ route, locationIds, mappedIds, accessToken,
 
   return (
     <div className='m-2'>
-      <p className='my-0 mx-2'>{routeName}<i className="mx-2 fa-solid fa-pen-to-square pointer" data-bs-toggle="modal" data-bs-target={`#editingModal-${route.routeId}`} onClick={() => handleClick()}/></p>
-      <div className="card-group d-flex flex-row pointer" onClick={() => handleClick()}>
+      <h6 className='my-0 mx-2 card-title'>{routeName}<i className="mx-2 fa-solid fa-pen-to-square pointer" data-bs-toggle="modal" data-bs-target={`#editingModal-${route.routeId}`} onClick={() => openRoute()} /></h6>
+      <div className="card-group d-flex flex-row pointer" onClick={() => openRoute()}>
         {
           locationIds.map((id, index) => {
             const eachId = mappedIds.find(location => location.locationId === id);
@@ -31,7 +30,8 @@ export default function SavedRoute({ route, locationIds, mappedIds, accessToken,
             );
           })
         }
-        <EditForm route={route} accessToken={accessToken} setRouteName={newName => setRouteName(newName)} />
+        <EditForm route={route} accessToken={accessToken} routeName={routeName} setRouteName={newName => setRouteName(newName)} />
+        <ConfirmDeleteModal route={route} accessToken={accessToken} routeName={routeName} locationIds={locationIds} mappedIds={mappedIds} homeRoutes={homeRoutes} setHomeRoutes={remainingRoutes => setHomeRoutes(remainingRoutes)} setViewingIds={reset => setViewingIds(reset)} setPrevList={reset => setPrevList(reset)}/>
       </div>
     </div>
   );

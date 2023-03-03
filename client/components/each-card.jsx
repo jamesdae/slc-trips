@@ -16,7 +16,7 @@ export default function EachCard(props) {
                 <img className='p-1 detailimage align-self-center align-self-md-stretch' src={props.location.photos[0].getUrl()} alt='photo from Google Places' />
                 )
           }
-          <div className='card-body d-flex flex-column justify-content-center'>
+          <div className='card-body d-flex flex-column justify-content-center carddetails'>
             <p className='card-title'>{props.location.name}</p>
             <p className='grey smalltext'>{props.location.category}</p>
             <span>Rating: {props.location.rating}/5 <i className='fa-solid fa-star gold' /></span>

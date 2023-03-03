@@ -183,6 +183,24 @@ app.delete('/api/mylist/:removeId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.delete('/api/routes/:routeId', (req, res, next) => {
+  const routeId = Number(req.params.routeId);
+  const sql1 = `
+    DELETE FROM "routeLocations" WHERE "routeId" = $1;
+  `;
+  const sql2 = `
+    DELETE FROM "routes" WHERE "routeId" = $1 RETURNING *;
+  `;
+  const params = [routeId];
+  db.query(sql1, params)
+    .then(() => db.query(sql2, params))
+    .then(result => {
+      const [deletedRoute] = result.rows;
+      res.status(200).json(deletedRoute);
+    })
+    .catch(err => next(err));
+});
+
 app.get('/api/mylist', (req, res, next) => {
   const { userId } = req.user;
   const sql = `
