@@ -38,6 +38,37 @@ export default function ConfirmDeleteModal({ route, accessToken, locationIds, ro
               <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={() => {
                 // eslint-disable-next-line no-console
                 console.log(route.routeId);
+                fetch(`/api/routes/${route.routeId}`, {
+                  method: 'DELETE',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-Access-Token': accessToken
+                  }
+                })
+                  .then(res => res.json())
+                  // eslint-disable-next-line no-console
+                  .then(deletedItems => console.log('deletedItems', deletedItems))
+                  // .then(res => {
+                  //   const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
+                  //   setAddedLocations(reducedLocations);
+                  //   const addedLocationIds = reducedLocations.map(obj => obj.locationId);
+                  //   const myListLocations = [];
+                  //   addedLocationIds.forEach(id => {
+                  //     myListLocations.push(place.find(location => location.locationId === id));
+                  //   });
+                  //   setMappedIds(myListLocations);
+                  //   if (viewingIds === false) return;
+                  //   const reducedPins = viewingIds.filter(id => id !== res.locationId);
+                  //   if (reducedPins[0] === undefined) {
+                  //     setViewingIds(false);
+                  //   } else {
+                  //     setViewingIds(reducedPins);
+                  //   }
+                  //   if (reducedLocations[0] === undefined) {
+                  //     setViewingIds(false);
+                  //   }
+                  // })
+                  .catch(err => console.error('Error:', err));
               }}>Delete</button>
             </div>
           </div>
