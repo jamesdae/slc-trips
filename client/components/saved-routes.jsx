@@ -33,7 +33,7 @@ export default function SavedRoute({ route, locationIds, mappedIds, accessToken,
           })
         }
         <EditForm route={route} accessToken={accessToken} setRouteName={newName => setRouteName(newName)} />
-        <ConfirmDeleteModal route={route} accessToken={accessToken} setRouteName={newName => setRouteName(newName)} />
+        <ConfirmDeleteModal route={route} accessToken={accessToken} routeName={routeName} locationIds={locationIds} mappedIds={mappedIds} />
       </div>
     </div>
   );
