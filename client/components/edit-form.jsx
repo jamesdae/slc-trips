@@ -1,10 +1,8 @@
 import React, { useState, useRef } from 'react';
 
 export default function EditForm({ setRouteName, route, accessToken, routeName }) {
-  const [routeNameValid, setRouteNameValid] = useState(false);
-
   const newNameRef = useRef(null);
-
+  const [routeNameValid, setRouteNameValid] = useState(false);
   const [isTouched, setIsTouched] = useState(false);
 
   function handleInputChange() {

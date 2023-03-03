@@ -41,6 +41,10 @@
   top: 0;
 }
 
+.carddetails {
+  width: 40%;
+}
+
 @media screen and (width < 430px) {
   .card-body {
     font-size: 80%;
@@ -74,6 +78,10 @@
   .detailimage {
     height: 22vh;
     width: 100%;
+  }
+
+  .carddetails {
+    width: auto;
   }
 }
 
