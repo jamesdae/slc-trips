@@ -26,6 +26,8 @@ export default function Login({ onLogin }) {
       .then(data => {
         // eslint-disable-next-line no-console
         console.log(data);
+        onLogin(data);
+
       })
       .catch(err => console.error(err));
   };

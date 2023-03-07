@@ -15,7 +15,7 @@ import EmptyTabAlert from '../components/empty-tab';
 import SavedRoute from '../components/saved-routes';
 import NewRouteForm from '../components/new-route-form';
 
-export default function Home() {
+export default function Home({ user }) {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.API_KEY,
     libraries: Libraries.libraries,
@@ -31,7 +31,7 @@ export default function Home() {
   const [mappedIds, setMappedIds] = useState(null);
   const [homeRoutes, setHomeRoutes] = useState([]);
 
-  const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3NzExMDAwfQ.kROhQMt9i1HcX3rTt2TFfk5AewEe61-mF-3FNDkDksA';
+  const accessToken = user.token;
 
   useEffect(() => {
     if (isLoaded && place === null) {
