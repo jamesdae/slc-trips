@@ -4,12 +4,30 @@ export default function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const API_URL = '/api/auth';
+
   const handleUsernameChange = event => {
     setUsername(event.target.value);
   };
 
   const handlePasswordChange = event => {
     setPassword(event.target.value);
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    const request = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    };
+    fetch(`${API_URL}/sign-in`, request)
+      .then(res => res.json())
+      .then(data => {
+        // eslint-disable-next-line no-console
+        console.log(data);
+      })
+      .catch(err => console.error(err));
   };
 
   return (
@@ -19,7 +37,7 @@ export default function Login({ onLogin }) {
           User Login
         </div>
         <div className="card-body ">
-          <form autoComplete="off" onSubmit={() => onLogin(true)}>
+          <form autoComplete="off" onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="username" className="col-form-label">Username:</label>
               <input type="text" id="username" value={username} onChange={handleUsernameChange} />
