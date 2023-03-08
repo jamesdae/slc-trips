@@ -66,7 +66,7 @@ export default function Home({ user }) {
         })
         .catch(err => console.error('Error:', err));
     }
-  }, [isLoaded, selectedCategory, place]);
+  }, [isLoaded, selectedCategory, place, accessToken]);
 
   if (loadError) return 'Error loading maps';
 
@@ -75,6 +75,7 @@ export default function Home({ user }) {
       <div className='bg-light'>
         <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md navbar-light bg-light'>
           <h1 className='mx-2 blue heading'>SLCTrips</h1>
+          <button className='btn btn-warning'>Sign Out</button>
         </nav>
         <div className='d-flex flex-wrap flex-column-reverse'>
           <div className='col-md-6 col-12'>

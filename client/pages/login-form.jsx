@@ -24,8 +24,7 @@ export default function Login({ onLogin }) {
     fetch(`${API_URL}/sign-in`, request)
       .then(res => res.json())
       .then(data => {
-        // eslint-disable-next-line no-console
-        console.log(data);
+        if (!data.token) return;
         onLogin(data);
 
       })
