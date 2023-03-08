@@ -35,7 +35,7 @@ export default function SignIn({ onSignIn, signUp }) {
     <div className="d-flex justify-content-center align-items-center main">
       <div className='card text-center'>
         <div className="card-header">
-          User Login
+          Sign In
         </div>
         <div className="card-body">
           <form autoComplete="off" onSubmit={handleSubmit}>

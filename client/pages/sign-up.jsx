@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function SignUp({ setShowSignUp, showLogIn }) {
+export default function SignUp({ showLogIn }) {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -18,7 +18,14 @@ export default function SignUp({ setShowSignUp, showLogIn }) {
     };
     fetch(`${API_URL}/sign-up`, request)
       .then(res => res.json())
-      // .then(newUser => console.log('newUser', newUser))
+      .then(newUser => {
+        // eslint-disable-next-line no-console
+        console.log('newUser', newUser);
+        setEmail('');
+        setUsername('');
+        setPassword('');
+        showLogIn();
+      })
       .catch(err => console.error(err));
   };
 
