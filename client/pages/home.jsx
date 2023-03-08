@@ -15,7 +15,7 @@ import EmptyTabAlert from '../components/empty-tab';
 import SavedRoute from '../components/saved-routes';
 import NewRouteForm from '../components/new-route-form';
 
-export default function Home({ user }) {
+export default function Home({ user, signOut }) {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.API_KEY,
     libraries: Libraries.libraries,
@@ -75,7 +75,7 @@ export default function Home({ user }) {
       <div className='bg-light'>
         <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md navbar-light bg-light'>
           <h1 className='mx-2 blue heading'>SLCTrips</h1>
-          <button className='btn btn-warning'>Sign Out</button>
+          <button className='btn btn-warning' onClick={() => signOut()}>Sign Out</button>
         </nav>
         <div className='d-flex flex-wrap flex-column-reverse'>
           <div className='col-md-6 col-12'>

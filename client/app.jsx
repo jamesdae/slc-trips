@@ -7,7 +7,7 @@ export default function App() {
 
   return (
     <div>
-      {user ? <Home user={user}/> : <Login onLogin={userInfo => setUser(userInfo)} />}
+      {user ? <Home user={user} signOut={() => setUser(null)} /> : <Login onLogin={userInfo => setUser(userInfo)} />}
     </div>
   );
 }
