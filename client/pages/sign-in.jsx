@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function Login({ onLogin }) {
+export default function SignIn({ onSignIn, signUp }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -25,7 +25,7 @@ export default function Login({ onLogin }) {
       .then(res => res.json())
       .then(data => {
         if (!data.token) return;
-        onLogin(data);
+        onSignIn(data);
 
       })
       .catch(err => console.error(err));
@@ -37,7 +37,7 @@ export default function Login({ onLogin }) {
         <div className="card-header">
           User Login
         </div>
-        <div className="card-body ">
+        <div className="card-body">
           <form autoComplete="off" onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="username" className="col-form-label">Username:</label>
@@ -54,7 +54,7 @@ export default function Login({ onLogin }) {
         </div>
         <div className="card-footer text-muted">
           <p>No account?</p>
-          <button className='btn btn-secondary'>Sign Up Here</button>
+          <button className='btn btn-secondary' onClick={() => signUp()}>Sign Up Here</button>
         </div>
       </div>
     </div>
