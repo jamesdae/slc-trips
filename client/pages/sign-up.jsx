@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import isEmail from 'validator/lib/isEmail';
 import isStrongPassword from 'validator/lib/isStrongPassword';
+import isAlphanumeric from 'validator/lib/isAlphanumeric';
 
 export default function SignUp({ showLogIn }) {
   const [email, setEmail] = useState('');
@@ -8,6 +9,7 @@ export default function SignUp({ showLogIn }) {
   const [password, setPassword] = useState('');
   const [emailIsValid, setEmailIsValid] = useState(true);
   const [passwordIsValid, setPasswordIsValid] = useState(true);
+  const [usernameIsValid, setUsernameIsValid] = useState(true);
 
   const API_URL = '/api/auth';
 
@@ -25,9 +27,11 @@ export default function SignUp({ showLogIn }) {
     // validateEmail(email);
     setEmailIsValid(isEmail(email));
     setPasswordIsValid(isStrongPassword(password));
-    if (!isEmail(email) || !isStrongPassword(password)) {
+    setUsernameIsValid(isAlphanumeric(username));
+    if (!isEmail(email) || !isStrongPassword(password) || !isAlphanumeric(username)) {
       setEmail('');
       setPassword('');
+      setUsername('');
       return;
     }
     const request = {
@@ -68,7 +72,9 @@ export default function SignUp({ showLogIn }) {
               <label htmlFor="username" className="col-form-label">Username:</label>
               <input type="text" id="username" value={username} onChange={event => {
                 setUsername(event.target.value);
-              }} />
+                setUsernameIsValid(true);
+              }} className={`form-control ${!usernameIsValid ? 'is-invalid' : ''}`} />
+              {!usernameIsValid && <div className="invalid-feedback">Username can only contain letters or numbers.</div>}
             </div>
             <div className="mb-3">
               <label htmlFor="password" className="col-form-label">Password:</label>
