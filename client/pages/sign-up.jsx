@@ -1,23 +1,35 @@
 import React, { useState } from 'react';
+import isEmail from 'validator/lib/isEmail';
+import isStrongPassword from 'validator/lib/isStrongPassword';
 
 export default function SignUp({ showLogIn }) {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [emailIsValid, setEmailIsValid] = useState(true);
+  const [passwordIsValid, setPasswordIsValid] = useState(true);
 
   const API_URL = '/api/auth';
 
-  const validateEmail = address => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // eslint-disable-next-line no-console
-    console.log(re.test(address));
-    setEmailIsValid(re.test(address));
-  };
+  // const validateEmail = address => {
+  //   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   // eslint-disable-next-line no-console
+  //   console.log(re.test(address));
+  //   // eslint-disable-next-line no-console
+  //   console.log('validator', isEmail(address));
+  //   setEmailIsValid(re.test(address));
+  // };
 
   const handleSubmit = event => {
     event.preventDefault();
-    validateEmail(email);
+    // validateEmail(email);
+    setEmailIsValid(isEmail(email));
+    setPasswordIsValid(isStrongPassword(password));
+    if (!isEmail(email) || !isStrongPassword(password)) {
+      setEmail('');
+      setPassword('');
+      return;
+    }
     const request = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -28,11 +40,6 @@ export default function SignUp({ showLogIn }) {
       .then(newUser => {
         // eslint-disable-next-line no-console
         console.log('newUser', newUser);
-        if (newUser.error) {
-          setEmailIsValid(false);
-          setEmail('');
-          return;
-        }
         setEmail('');
         setUsername('');
         setPassword('');
@@ -55,7 +62,7 @@ export default function SignUp({ showLogIn }) {
                 setEmail(event.target.value);
                 setEmailIsValid(true);
               }} className={`form-control ${!emailIsValid ? 'is-invalid' : ''}`} />
-              {(!emailIsValid && email.length === 0) && <div className="invalid-feedback">Please enter a valid email address.</div>}
+              {!emailIsValid && <div className="invalid-feedback">Please enter a valid email address.</div>}
             </div>
             <div className="mb-3">
               <label htmlFor="username" className="col-form-label">Username:</label>
@@ -65,7 +72,11 @@ export default function SignUp({ showLogIn }) {
             </div>
             <div className="mb-3">
               <label htmlFor="password" className="col-form-label">Password:</label>
-              <input type="password" id="password" value={password} onChange={event => setPassword(event.target.value)} />
+              <input type="password" id="password" value={password} onChange={event => {
+                setPassword(event.target.value);
+                setPasswordIsValid(true);
+              }} className={`form-control ${!passwordIsValid ? 'is-invalid' : ''}`}/>
+              {!passwordIsValid && <div className="invalid-feedback">Please enter a valid password.</div>}
             </div>
             <div className="mb-3">
               <button className="btn btn-primary" type="submit">Submit</button>
