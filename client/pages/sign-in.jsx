@@ -3,15 +3,18 @@ import React, { useState } from 'react';
 export default function SignIn({ onSignIn, signUp }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [invalidLogin, setInvalidLogin] = useState(null);
 
   const API_URL = '/api/auth';
 
   const handleUsernameChange = event => {
     setUsername(event.target.value);
+    setInvalidLogin(null);
   };
 
   const handlePasswordChange = event => {
     setPassword(event.target.value);
+    setInvalidLogin(null);
   };
 
   const handleSubmit = event => {
@@ -24,6 +27,9 @@ export default function SignIn({ onSignIn, signUp }) {
     fetch(`${API_URL}/sign-in`, request)
       .then(res => res.json())
       .then(data => {
+        if (data.error) {
+          setInvalidLogin(data.error);
+        }
         if (!data.token) return;
         onSignIn(data);
 
@@ -41,11 +47,12 @@ export default function SignIn({ onSignIn, signUp }) {
           <form autoComplete="off" onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="username" className="col-form-label">Username:</label>
-              <input type="text" id="username" value={username} onChange={handleUsernameChange} />
+              <input type="text" id="username" value={username} onChange={handleUsernameChange} className={`form-control ${invalidLogin ? 'is-invalid' : ''}`}/>
             </div>
             <div className="mb-3">
               <label htmlFor="password" className="col-form-label">Password:</label>
-              <input type="password" id="password" value={password} onChange={handlePasswordChange} />
+              <input type="password" id="password" value={password} onChange={handlePasswordChange} className={`form-control ${invalidLogin ? 'is-invalid' : ''}`} onClick={invalidLogin ? () => setPassword('') : null}/>
+              {invalidLogin && <div className="invalid-feedback">{invalidLogin}</div>}
             </div>
             <div className="mb-3">
               <button className="btn btn-primary" type="submit">Login</button>
