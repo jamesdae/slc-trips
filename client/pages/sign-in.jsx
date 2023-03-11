@@ -38,10 +38,11 @@ export default function SignIn({ onSignIn, signUp }) {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center main">
-      <div className='card text-center'>
+    <div className="d-flex flex-column justify-content-center align-items-center main">
+      <h1 className='blue heading'>SLCTrips</h1>
+      <div className='card text-center w-50'>
         <div className="card-header">
-          Sign In
+          <p className='m-2'>Plan your next trip to Salt Lake City!</p>
         </div>
         <div className="card-body">
           <form autoComplete="off" onSubmit={handleSubmit}>
@@ -55,7 +56,7 @@ export default function SignIn({ onSignIn, signUp }) {
               {invalidLogin && <div className="invalid-feedback">{invalidLogin}</div>}
             </div>
             <div className="mb-3">
-              <button className="btn btn-primary" type="submit">Login</button>
+              <button className="btn btn-primary" type="submit">Sign In</button>
             </div>
           </form>
         </div>
