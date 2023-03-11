@@ -46,23 +46,24 @@ export default function SignIn({ onSignIn, signUp }) {
         </div>
         <div className="card-body">
           <form autoComplete="off" onSubmit={handleSubmit}>
-            <div className="mb-3">
+            <div className="mb-3 d-flex flex-column align-items-center">
               <label htmlFor="username" className="col-form-label">Username:</label>
-              <input type="text" id="username" value={username} onChange={handleUsernameChange} className={`form-control ${invalidLogin ? 'is-invalid' : ''}`}/>
+              <input type="text" id="username" value={username} onChange={handleUsernameChange} className={`form-control ${invalidLogin ? 'is-invalid' : ''} w-50`}/>
             </div>
-            <div className="mb-3">
+            <div className="mb-3 d-flex flex-column align-items-center">
               <label htmlFor="password" className="col-form-label">Password:</label>
-              <input type="password" id="password" value={password} onChange={handlePasswordChange} className={`form-control ${invalidLogin ? 'is-invalid' : ''}`} onClick={invalidLogin ? () => setPassword('') : null}/>
+              <input type="password" id="password" value={password} onChange={handlePasswordChange} className={`form-control ${invalidLogin ? 'is-invalid' : ''} w-50`} onClick={invalidLogin ? () => setPassword('') : null}/>
               {invalidLogin && <div className="invalid-feedback">{invalidLogin}</div>}
             </div>
-            <div className="mb-3">
-              <button className="btn btn-primary" type="submit">Sign In</button>
-            </div>
+
+            <button className="btn btn-primary" type="submit">Sign In</button>
+
           </form>
         </div>
-        <div className="card-footer text-muted">
+        <div className="card-footer text-muted d-flex flex-column justify-content-between align-items-center">
           <p>No account?</p>
-          <button className='btn btn-secondary' onClick={() => signUp()}>Sign Up Here</button>
+          <button className='mb-3 btn btn-secondary' onClick={() => signUp()}>Sign Up Here</button>
+          <p><a href='#' onClick={() => onSignIn('guest')}>Continue as guest</a></p>
         </div>
       </div>
     </div>

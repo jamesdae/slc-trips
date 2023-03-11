@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds, viewingIds, addedLocations, homeRoutes, setHomeRoutes }) {
 
-  if (!Array.isArray(viewingIds) || !viewingIds.length > 1) return;
+  if (!Array.isArray(viewingIds) || !viewingIds.length > 1 || !mappedIds) return;
   const coordinates = viewingIds.map(id => {
     const pinnedIndex = mappedIds.findIndex(place => place.locationId === id);
     if (pinnedIndex >= 0) {

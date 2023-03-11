@@ -75,7 +75,7 @@ export default function Home({ user, signOut }) {
       <div className='bg-light'>
         <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md justify-content-md-between navbar-light bg-light'>
           <h1 className='mx-2 blue heading'>SLCTrips</h1>
-          <button className='mx-2 btn btn-secondary' onClick={() => signOut()}>Sign Out</button>
+          <button className='mx-2 btn btn-secondary' onClick={() => signOut()}>{user === 'guest' ? 'Sign in' : 'Sign Out'}</button>
         </nav>
         <div className='d-flex flex-wrap flex-column-reverse'>
           <div className='col-md-6 col-12'>
@@ -120,12 +120,13 @@ export default function Home({ user, signOut }) {
                           setSelectedCategory(selectedCategory);
                         }} />
                         <div className='row row-cols-1 row-cols-md-2 g-1'>
-                          <LocationCards place={place} clickedCategory={selectedCategory}
+                          <LocationCards place={place} clickedCategory={selectedCategory} user={user}
                             viewCard={viewingId => {
                               setExtraDetailsOpen(!extraDetailsOpen);
                               setViewingIds([viewingId]);
                             }}
                             addCard={addedLocationId => {
+                              if (user === 'guest') return; //
                               const existenceCheck = addedLocations.find(savedlocation => savedlocation.locationId === addedLocationId);
                               if (existenceCheck) {
                                 return null;

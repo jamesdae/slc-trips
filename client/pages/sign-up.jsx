@@ -52,38 +52,36 @@ export default function SignUp({ showLogIn }) {
         </div>
         <div className="card-body">
           <form autoComplete="off" onSubmit={handleSubmit}>
-            <div className="mb-3">
+            <div className="mb-3 d-flex flex-column align-items-center">
               <label htmlFor="email" className="col-form-label">Email:</label>
               <input type="text" id="email" value={email} onChange={event => {
                 setEmail(event.target.value);
                 setEmailIsValid(true);
-              }} className={`form-control ${!emailIsValid ? 'is-invalid' : ''}`} />
+              }} className={`form-control ${!emailIsValid ? 'is-invalid' : ''} w-75`} />
               {!emailIsValid && <div className="invalid-feedback">Please enter a valid email address.</div>}
             </div>
-            <div className="mb-3">
+            <div className="mb-3 d-flex flex-column align-items-center">
               <label htmlFor="username" className="col-form-label">Username:</label>
               <input type="text" id="username" value={username} onChange={event => {
                 setUsername(event.target.value);
                 setUsernameIsValid(true);
-              }} className={`form-control ${!usernameIsValid ? 'is-invalid' : ''}`} />
+              }} className={`form-control ${!usernameIsValid ? 'is-invalid' : ''} w-75`} />
               {!usernameIsValid && <div className="invalid-feedback">Username can only contain letters or numbers.</div>}
             </div>
-            <div className="mb-3">
+            <div className="mb-3 d-flex flex-column align-items-center">
               <label htmlFor="password" className="col-form-label">Password:</label>
               <input type="password" id="password" value={password} onChange={event => {
                 setPassword(event.target.value);
                 setPasswordIsValid(true);
-              }} className={`form-control ${!passwordIsValid ? 'is-invalid' : ''}`}/>
+              }} className={`form-control ${!passwordIsValid ? 'is-invalid' : ''} w-75`}/>
               {!passwordIsValid && <div className="invalid-feedback">Please enter a valid password.</div>}
             </div>
-            <div className="mb-3">
-              <button className="btn btn-primary" type="submit">Submit</button>
-            </div>
+            <button className="btn btn-primary" type="submit">Submit</button>
           </form>
         </div>
         <div className="card-footer text-muted">
           <p>Already have an account?</p>
-          <button className='btn btn-secondary' onClick={() => showLogIn()}>Sign In</button>
+          <button className='mb-3 btn btn-secondary' onClick={() => showLogIn()}>Sign In</button>
         </div>
       </div>
     </div>

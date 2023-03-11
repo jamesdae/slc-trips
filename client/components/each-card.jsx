@@ -68,7 +68,7 @@ export default function EachCard(props) {
                           }}>Pin</button>
                           )
                         : (
-                          <button className="mybuttons btn btn-success" type="button" onClick={() => props.addCard(props.location.locationId)}>Add</button>
+                          <button className="mybuttons btn btn-success" type="button" disabled={props.user === 'guest'} onClick={() => props.addCard(props.location.locationId)}>Add</button>
                           )}
                   </div>
                   )
