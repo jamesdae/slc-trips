@@ -7,6 +7,7 @@ const staticMiddleware = require('./static-middleware');
 const ClientError = require('./client-error');
 const errorMiddleware = require('./error-middleware');
 const authorizationMiddleware = require('./authorization-middleware');
+const { check, validationResult } = require('express-validator');
 
 const app = express();
 
@@ -59,10 +60,22 @@ app.get('/api/locations/', (req, res) => {
   }
 });
 
-app.post('/api/auth/sign-up', (req, res, next) => {
+app.post('/api/auth/sign-up', [
+  check('email').trim().escape(),
+  check('username').trim().escape(),
+  check('password').trim().escape(),
+
+  check('email').notEmpty().withMessage('Email is required.').isEmail().withMessage('Please enter a valid email address.'),
+  check('username').notEmpty().withMessage('Username is required.').isAlphanumeric().withMessage('Username must only contain letters or numbers.'),
+  check('password').notEmpty().withMessage('Password is required.').isStrongPassword().withMessage('Password does meet requirements.').isLength({ max: 50 }).withMessage('Password length must be between 8-50 characters.')
+], (req, res, next) => {
   const { username, password, email } = req.body;
   if (!username || !password || !email) {
     throw new ClientError(400, 'username, password, and email are required fields');
+  }
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
   }
   argon2
     .hash(password)
@@ -91,7 +104,7 @@ app.post('/api/auth/sign-up', (req, res, next) => {
 app.post('/api/auth/sign-in', (req, res, next) => {
   const { username, password } = req.body;
   if (!username || !password) {
-    throw new ClientError(401, 'invalid login');
+    throw new ClientError(401, 'Invalid login.');
   }
   const sql = `
     select "userId",
@@ -104,14 +117,14 @@ app.post('/api/auth/sign-in', (req, res, next) => {
     .then(result => {
       const [user] = result.rows;
       if (!user) {
-        throw new ClientError(401, 'invalid login');
+        throw new ClientError(401, 'Invalid login.');
       }
       const { userId, hashedPassword } = user;
       return argon2
         .verify(hashedPassword, password)
         .then(isMatching => {
           if (!isMatching) {
-            throw new ClientError(401, 'invalid login');
+            throw new ClientError(401, 'Invalid login.');
           }
           const payload = { userId, username };
           const token = jwt.sign(payload, process.env.TOKEN_SECRET);

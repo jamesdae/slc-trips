@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function EmptyTabAlert({ tab }) {
+export default function EmptyTabAlert({ tab, user }) {
   return (
     <div className='flex-fill'>
       <div className="alert alert-primary" role="alert">
@@ -19,7 +19,7 @@ export default function EmptyTabAlert({ tab }) {
             )
         }
         <hr />
-        <p className="mb-0">Sign in <a href="#" className="alert-link">here</a> to save your changes!</p>
+        {!user && <p className="mb-0">Sign in <a href="#" className="alert-link">here</a> to save your changes!</p>}
       </div>
     </div>
   );

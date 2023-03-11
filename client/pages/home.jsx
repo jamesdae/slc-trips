@@ -15,7 +15,7 @@ import EmptyTabAlert from '../components/empty-tab';
 import SavedRoute from '../components/saved-routes';
 import NewRouteForm from '../components/new-route-form';
 
-export default function Home() {
+export default function Home({ user, signOut }) {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.API_KEY,
     libraries: Libraries.libraries,
@@ -31,7 +31,7 @@ export default function Home() {
   const [mappedIds, setMappedIds] = useState(null);
   const [homeRoutes, setHomeRoutes] = useState([]);
 
-  const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoibWFzdGVyIiwiaWF0IjoxNjc3NzExMDAwfQ.kROhQMt9i1HcX3rTt2TFfk5AewEe61-mF-3FNDkDksA';
+  const accessToken = user.token;
 
   useEffect(() => {
     if (isLoaded && place === null) {
@@ -66,15 +66,16 @@ export default function Home() {
         })
         .catch(err => console.error('Error:', err));
     }
-  }, [isLoaded, selectedCategory, place]);
+  }, [isLoaded, selectedCategory, place, accessToken]);
 
   if (loadError) return 'Error loading maps';
 
   if (place !== null && addedLocations !== null) {
     return (
       <div className='bg-light'>
-        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md navbar-light bg-light'>
+        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md justify-content-md-between navbar-light bg-light'>
           <h1 className='mx-2 blue heading'>SLCTrips</h1>
+          <button className='mx-2 btn btn-secondary' onClick={() => signOut()}>Sign Out</button>
         </nav>
         <div className='d-flex flex-wrap flex-column-reverse'>
           <div className='col-md-6 col-12'>
@@ -237,7 +238,7 @@ export default function Home() {
                               </div>
                               )
                             : (
-                              <EmptyTabAlert tab='list'/>
+                              <EmptyTabAlert tab='list' user={user}/>
                               )
                         }
                       </div>
@@ -289,7 +290,7 @@ export default function Home() {
                             )
                           : (
                             <div className='flex-fill'>
-                              {homeRoutes[0] === undefined ? <EmptyTabAlert tab='routes' /> : null}
+                              {homeRoutes[0] === undefined ? <EmptyTabAlert tab='routes' user={user} /> : null}
                             </div>
                             )
                           }
