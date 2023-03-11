@@ -22,12 +22,7 @@ export default function SignUp({ showLogIn }) {
     setEmailIsValid(isEmail(email));
     setPasswordIsValid(isStrongPassword(password));
     setUsernameIsValid(isAlphanumeric(username));
-    if (!isEmail(email) || !isStrongPassword(password) || !isAlphanumeric(username)) {
-      setEmail('');
-      setPassword('');
-      setUsername('');
-      return;
-    }
+    if (!isEmail(email) || !isStrongPassword(password) || !isAlphanumeric(username)) return;
     const request = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

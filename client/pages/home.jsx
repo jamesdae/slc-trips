@@ -73,9 +73,9 @@ export default function Home({ user, signOut }) {
   if (place !== null && addedLocations !== null) {
     return (
       <div className='bg-light'>
-        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md navbar-light bg-light'>
+        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md justify-content-md-between navbar-light bg-light'>
           <h1 className='mx-2 blue heading'>SLCTrips</h1>
-          <button className='btn btn-warning' onClick={() => signOut()}>Sign Out</button>
+          <button className='mx-2 btn btn-secondary' onClick={() => signOut()}>Sign Out</button>
         </nav>
         <div className='d-flex flex-wrap flex-column-reverse'>
           <div className='col-md-6 col-12'>
@@ -238,7 +238,7 @@ export default function Home({ user, signOut }) {
                               </div>
                               )
                             : (
-                              <EmptyTabAlert tab='list'/>
+                              <EmptyTabAlert tab='list' user={user}/>
                               )
                         }
                       </div>
@@ -290,7 +290,7 @@ export default function Home({ user, signOut }) {
                             )
                           : (
                             <div className='flex-fill'>
-                              {homeRoutes[0] === undefined ? <EmptyTabAlert tab='routes' /> : null}
+                              {homeRoutes[0] === undefined ? <EmptyTabAlert tab='routes' user={user} /> : null}
                             </div>
                             )
                           }

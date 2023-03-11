@@ -61,15 +61,13 @@ app.get('/api/locations/', (req, res) => {
 });
 
 app.post('/api/auth/sign-up', [
-  // Sanitization functions
   check('email').trim().escape(),
   check('username').trim().escape(),
   check('password').trim().escape(),
 
-  // Validation functions
   check('email').notEmpty().withMessage('Email is required.').isEmail().withMessage('Please enter a valid email address.'),
   check('username').notEmpty().withMessage('Username is required.').isAlphanumeric().withMessage('Username must only contain letters or numbers.'),
-  check('password').notEmpty().withMessage('Password is required.').isStrongPassword().withMessage('Password does meet requirements.').isLength({ max: 10 }).withMessage('Password length must be between 8-50 characters.')
+  check('password').notEmpty().withMessage('Password is required.').isStrongPassword().withMessage('Password does meet requirements.').isLength({ max: 50 }).withMessage('Password length must be between 8-50 characters.')
 ], (req, res, next) => {
   const { username, password, email } = req.body;
   if (!username || !password || !email) {
