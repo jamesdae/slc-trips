@@ -40,7 +40,7 @@ export default function Home({ user, signOut }) {
         .then(locations => fetchPlaces(locations, selectedCategory))
         .then(fetchedLocations => setPlace(fetchedLocations))
         .catch(error => console.error(error));
-    } else if (isLoaded && place !== null) {
+    } else if (isLoaded && place !== null && accessToken) {
       const myInit = {
         method: 'GET',
         headers: {
@@ -70,7 +70,7 @@ export default function Home({ user, signOut }) {
 
   if (loadError) return 'Error loading maps';
 
-  if (place !== null && addedLocations !== null) {
+  if (place !== null) {
     return (
       <div className='bg-light'>
         <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md justify-content-md-between navbar-light bg-light'>
@@ -164,9 +164,9 @@ export default function Home({ user, signOut }) {
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        <RouteOptionsButton viewingIds={viewingIds} />
+                        {accessToken && <RouteOptionsButton viewingIds={viewingIds} />}
                         {
-                          addedLocations.length > 0
+                          accessToken && addedLocations !== null && addedLocations.length > 0
                             ? (
                               <div className='row row-cols-1 row-cols-md-2 g-1'>
                                 {

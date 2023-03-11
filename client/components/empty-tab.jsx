@@ -19,7 +19,7 @@ export default function EmptyTabAlert({ tab, user }) {
             )
         }
         <hr />
-        {!user && <p className="mb-0">Sign in <a href="#" className="alert-link">here</a> to save your changes!</p>}
+        {user === 'guest' && <p className="mb-0">Sign in <a href="#" className="alert-link">here</a> to save your changes!</p>}
       </div>
     </div>
   );
