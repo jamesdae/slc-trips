@@ -42,6 +42,7 @@ export default function EachCard(props) {
                                 </div>
                                 <div className="modal-body">
                                   <p>Remove {props.location.name} from list?</p>
+                                  {props.homeRoutes.find(route => route.myListItemsIds.includes(props.myListItemsId)) && <p>This location is included in a saved route, which will also be deleted with removal.</p>}
                                 </div>
                                 <div className="modal-footer">
                                   <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>

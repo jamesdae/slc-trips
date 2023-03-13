@@ -174,7 +174,7 @@ export default function Home({ user, signOut }) {
                                   mappedIds.map((location, index) => {
                                     const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
                                     if (savedlocation.locationId === location.locationId) {
-                                      return <EachCard location={location} key={savedlocation.myListItemsId} viewingIds={viewingIds} myListItemsId={savedlocation.myListItemsId} tab="list"
+                                      return <EachCard location={location} key={savedlocation.myListItemsId} homeRoutes={homeRoutes} viewingIds={viewingIds} myListItemsId={savedlocation.myListItemsId} tab="list"
                                       setPins={pinnedId => {
                                         if (viewingIds === false) {
                                           setViewingIds([pinnedId]);
@@ -194,30 +194,24 @@ export default function Home({ user, signOut }) {
                                         }
                                       }}
                                       removeLocation={removeId => {
-                                        if (homeRoutes.find(route => route.myListItemsIds.includes(removeId))) {
-                                          const route = homeRoutes.find(route => route.myListItemsIds.includes(removeId));
-                                          fetch(`/api/routes/${route.routeId}`, {
-                                            method: 'DELETE',
-                                            headers: {
-                                              'Content-Type': 'application/json',
-                                              'X-Access-Token': accessToken
-                                            }
-                                          })
-                                            .then(res => res.json())
-                                            .then(deletedRoute => {
-                                              const remainingRoutes = homeRoutes.filter(route => route.routeId !== deletedRoute.routeId);
-                                              setHomeRoutes(remainingRoutes);
-
-                                            })
-                                            .catch(err => console.error('Error:', err));
-                                        }
-                                        fetch(`/api/mylist/${removeId}`, {
+                                        const deleteRequest = {
                                           method: 'DELETE',
                                           headers: {
                                             'Content-Type': 'application/json',
                                             'X-Access-Token': accessToken
                                           }
-                                        })
+                                        };
+                                        if (homeRoutes.find(route => route.myListItemsIds.includes(removeId))) {
+                                          const route = homeRoutes.find(route => route.myListItemsIds.includes(removeId));
+                                          fetch(`/api/routes/${route.routeId}`, deleteRequest)
+                                            .then(res => res.json())
+                                            .then(deletedRoute => {
+                                              const remainingRoutes = homeRoutes.filter(route => route.routeId !== deletedRoute.routeId);
+                                              setHomeRoutes(remainingRoutes);
+                                            })
+                                            .catch(err => console.error('Error:', err));
+                                        }
+                                        fetch(`/api/mylist/${removeId}`, deleteRequest)
                                           .then(res => res.json())
                                           .then(res => {
                                             const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
