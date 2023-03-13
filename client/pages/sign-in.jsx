@@ -32,7 +32,7 @@ export default function SignIn({ onSignIn, signUp }) {
         }
         if (!data.token) return;
         onSignIn(data);
-
+        localStorage.setItem('user', JSON.stringify(data));
       })
       .catch(err => console.error(err));
   };
