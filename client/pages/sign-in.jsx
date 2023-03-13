@@ -55,9 +55,7 @@ export default function SignIn({ onSignIn, signUp }) {
               <input type="password" id="password" value={password} onChange={handlePasswordChange} className={`form-control ${invalidLogin ? 'is-invalid' : ''} w-50`} onClick={invalidLogin ? () => setPassword('') : null}/>
               {invalidLogin && <div className="invalid-feedback">{invalidLogin}</div>}
             </div>
-
             <button className="btn btn-primary" type="submit">Sign In</button>
-
           </form>
         </div>
         <div className="card-footer text-muted d-flex flex-column justify-content-between align-items-center">

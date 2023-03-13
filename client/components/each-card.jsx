@@ -6,7 +6,11 @@ export default function EachCard(props) {
   return (
     <div className='col'>
       <div className='card m-2'>
-        <div className='d-flex flex-md-column flex-row-reverse'>
+        <div className='d-flex flex-md-column flex-row-reverse pointer' onClick={() => {
+          const offset = window.innerWidth < 768 ? window.innerHeight * 0.07 : 0;
+          window.scrollTo({ top: offset, behavior: 'smooth' });
+          props.viewCard(props.location.locationId);
+        }}>
           {
             props.tab === 'extradetails'
               ? (
@@ -20,20 +24,19 @@ export default function EachCard(props) {
             <p className='card-title'>{props.location.name}</p>
             <p className='grey smalltext'>{props.location.category}</p>
             <span>Rating: {props.location.rating}/5 <i className='fa-solid fa-star gold' /></span>
-            <a href={props.location.url} target='_blank' rel="noreferrer" className='d-block py-2'>{props.location.user_ratings_total} reviews</a>
+            <p className='pt-2 mb-1'>{props.location.user_ratings_total} reviews</p>
             {
               props.tab === 'extradetails'
                 ? (
                     null
                   )
                 : (
-                  <div className="d-flex justify-content-evenly">
+                  <div className="d-flex justify-content-evenly align-items-center">
                     {props.tab === 'list'
                       ? (
                         <div className='d-flex'>
-                          <i type="button" className='grey align-self-center fa-solid fa-circle-minus pointer' data-bs-toggle="modal" data-bs-target={`#exampleModalCenter-${props.location.locationId}`} />
-
-                          <div className="modal fade" id={`exampleModalCenter-${props.location.locationId}`} tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                          <i type="button" className='grey align-self-center fa-solid fa-xmark fs-4' title="Remove location" data-bs-toggle="modal" data-bs-target={`#exampleModalCenter-${props.location.locationId}`} onClick={event => event.stopPropagation()}/>
+                          <div className="modal fade" id={`exampleModalCenter-${props.location.locationId}`} tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" onClick={event => event.stopPropagation()}>
                             <div className="modal-dialog modal-dialog-centered" role="document">
                               <div className="modal-content">
                                 <div className="modal-header">
@@ -54,22 +57,26 @@ export default function EachCard(props) {
                         </div>
                         )
                       : null}
-                    <button className="mybuttons btn btn-primary" type="button" onClick={() => {
-                      window.scrollTo({ top: 0, behavior: 'auto' });
-                      props.viewCard(props.location.locationId);
-                    }}>Info</button>
+                    <a href={props.location.url} target='_blank' rel="noreferrer" title="View in Google Maps" onClick={event => event.stopPropagation()}><i className="fa-brands fa-google fs-4" /></a>
                     {Array.isArray(props.viewingIds) && props.viewingIds.includes(props.location.locationId)
                       ? (
-                        <button className="mybuttons btn btn-danger" type="button" onClick={() => props.unpinLocation(props.location.locationId)}>Unpin</button>
+                        <i className="fa-solid fa-location-dot text-danger fs-4" onClick={event => {
+                          event.stopPropagation();
+                          props.unpinLocation(props.location.locationId);
+                        }}/>
                         )
                       : props.tab === 'list'
                         ? (
-                          <button className="mybuttons btn btn-success" type="button" onClick={() => {
+                          <i title="Pin on map" className="fa-solid fa-location-dot text-success fs-4" onClick={event => {
+                            event.stopPropagation();
                             props.setPins(props.location.locationId);
-                          }}>Pin</button>
+                          }}/>
                           )
                         : (
-                          <button className="mybuttons btn btn-success" type="button" disabled={props.user === 'guest'} onClick={() => props.addCard(props.location.locationId)}>Add</button>
+                          <a href="#" title={props.user === 'guest' ? 'Sign in to make changes' : 'Add to my list'} disabled={props.user === 'guest'} onClick={event => {
+                            event.stopPropagation();
+                            props.addCard(props.location.locationId);
+                          }}><i className="fa-solid fa-plus text-success fs-4" /></a>
                           )}
                   </div>
                   )

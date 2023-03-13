@@ -83,7 +83,8 @@ export default function Home({ user, signOut }) {
               <nav className='stickytab backwhite'>
                 <div className='nav nav-tabs nav-fill' id='nav-tab' role='tablist'>
                   <button className='nav-link active' id='nav-places-tab' data-bs-toggle='tab' data-bs-target='#nav-places' type='button' role='tab' aria-controls='nav-places' aria-selected='true' onClick={() => {
-                    window.scrollTo({ top: 0 });
+                    const offset = window.innerWidth < 768 ? window.innerHeight * 0.07 : 0;
+                    window.scrollTo({ top: offset, behavior: 'smooth' });
                     if (extraDetailsOpen) return;
                     if (viewingIds !== null) {
                       setPrevList(viewingIds);
@@ -91,7 +92,8 @@ export default function Home({ user, signOut }) {
                     setViewingIds(null);
                   }}>Places</button>
                   <button className='nav-link' id='nav-mylist-tab' data-bs-toggle='tab' data-bs-target='#nav-mylist' type='button' role='tab' aria-controls='nav-mylist' aria-selected='false' onClick={() => {
-                    window.scrollTo({ top: 0 });
+                    const offset = window.innerWidth < 768 ? window.innerHeight * 0.07 : 0;
+                    window.scrollTo({ top: offset, behavior: 'smooth' });
                     if (extraDetailsOpen) return;
                     if (prevList !== null) {
                       setViewingIds(prevList);
@@ -100,7 +102,8 @@ export default function Home({ user, signOut }) {
                     }
                   }}>My List</button>
                   <button className='nav-link' id='nav-routes-tab' data-bs-toggle='tab' data-bs-target='#nav-routes' type='button' role='tab' aria-controls='nav-routes' aria-selected='false' onClick={() => {
-                    window.scrollTo({ top: 0 });
+                    const offset = window.innerWidth < 768 ? window.innerHeight * 0.07 : 0;
+                    window.scrollTo({ top: offset, behavior: 'smooth' });
                     if (extraDetailsOpen) return;
                     if (viewingIds !== null) {
                       setPrevList(viewingIds);
