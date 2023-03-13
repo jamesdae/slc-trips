@@ -194,6 +194,23 @@ export default function Home({ user, signOut }) {
                                         }
                                       }}
                                       removeLocation={removeId => {
+                                        if (homeRoutes.find(route => route.myListItemsIds.includes(removeId))) {
+                                          const route = homeRoutes.find(route => route.myListItemsIds.includes(removeId));
+                                          fetch(`/api/routes/${route.routeId}`, {
+                                            method: 'DELETE',
+                                            headers: {
+                                              'Content-Type': 'application/json',
+                                              'X-Access-Token': accessToken
+                                            }
+                                          })
+                                            .then(res => res.json())
+                                            .then(deletedRoute => {
+                                              const remainingRoutes = homeRoutes.filter(route => route.routeId !== deletedRoute.routeId);
+                                              setHomeRoutes(remainingRoutes);
+
+                                            })
+                                            .catch(err => console.error('Error:', err));
+                                        }
                                         fetch(`/api/mylist/${removeId}`, {
                                           method: 'DELETE',
                                           headers: {
