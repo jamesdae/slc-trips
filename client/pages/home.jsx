@@ -30,7 +30,6 @@ export default function Home({ user, signOut }) {
   const [prevList, setPrevList] = useState(null);
   const [mappedIds, setMappedIds] = useState(null);
   const [homeRoutes, setHomeRoutes] = useState([]);
-  const [routeLink, setRouteLink] = useState(null);
 
   const accessToken = user.token;
 
@@ -169,7 +168,7 @@ export default function Home({ user, signOut }) {
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        {accessToken && <RouteOptionsButton link={routeLink} viewingIds={viewingIds} />}
+                        {accessToken && <RouteOptionsButton mappedIds={mappedIds} viewingIds={viewingIds} />}
                         {
                           accessToken && addedLocations !== null && addedLocations.length > 0
                             ? (
@@ -274,7 +273,7 @@ export default function Home({ user, signOut }) {
                                 Current Route Details
                               </button>
                               <div className="collapse show" id="collapsePins">
-                                <RouteOptionsButton link={routeLink} viewingIds={viewingIds} />
+                                <RouteOptionsButton mappedIds={mappedIds} viewingIds={viewingIds} />
                                 <div className='row row-cols-1 row-cols-md-2 g-1'>
                                   {
                                     mappedIds.map((location, index) => {
@@ -337,7 +336,7 @@ export default function Home({ user, signOut }) {
             </div>
           </div>
           <NewRouteForm accessToken={accessToken} viewingIds={viewingIds} homeRoutes={homeRoutes} setHomeRoutes={routes => setHomeRoutes(routes)} setPrevList={list => setPrevList(list)} setViewingIds={ids => setViewingIds(ids)}/>
-          <DirectionsPanel setRouteLink={link => setRouteLink(link)} homeRoutes={homeRoutes} setHomeRoutes={newRoutes => setHomeRoutes(newRoutes)} addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
+          <DirectionsPanel homeRoutes={homeRoutes} setHomeRoutes={newRoutes => setHomeRoutes(newRoutes)} addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
           <div className='full backwhite col-md-6 col-12 botpad'>
             <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {
               if (extraDetailsOpen === true) return;

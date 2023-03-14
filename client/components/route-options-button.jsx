@@ -1,6 +1,21 @@
 import React from 'react';
 
-export default function RouteOptionsButton({ viewingIds, link }) {
+export default function RouteOptionsButton({ viewingIds, mappedIds }) {
+  if (!Array.isArray(viewingIds) || !viewingIds.length > 1 || !mappedIds) return;
+  const coordinates = viewingIds.map(id => {
+    const pinnedIndex = mappedIds.findIndex(place => place.locationId === id);
+    if (pinnedIndex >= 0) {
+      return `${mappedIds[pinnedIndex].geometry.location.lat()}, ${mappedIds[pinnedIndex].geometry.location.lng()}`;
+    } else {
+      return null;
+    }
+  });
+  const waypoints = coordinates.slice(1, -1).map(coord => ({ location: coord }));
+  const daddr = coordinates[coordinates.length - 1];
+  const origin = coordinates[0];
+
+  const link = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${daddr}&waypoints=${waypoints.map(waypoint => waypoint.location).join('|')}`;
+
   if (viewingIds !== null && viewingIds.length > 1) {
     return (
       <div className='d-flex'>

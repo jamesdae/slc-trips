@@ -6,10 +6,12 @@ export default function EachCard(props) {
   return (
     <div className='col'>
       <div className='card m-2'>
-        <div className='d-flex flex-md-column flex-row-reverse pointer' onClick={() => {
-          const offset = window.innerWidth < 768 ? window.innerHeight * 0.07 : 0;
-          window.scrollTo({ top: offset, behavior: 'smooth' });
-          props.viewCard(props.location.locationId);
+        <div className={props.tab === 'extradetails' ? 'd-flex flex-md-column flex-row-reverse' : 'd-flex flex-md-column flex-row-reverse pointer'} onClick={() => {
+          if (props.tab !== 'extradetails') {
+            const offset = window.innerWidth < 768 ? window.innerHeight * 0.07 : 0;
+            window.scrollTo({ top: offset, behavior: 'smooth' });
+            props.viewCard(props.location.locationId);
+          }
         }}>
           {
             props.tab === 'extradetails'

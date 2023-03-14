@@ -1,7 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import DOMPurify from 'dompurify';
 
 export default function Carousel(props) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const sanitizedAttribution = DOMPurify.sanitize(props.images[activeIndex].html_attributions[0]);
+  const attributionRef = useRef(null);
+
+  useEffect(() => {
+    if (attributionRef.current) {
+      const links = attributionRef.current.querySelectorAll('a');
+      links.forEach(link => {
+        link.setAttribute('target', '_blank');
+      });
+    }
+  }, [sanitizedAttribution]);
 
   function nextImage() {
     const length = props.images.length;
@@ -36,20 +48,25 @@ export default function Carousel(props) {
     ));
   }
 
+  // eslint-disable-next-line no-console
+  console.log(props.images);
+
+  // eslint-disable-next-line no-console
+  console.log('sani', sanitizedAttribution);
   return (
     <div className="container me-auto">
       <div className='box'>
         <i className='fa-solid fa-angle-left blue pointer' onClick={prevImage}/>
         <div className='center d-flex flex-column justify-content-center'>
-          <a href='#'>
-            <img src={props.images[activeIndex].getUrl()} className='p-2 carouselimg align-self-stretch' />
-            {}
-          </a>
+          <img src={props.images[activeIndex].getUrl()} className='p-2 carouselimg align-self-stretch' />
           <div className="dots">
             <Dots />
           </div>
         </div>
         <i className='fa-solid fa-angle-right blue pointer' onClick={nextImage}/>
+      </div>
+      <div className='mt-1 text-center'>
+        <p>Photo credits: <span ref={attributionRef} dangerouslySetInnerHTML={{ __html: sanitizedAttribution }} /></p>
       </div>
     </div>
   );
