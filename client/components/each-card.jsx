@@ -31,12 +31,12 @@ export default function EachCard(props) {
                     null
                   )
                 : (
-                  <div className="d-flex justify-content-evenly align-items-center">
+                  <div className="d-flex justify-content-evenly align-items-center p-1" onClick={event => event.stopPropagation()}>
                     {props.tab === 'list'
                       ? (
                         <div className='d-flex'>
-                          <i type="button" className='grey align-self-center fa-solid fa-xmark fs-4' title="Remove location" data-bs-toggle="modal" data-bs-target={`#exampleModalCenter-${props.location.locationId}`} onClick={event => event.stopPropagation()}/>
-                          <div className="modal fade" id={`exampleModalCenter-${props.location.locationId}`} tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" onClick={event => event.stopPropagation()}>
+                          <i type="button" className='grey align-self-center fa-solid fa-xmark fs-3' title="Remove location" data-bs-toggle="modal" data-bs-target={`#exampleModalCenter-${props.location.locationId}`} />
+                          <div className="modal fade" id={`exampleModalCenter-${props.location.locationId}`} tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                             <div className="modal-dialog modal-dialog-centered" role="document">
                               <div className="modal-content">
                                 <div className="modal-header">
@@ -57,26 +57,17 @@ export default function EachCard(props) {
                         </div>
                         )
                       : null}
-                    <a href={props.location.url} target='_blank' rel="noreferrer" title="View in Google Maps" onClick={event => event.stopPropagation()}><i className="fa-brands fa-google fs-4" /></a>
+                    <a href={props.location.url} target='_blank' rel="noreferrer" title="View in Google Maps" onClick={event => event.stopPropagation()}><i className="fa-brands fa-google fs-3" /></a>
                     {Array.isArray(props.viewingIds) && props.viewingIds.includes(props.location.locationId)
                       ? (
-                        <i className="fa-solid fa-location-dot text-danger fs-4" onClick={event => {
-                          event.stopPropagation();
-                          props.unpinLocation(props.location.locationId);
-                        }}/>
+                        <i className="fa-solid fa-location-dot text-danger fs-3" onClick={() => props.unpinLocation(props.location.locationId)}/>
                         )
                       : props.tab === 'list'
                         ? (
-                          <i title="Pin on map" className="fa-solid fa-location-dot text-success fs-4" onClick={event => {
-                            event.stopPropagation();
-                            props.setPins(props.location.locationId);
-                          }}/>
+                          <i title="Pin on map" className="fa-solid fa-location-dot text-success fs-3" onClick={() => props.setPins(props.location.locationId)}/>
                           )
                         : (
-                          <a href="#" title={props.user === 'guest' ? 'Sign in to make changes' : 'Add to my list'} disabled={props.user === 'guest'} onClick={event => {
-                            event.stopPropagation();
-                            props.addCard(props.location.locationId);
-                          }}><i className="fa-solid fa-plus text-success fs-4" /></a>
+                          <button className='btn btn-link' type='button' title={props.user === 'guest' ? 'Sign in to make changes' : 'Add to my list'} disabled={props.user === 'guest'} aria-disabled={props.user === 'guest'} onClick={() => props.addCard(props.location.locationId)}><i className={props.user === 'guest' ? 'fa-solid fa-plus text-secondary fs-3' : 'fa-solid fa-plus text-success fs-3'} /></button>
                           )}
                   </div>
                   )

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds, viewingIds, addedLocations, homeRoutes, setHomeRoutes }) {
+export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds, viewingIds, addedLocations, homeRoutes, setHomeRoutes, setRouteLink }) {
 
   if (!Array.isArray(viewingIds) || !viewingIds.length > 1 || !mappedIds) return;
   const coordinates = viewingIds.map(id => {
@@ -16,6 +16,7 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, mappedIds,
   const origin = coordinates[0];
 
   const link = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${daddr}&waypoints=${waypoints.map(waypoint => waypoint.location).join('|')}`;
+  setRouteLink(link);
 
   return (
     <div className="offcanvas offcanvas-start" data-bs-backdrop="false" tabIndex="-1" id="offcanvasDirections" aria-labelledby="offcanvasHeader">

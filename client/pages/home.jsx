@@ -30,6 +30,7 @@ export default function Home({ user, signOut }) {
   const [prevList, setPrevList] = useState(null);
   const [mappedIds, setMappedIds] = useState(null);
   const [homeRoutes, setHomeRoutes] = useState([]);
+  const [routeLink, setRouteLink] = useState(null);
 
   const accessToken = user.token;
 
@@ -168,7 +169,7 @@ export default function Home({ user, signOut }) {
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        {accessToken && <RouteOptionsButton viewingIds={viewingIds} />}
+                        {accessToken && <RouteOptionsButton link={routeLink} viewingIds={viewingIds} />}
                         {
                           accessToken && addedLocations !== null && addedLocations.length > 0
                             ? (
@@ -247,13 +248,13 @@ export default function Home({ user, signOut }) {
                                   })
                                   }
                                 <span><div className="alert alert-warning alert-dismissible fade show d-flex justify-content-between" role="alert">
-                                  <p><i className="fa-solid fa-circle-info" /> Press{' '}<button className="mybuttons btn btn-success" type="button">Pin</button> to start a new route on the map!</p>
+                                  <p><i className="fa-solid fa-circle-info" /> Press{' '}<i className='fa-solid fa-location-dot text-success fs-3' /> to start a new route on the map!</p>
                                   <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
                                 </div></span>
                               </div>
                               )
                             : (
-                              <EmptyTabAlert tab='list' user={user}/>
+                              <EmptyTabAlert signIn={() => signOut()} tab='list' user={user}/>
                               )
                         }
                       </div>
@@ -270,10 +271,10 @@ export default function Home({ user, signOut }) {
                           ? (
                             <div className='row rows-cols-1'>
                               <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePins" aria-expanded="true" aria-controls="collapsePins">
-                                New Route Details
+                                Current Route Details
                               </button>
                               <div className="collapse show" id="collapsePins">
-                                <RouteOptionsButton viewingIds={viewingIds} />
+                                <RouteOptionsButton link={routeLink} viewingIds={viewingIds} />
                                 <div className='row row-cols-1 row-cols-md-2 g-1'>
                                   {
                                     mappedIds.map((location, index) => {
@@ -305,17 +306,17 @@ export default function Home({ user, signOut }) {
                             )
                           : (
                             <div className='flex-fill'>
-                              {homeRoutes[0] === undefined ? <EmptyTabAlert tab='routes' user={user} /> : null}
+                              {homeRoutes[0] === undefined ? <EmptyTabAlert signIn={() => signOut()} tab='routes' user={user} /> : null}
                             </div>
                             )
                           }
                         {homeRoutes[0] !== undefined
                           ? (
                             <div className='row row-cols-1'>
-                              <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRoutes" aria-expanded="false" aria-controls="collapseRoutes">
+                              <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRoutes" aria-expanded={!viewingIds} aria-controls="collapseRoutes">
                                 My Saved Routes
                               </button>
-                              <div className="collapse" id="collapseRoutes">
+                              <div className={!viewingIds ? 'collapse show' : 'collapse'} id="collapseRoutes">
                                 {
                                 homeRoutes.map(route => {
                                   const locationIds = route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId);
@@ -336,7 +337,7 @@ export default function Home({ user, signOut }) {
             </div>
           </div>
           <NewRouteForm accessToken={accessToken} viewingIds={viewingIds} homeRoutes={homeRoutes} setHomeRoutes={routes => setHomeRoutes(routes)} setPrevList={list => setPrevList(list)} setViewingIds={ids => setViewingIds(ids)}/>
-          <DirectionsPanel homeRoutes={homeRoutes} setHomeRoutes={newRoutes => setHomeRoutes(newRoutes)} addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
+          <DirectionsPanel setRouteLink={link => setRouteLink(link)} homeRoutes={homeRoutes} setHomeRoutes={newRoutes => setHomeRoutes(newRoutes)} addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
           <div className='full backwhite col-md-6 col-12 botpad'>
             <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {
               if (extraDetailsOpen === true) return;

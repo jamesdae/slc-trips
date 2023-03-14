@@ -56,7 +56,6 @@ export default function EditForm({ setRouteName, route, accessToken, routeName }
                 </div>
               </div>
               <div className="modal-footer d-flex gap-2">
-                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" className="btn btn-danger" data-bs-target={`#confirmDeleteModal-${route.routeId}`} data-bs-toggle="modal" data-bs-dismiss="modal">Delete Route</button>
                 <button type="submit" className="btn btn-primary" disabled={!routeNameValid} data-bs-dismiss="modal">Save changes</button>
               </div>
