@@ -70,6 +70,24 @@ export default function Home({ user, signOut }) {
 
   if (loadError) return 'Error loading maps';
 
+  function findRouteLink() {
+    if (!Array.isArray(viewingIds) || !viewingIds.length > 1 || !mappedIds) return '#';
+    const coordinates = viewingIds.map(id => {
+      const pinnedIndex = mappedIds.findIndex(place => place.locationId === id);
+      if (pinnedIndex >= 0) {
+        return `${mappedIds[pinnedIndex].geometry.location.lat()}, ${mappedIds[pinnedIndex].geometry.location.lng()}`;
+      } else {
+        return null;
+      }
+    });
+    const waypoints = coordinates.slice(1, -1).map(coord => ({ location: coord }));
+    const daddr = coordinates[coordinates.length - 1];
+    const origin = coordinates[0];
+
+    const link = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${daddr}&waypoints=${waypoints.map(waypoint => waypoint.location).join('|')}`;
+    return link;
+  }
+
   if (place !== null) {
     return (
       <div className='bg-light'>
@@ -168,7 +186,7 @@ export default function Home({ user, signOut }) {
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        {accessToken && <RouteOptionsButton mappedIds={mappedIds} viewingIds={viewingIds} />}
+                        {accessToken && <RouteOptionsButton link={findRouteLink()} mappedIds={mappedIds} viewingIds={viewingIds} />}
                         {
                           accessToken && addedLocations !== null && addedLocations.length > 0
                             ? (
@@ -273,7 +291,7 @@ export default function Home({ user, signOut }) {
                                 Current Route Details
                               </button>
                               <div className="collapse show" id="collapsePins">
-                                <RouteOptionsButton mappedIds={mappedIds} viewingIds={viewingIds} />
+                                <RouteOptionsButton link={findRouteLink()} mappedIds={mappedIds} viewingIds={viewingIds} />
                                 <div className='row row-cols-1 row-cols-md-2 g-1'>
                                   {
                                     mappedIds.map((location, index) => {
@@ -315,7 +333,7 @@ export default function Home({ user, signOut }) {
                               <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRoutes" aria-expanded={!viewingIds} aria-controls="collapseRoutes">
                                 My Saved Routes
                               </button>
-                              <div className={!viewingIds ? 'collapse show' : 'collapse'} id="collapseRoutes">
+                              <div className='collapse' id="collapseRoutes">
                                 {
                                 homeRoutes.map(route => {
                                   const locationIds = route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId);
@@ -336,7 +354,7 @@ export default function Home({ user, signOut }) {
             </div>
           </div>
           <NewRouteForm accessToken={accessToken} viewingIds={viewingIds} homeRoutes={homeRoutes} setHomeRoutes={routes => setHomeRoutes(routes)} setPrevList={list => setPrevList(list)} setViewingIds={ids => setViewingIds(ids)}/>
-          <DirectionsPanel homeRoutes={homeRoutes} setHomeRoutes={newRoutes => setHomeRoutes(newRoutes)} addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
+          <DirectionsPanel link={findRouteLink()} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} viewingIds={viewingIds}/>
           <div className='full backwhite col-md-6 col-12 botpad'>
             <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {
               if (extraDetailsOpen === true) return;

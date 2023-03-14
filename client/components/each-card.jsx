@@ -69,7 +69,11 @@ export default function EachCard(props) {
                           <i title="Pin on map" className="fa-solid fa-location-dot text-success fs-3" onClick={() => props.setPins(props.location.locationId)}/>
                           )
                         : (
-                          <button className='btn btn-link' type='button' title={props.user === 'guest' ? 'Sign in to make changes' : 'Add to my list'} disabled={props.user === 'guest'} aria-disabled={props.user === 'guest'} onClick={() => props.addCard(props.location.locationId)}><i className={props.user === 'guest' ? 'fa-solid fa-plus text-secondary fs-3' : 'fa-solid fa-plus text-success fs-3'} /></button>
+                            props.user === 'guest'
+                              ? <button className='btn btn-link' type='button' title='Sign in to make changes' aria-disabled="false"><i className='fa-solid fa-plus text-secondary fs-3'/></button>
+                              : <button className='btn btn-link' type='button' title='Add to my list' aria-disabled="false" onClick={() => props.addCard(props.location.locationId)} ><i className='fa-solid fa-plus text-success fs-3' /></button>
+
+                          // <button className='btn btn-link' type='button' title={props.user === 'guest' ? 'Sign in to make changes' : 'Add to my list'} disabled={props.user === 'guest'} aria-disabled={props.user === 'guest'} onClick={() => props.addCard(props.location.locationId)}><i className={props.user === 'guest' ? 'fa-solid fa-plus text-secondary fs-3 disabled' : 'fa-solid fa-plus text-success fs-3'} /></button>
                           )}
                   </div>
                   )
