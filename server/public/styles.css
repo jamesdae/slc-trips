@@ -53,6 +53,22 @@
   .mybuttons {
     scale: 75%;
   }
+
+  .cardbutton {
+    font-size: xx-small;
+  }
+}
+
+@media screen and (min-width: 430px) and (max-width: 610px) {
+  .cardbutton {
+    font-size: small;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1036px) {
+  .cardbutton {
+    font-size: x-small;
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -280,4 +296,8 @@
 
 .routecard {
   width: 50%;
+}
+
+.buttonrow {
+  height: 6vh;
 }

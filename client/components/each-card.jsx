@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Carousel from './photoCarousel';
 
 export default function EachCard(props) {
+  const [logoIsHovered, setLogoIsHovered] = useState(false);
+  const [addIconHovered, setAddIconHovered] = useState(false);
+  const [pinIconHovered, setPinIconHovered] = useState(false);
 
   return (
     <div className='col'>
@@ -24,20 +27,20 @@ export default function EachCard(props) {
           }
           <div className='card-body d-flex flex-column justify-content-center carddetails'>
             <p className='card-title'>{props.location.name}</p>
-            <p className='grey smalltext'>{props.location.category}</p>
+            <p className='grey smalltext mb-1'>{props.location.category}</p>
             <span>Rating: {props.location.rating}/5 <i className='fa-solid fa-star gold' /></span>
-            <p className='pt-2 mb-1'>{props.location.user_ratings_total} reviews</p>
+            <p className='my-1'>{props.location.user_ratings_total} reviews</p>
             {
               props.tab === 'extradetails'
                 ? (
                     null
                   )
                 : (
-                  <div className="d-flex justify-content-evenly align-items-center p-1" onClick={event => event.stopPropagation()}>
+                  <div className="d-flex justify-content-evenly align-items-center buttonrow" role="group" onClick={event => event.stopPropagation()}>
                     {props.tab === 'list'
                       ? (
                         <div className='d-flex'>
-                          <i type="button" className='grey align-self-center fa-solid fa-xmark fs-3' title="Remove location" data-bs-toggle="modal" data-bs-target={`#exampleModalCenter-${props.location.locationId}`} />
+                          <button type="button" className='btn btn-secondary' title="Remove location" data-bs-toggle="modal" data-bs-target={`#exampleModalCenter-${props.location.locationId}`}><i className='align-self-center fa-solid fa-xmark fs-6'/></button>
                           <div className="modal fade" id={`exampleModalCenter-${props.location.locationId}`} tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                             <div className="modal-dialog modal-dialog-centered" role="document">
                               <div className="modal-content">
@@ -47,7 +50,7 @@ export default function EachCard(props) {
                                 </div>
                                 <div className="modal-body">
                                   <p>Remove {props.location.name} from list?</p>
-                                  {props.homeRoutes.find(route => route.myListItemsIds.includes(props.myListItemsId)) && <p>This location is included in a saved route, which will also be deleted with removal.</p>}
+                                  {props.homeRoutes.find(route => route.myListItemsIds.includes(props.myListItemsId)) && <p>(Removing this location will also delete all saved routes containing it)</p>}
                                 </div>
                                 <div className="modal-footer">
                                   <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -59,21 +62,19 @@ export default function EachCard(props) {
                         </div>
                         )
                       : null}
-                    <a href={props.location.url} target='_blank' rel="noreferrer" title="View in Google Maps" onClick={event => event.stopPropagation()}><i className="fa-brands fa-google fs-3" /></a>
+                    <a className="btn btn-primary" href={props.location.url} target='_blank' rel="noreferrer" title="Open in Google Maps" onMouseEnter={() => setLogoIsHovered(true)} onMouseLeave={() => setLogoIsHovered(false)} onClick={event => event.stopPropagation()}>{!logoIsHovered ? <i className="fa-brands fa-google fs-6" /> : <p className='cardbutton mb-0'>Open Google Maps</p>}</a>
                     {Array.isArray(props.viewingIds) && props.viewingIds.includes(props.location.locationId)
                       ? (
-                        <i className="fa-solid fa-location-dot text-danger fs-3" onClick={() => props.unpinLocation(props.location.locationId)}/>
+                        <button title="Unpin from map" className='btn btn-danger' onMouseEnter={() => setPinIconHovered(true)} onMouseLeave={() => setPinIconHovered(false)} onClick={() => props.unpinLocation(props.location.locationId)}>{!pinIconHovered ? <i className="fa-solid fa-location-dot fs-6" /> : <p className='mb-0 fs-6'>Unpin</p>}</button>
                         )
                       : props.tab === 'list'
                         ? (
-                          <i title="Pin on map" className="fa-solid fa-location-dot text-success fs-3" onClick={() => props.setPins(props.location.locationId)}/>
+                          <button title="Pin on map" className='btn btn-success' onMouseEnter={() => setPinIconHovered(true)} onMouseLeave={() => setPinIconHovered(false)} onClick={() => props.setPins(props.location.locationId)}> {!pinIconHovered ? <i className="fa-solid fa-location-dot fs-6" /> : <p className='mb-0 fs-6'>Pin</p>} </button>
                           )
                         : (
                             props.user === 'guest'
-                              ? <button className='btn btn-link' type='button' title='Sign in to make changes' aria-disabled="false"><i className='fa-solid fa-plus text-secondary fs-3'/></button>
-                              : <button className='btn btn-link' type='button' title='Add to my list' aria-disabled="false" onClick={() => props.addCard(props.location.locationId)} ><i className='fa-solid fa-plus text-success fs-3' /></button>
-
-                          // <button className='btn btn-link' type='button' title={props.user === 'guest' ? 'Sign in to make changes' : 'Add to my list'} disabled={props.user === 'guest'} aria-disabled={props.user === 'guest'} onClick={() => props.addCard(props.location.locationId)}><i className={props.user === 'guest' ? 'fa-solid fa-plus text-secondary fs-3 disabled' : 'fa-solid fa-plus text-success fs-3'} /></button>
+                              ? <button className='btn btn-secondary' type='button' title='Sign in to make changes' aria-disabled="false" onMouseEnter={() => setAddIconHovered(true)} onMouseLeave={() => setAddIconHovered(false)} >{!addIconHovered ? <i className='fa-solid fa-plus fs-6' /> : <p className='mb-0 cardbutton'>Sign in to add</p>} </button>
+                              : <button className='btn btn-success' type='button' title='Add to my list' aria-disabled="false" onMouseEnter={() => setAddIconHovered(true)} onMouseLeave={() => setAddIconHovered(false)} onClick={() => props.addCard(props.location.locationId)} >{!addIconHovered ? <i className='fa-solid fa-plus fs-6' /> : <p className='cardbutton mb-0'>Add to My List</p>} </button>
                           )}
                   </div>
                   )

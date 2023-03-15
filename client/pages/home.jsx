@@ -144,6 +144,7 @@ export default function Home({ user, signOut }) {
                           <LocationCards place={place} clickedCategory={selectedCategory} user={user}
                             viewCard={viewingId => {
                               setExtraDetailsOpen(!extraDetailsOpen);
+                              setPrevList(viewingIds);
                               setViewingIds([viewingId]);
                             }}
                             addCard={addedLocationId => {
