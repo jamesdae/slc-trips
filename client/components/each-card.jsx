@@ -22,14 +22,16 @@ export default function EachCard(props) {
                 <Carousel location={props.location} images={props.location.photos} />
                 )
               : (
-                <img className='p-1 detailimage align-self-center align-self-md-stretch' src={props.location.photos[0].getUrl()} alt='photo from Google Places' />
+                <img className='p-1 detailimage align-self-center align-self-md-stretch' src={props.location.photos[0].getUrl()} alt={props.location.name} />
                 )
           }
           <div className='card-body d-flex flex-column justify-content-center carddetails'>
-            {props.tab === 'extradetails' ? <a href={props.location.url} target='_blank' rel="noreferrer" title="Open in Google Maps"><p className='card-title'>{props.location.name}</p></a> : <p className='card-title'>{props.location.name}</p>}
-            <p className='grey smalltext mb-1'>{props.location.category}</p>
-            <span>Rating: {props.location.rating}/5 <i className='fa-solid fa-star gold' /></span>
-            <p className='my-1'>{props.location.user_ratings_total} reviews</p>
+            <div className='d-flex flex-column ps-1'>
+              {props.tab === 'extradetails' ? <a href={props.location.url} target='_blank' rel="noreferrer" title="Open in Google Maps"><p className='card-title'>{props.location.name}</p></a> : <p className='card-title'>{props.location.name}</p>}
+              <p className='grey smalltext mb-1'>{props.location.category}</p>
+              <span>Rating: {props.location.rating}/5 <i className='fa-solid fa-star gold' /></span>
+              <p className='my-1'>{props.location.user_ratings_total} reviews</p>
+            </div>
             {
               props.tab === 'extradetails'
                 ? (

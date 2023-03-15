@@ -13,9 +13,15 @@
 }
 
 .detailimage {
-  height: 16vh;
-  width: 52%;
+  max-height: 16rem;
+  width: 54%;
   object-fit: cover;
+}
+
+@media screen and (min-width: 1200px) {
+  .carouselimg.p-2 {
+    object-fit: contain;
+  }
 }
 
 .stickytab {
@@ -30,14 +36,14 @@
 }
 
 .carddetails {
-  width: 50%;
+  width: 46%;
 }
 
 .buttonrow {
   height: 6vh;
 }
 
-.navbar {
+.mynav {
   height: 7vh;
 }
 
@@ -89,6 +95,8 @@
 
 .markerimg {
   width: 9rem;
+  max-height: 4rem;
+  object-fit: cover;
 }
 
 .photo {
@@ -100,7 +108,8 @@
   align-items: center;
   justify-content: space-around;
   padding: 10px;
-  height: 30vh;
+  max-height: 32vh;
+  height: 100%;
 }
 
 .dots {
@@ -112,8 +121,8 @@
 
 .button {
   padding: 0;
-  height: 0.7rem;
-  width: 0.7rem;
+  height: 0.6rem;
+  width: 0.6rem;
   border-radius: 50%;
   border-color: var(--water-color);
   background-color: white;
@@ -123,7 +132,7 @@
   width: 100%;
   object-fit: cover;
   object-position: 50% 50%;
-  max-height: 29vh;
+  max-height: 31vh;
 }
 
 .multiline {

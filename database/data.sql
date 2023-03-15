@@ -14,9 +14,9 @@ values ('Antelope Island State Park', 'ChIJ6bQ5YpQbU4cRCw2g6VuOcUY', 'Parks & At
        ('Park City Mountain', 'ChIJ3-VdWJxyUocRr-MVIgU4Sfs', 'Snow Activities'),
        ('Powder Mountain', 'ChIJhZdzk1yfU4cRJqu8U9Y8ROw', 'Snow Activities'),
        ('Soldier Hollow Nordic Center', 'ChIJXb7C0sGKTYcRHkzCG9NCLlI', 'Snow Activities'),
-       ('KOU Korean BBQ', 'ChIJAQBQNrKJUocRmWIlb7fSnTk', 'Restaurants'),
-       ('Paiks Noodle House', 'ChIJQfts0JyNUocRQn1qyfBxvwM', 'Restaurants'),
-       ('Luckys Roadhouse', 'ChIJoTOzmdaPUocRKvq0IcOknQY', 'Restaurants'),
-       ('La Casa Del Tamal', 'ChIJI9KqZASNUocRIwtWdAdtu8Q', 'Restaurants'),
        ('Crown Burgers', 'ChIJD_VkmdRhUocRF_rXpd_WNy4', 'Restaurants'),
+       ('KOU Korean BBQ', 'ChIJAQBQNrKJUocRmWIlb7fSnTk', 'Restaurants'),
+       ('La Casa Del Tamal', 'ChIJI9KqZASNUocRIwtWdAdtu8Q', 'Restaurants'),
+       ('Luckys Roadhouse', 'ChIJoTOzmdaPUocRKvq0IcOknQY', 'Restaurants'),
+       ('Paiks Noodle House', 'ChIJQfts0JyNUocRQn1qyfBxvwM', 'Restaurants'),
        ('Tonkotsu Shabu Shabu Bar', 'ChIJxxWKB2WLUocRBsftkKPvF1E', 'Restaurants')

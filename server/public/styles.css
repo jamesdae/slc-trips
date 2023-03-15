@@ -160,3 +160,7 @@
 .pointer {
   cursor: pointer;
 }
+
+.arrow-container {
+  pointer-events: auto;
+}

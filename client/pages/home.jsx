@@ -37,32 +37,28 @@ export default function Home({ user, signOut }) {
     if (isLoaded && place === null) {
       fetch(`/api/locations/?category=${selectedCategory}`)
         .then(res => res.json())
-        .then(locations => fetchPlaces(locations, selectedCategory))
+        .then(locations => fetchPlaces(locations, selectedCategory, isLoaded))
         .then(fetchedLocations => setPlace(fetchedLocations))
         .catch(error => console.error(error));
     } else if (isLoaded && place !== null && accessToken) {
-      const myInit = {
+      const getRequest = {
         method: 'GET',
         headers: {
           'X-Access-Token': accessToken
         }
       };
-      fetch('/api/mylist', myInit)
+      fetch('/api/mylist', getRequest)
         .then(res => res.json())
         .then(res => {
           const myList = res.map(obj => obj);
           const addedLocationIds = res.map(obj => obj.locationId);
           setAddedLocations(myList);
           const myListLocations = [];
-          addedLocationIds.forEach(id => {
-            myListLocations.push(place.find(location => location.locationId === id));
-          });
+          addedLocationIds.forEach(id => myListLocations.push(place.find(location => location.locationId === id)));
           setMappedIds(myListLocations);
-          fetch('/api/routes', myInit)
+          fetch('/api/routes', getRequest)
             .then(response => response.json())
-            .then(oldRoutes => {
-              setHomeRoutes(oldRoutes);
-            });
+            .then(oldRoutes => setHomeRoutes(oldRoutes));
         })
         .catch(err => console.error('Error:', err));
     }
@@ -83,7 +79,6 @@ export default function Home({ user, signOut }) {
     const waypoints = coordinates.slice(1, -1).map(coord => ({ location: coord }));
     const daddr = coordinates[coordinates.length - 1];
     const origin = coordinates[0];
-
     const link = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${daddr}&waypoints=${waypoints.map(waypoint => waypoint.location).join('|')}`;
     return link;
   }
@@ -91,7 +86,7 @@ export default function Home({ user, signOut }) {
   if (place !== null) {
     return (
       <div className='bg-light'>
-        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md justify-content-md-between navbar-light bg-light'>
+        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md justify-content-md-between navbar-light bg-light mynav'>
           <h1 className='mx-2 blue heading'>SLCTrips</h1>
           <button className='mx-2 btn btn-secondary' onClick={() => signOut()}>{user === 'guest' ? 'Sign in' : 'Sign Out'}</button>
         </nav>
@@ -320,7 +315,7 @@ export default function Home({ user, signOut }) {
                           ? (
                             <div className='row rows-cols-1'>
                               <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePins" aria-expanded="true" aria-controls="collapsePins">
-                                Current Route Details
+                                Current Route Details <i className="fa-sharp fa-solid fa-caret-down" />
                               </button>
                               <div className="collapse show" id="collapsePins">
                                 <RouteOptionsButton link={findRouteLink()} mappedIds={mappedIds} viewingIds={viewingIds} />
@@ -363,7 +358,7 @@ export default function Home({ user, signOut }) {
                           ? (
                             <div className='row row-cols-1'>
                               <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRoutes" aria-expanded={!viewingIds} aria-controls="collapseRoutes">
-                                My Saved Routes
+                                My Saved Routes <i className="fa-sharp fa-solid fa-caret-down" />
                               </button>
                               <div className='collapse' id="collapseRoutes">
                                 {
