@@ -26,7 +26,7 @@ export default function ConfirmDeleteModal({ route, accessToken, locationIds, ro
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLongTitle">Confirm Changes</h5>
+              <h5 className="modal-title">Confirm Changes</h5>
               <i aria-hidden="true" type="button" className="close fa-solid fa-xmark" data-bs-dismiss="modal" aria-label="Close" />
             </div>
             <div className="modal-body">

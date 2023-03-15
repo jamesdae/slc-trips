@@ -24,20 +24,20 @@ export default function DropdownMenu(props) {
           <button className="dropdown-item" type="button" onClick={() => selectItem('All Categories')}>
             All Categories
           </button>
+          <button className="dropdown-item" type="button" onClick={() => selectItem('Restaurants')}>
+            Restaurants
+          </button>
+          <button className="dropdown-item" type="button" onClick={() => selectItem('Lakes')}>
+            Lakes
+          </button>
           <button className="dropdown-item" type="button" onClick={() => selectItem('Hiking')}>
             Hiking
           </button>
-          <button className="dropdown-item" type="button" onClick={() => selectItem('Parks')}>
-            Parks
-          </button>
-          <button className="dropdown-item" type="button" onClick={() => selectItem('Viewpoints')}>
-            Viewpoints
-          </button>
-          <button className="dropdown-item" type="button" onClick={() => selectItem('Water Activities')}>
-            Water Activities
-          </button>
           <button className="dropdown-item" type="button" onClick={() => selectItem('Snow Activities')}>
             Snow Activities
+          </button>
+          <button className="dropdown-item" type="button" onClick={() => selectItem('Parks & Attractions')}>
+            Parks &amp; Attractions
           </button>
         </div>
       </div>

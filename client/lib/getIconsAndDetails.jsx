@@ -3,23 +3,23 @@ import React from 'react';
 export default function getIconsAndDetails(location) {
   let categoryValue = 'fa-solid';
   switch (location.category) {
-    case 'Parks':
-      categoryValue += ' fa-tree';
+    case 'Parks & Attractions':
+      categoryValue += ' fa-camera-retro';
       break;
-    case 'Water Activities':
+    case 'Lakes':
       categoryValue += ' fa-sailboat';
       break;
     case 'Snow Activities':
       categoryValue += ' fa-snowflake';
       break;
     case 'Hiking':
-      categoryValue += ' fa-mountain-sun';
+      categoryValue += ' fa-person-hiking';
       break;
-    case 'Viewpoints':
-      categoryValue += ' fa-binoculars';
+    case 'Restaurants':
+      categoryValue += ' fa-utensils';
       break;
     default:
-      categoryValue += ' fa-tree';
+      categoryValue += ' fa-snowwflake';
   }
 
   return (

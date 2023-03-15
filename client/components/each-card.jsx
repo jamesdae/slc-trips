@@ -9,7 +9,7 @@ export default function EachCard(props) {
   return (
     <div className='col'>
       <div className='card m-2'>
-        <div className={props.tab === 'extradetails' ? 'd-flex flex-md-column flex-row-reverse' : 'd-flex flex-md-column flex-row-reverse pointer'} onClick={() => {
+        <div title='View photos and info' className={props.tab === 'extradetails' ? 'd-flex flex-md-column flex-row-reverse' : 'd-flex flex-md-column flex-row-reverse pointer'} onClick={() => {
           if (props.tab !== 'extradetails') {
             const offset = window.innerWidth < 768 ? window.innerHeight * 0.07 : 0;
             window.scrollTo({ top: offset, behavior: 'smooth' });
@@ -19,14 +19,14 @@ export default function EachCard(props) {
           {
             props.tab === 'extradetails'
               ? (
-                <Carousel images={props.location.photos} />
+                <Carousel location={props.location} images={props.location.photos} />
                 )
               : (
                 <img className='p-1 detailimage align-self-center align-self-md-stretch' src={props.location.photos[0].getUrl()} alt='photo from Google Places' />
                 )
           }
           <div className='card-body d-flex flex-column justify-content-center carddetails'>
-            <p className='card-title'>{props.location.name}</p>
+            {props.tab === 'extradetails' ? <a href={props.location.url} target='_blank' rel="noreferrer" title="Open in Google Maps"><p className='card-title'>{props.location.name}</p></a> : <p className='card-title'>{props.location.name}</p>}
             <p className='grey smalltext mb-1'>{props.location.category}</p>
             <span>Rating: {props.location.rating}/5 <i className='fa-solid fa-star gold' /></span>
             <p className='my-1'>{props.location.user_ratings_total} reviews</p>
@@ -40,12 +40,12 @@ export default function EachCard(props) {
                     {props.tab === 'list'
                       ? (
                         <div className='d-flex'>
-                          <button type="button" className='btn btn-secondary' title="Remove location" data-bs-toggle="modal" data-bs-target={`#exampleModalCenter-${props.location.locationId}`}><i className='align-self-center fa-solid fa-xmark fs-6'/></button>
-                          <div className="modal fade" id={`exampleModalCenter-${props.location.locationId}`} tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                          <button type="button" className='btn btn-secondary' title="Remove location" data-bs-toggle="modal" data-bs-target={`#confirmRouteDeleteModal-${props.location.locationId}`}><i className='align-self-center fa-solid fa-xmark fs-6'/></button>
+                          <div className="modal fade" id={`confirmRouteDeleteModal-${props.location.locationId}`} tabIndex="-1" role="dialog" aria-labelledby="confirmRouteDeleteModalTitle" aria-hidden="true">
                             <div className="modal-dialog modal-dialog-centered" role="document">
                               <div className="modal-content">
                                 <div className="modal-header">
-                                  <h5 className="modal-title" id="exampleModalLongTitle">Confirm</h5>
+                                  <h5 className="modal-title">Confirm</h5>
                                   <i aria-hidden="true" type="button" className="close fa-solid fa-xmark" data-bs-dismiss="modal" aria-label="Close"/>
                                 </div>
                                 <div className="modal-body">
@@ -87,7 +87,7 @@ export default function EachCard(props) {
                 props.location.reviews.map((review, index) => {
                   return (
                     <div key={index} className="m-2 p-2 d-flex flex-column justify-content-center">
-                      <a href={review.author_url} target='_blank' rel="noreferrer" className='text-capitalize'><i className='me-1 fa-solid fa-circle-user'/>{review.author_name}</a>
+                      <a title="Contributor Google Maps Page" href={review.author_url} target='_blank' rel="noreferrer" className='text-capitalize'><i className='me-1 fa-solid fa-circle-user'/>{review.author_name}</a>
                       <p className='my-1'>{review.rating}/5 <i className='fa-solid fa-star gold' /> <em>about {review.relative_time_description}</em></p>
                       <p className='grey smalltext'>&quot;{review.text}&quot;</p>
                     </div>

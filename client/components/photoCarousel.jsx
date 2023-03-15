@@ -53,7 +53,7 @@ export default function Carousel(props) {
       <div className='box'>
         <i className='fa-solid fa-angle-left blue pointer' onClick={prevImage}/>
         <div className='center d-flex flex-column justify-content-center'>
-          <img src={props.images[activeIndex].getUrl()} className='p-2 carouselimg align-self-stretch' />
+          <a title="View original source of image" href={props.images[activeIndex].getUrl()} target="_blank" rel="noopener noreferrer"><img src={props.images[activeIndex].getUrl()} className='p-2 carouselimg align-self-stretch' alt={props.location.name} /></a>
           <div className="dots">
             <Dots />
           </div>
@@ -61,7 +61,7 @@ export default function Carousel(props) {
         <i className='fa-solid fa-angle-right blue pointer' onClick={nextImage}/>
       </div>
       <div className='mt-1 text-center'>
-        <p>Photo credits: <span ref={attributionRef} dangerouslySetInnerHTML={{ __html: sanitizedAttribution }} /></p>
+        <p className='smalltext'>Photo credits: <span ref={attributionRef} dangerouslySetInnerHTML={{ __html: sanitizedAttribution }} /></p>
       </div>
     </div>
   );

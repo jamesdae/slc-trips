@@ -20,7 +20,7 @@ export default class MapMarkers extends React.Component {
     });
     this.props.place.forEach((location, index) => {
       const div = document.createElement('div');
-      div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
+      div.classList.add('location', 'd-flex', 'justify-content-center');
       const root = ReactDOM.createRoot(div);
       root.render(getIconsAndDetails(location));
       // eslint-disable-next-line no-undef
@@ -65,7 +65,7 @@ export default class MapMarkers extends React.Component {
       this.props.place.forEach((location, index) => {
         if (location.category === this.props.clickedCategory || this.props.clickedCategory === 'All Categories') {
           const div = document.createElement('div');
-          div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
+          div.classList.add('location', 'd-flex', 'justify-content-center');
           const root = ReactDOM.createRoot(div);
           root.render(getIconsAndDetails(location));
           // eslint-disable-next-line no-undef
@@ -111,7 +111,7 @@ export default class MapMarkers extends React.Component {
       this.props.place.forEach((location, index) => {
         if (this.props.viewingIds !== null && this.props.viewingIds.length === 1 && location.locationId === this.props.viewingIds[0]) {
           const div = document.createElement('div');
-          div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
+          div.classList.add('location', 'd-flex', 'justify-content-center');
           const root = ReactDOM.createRoot(div);
           root.render(getIconsAndDetails(location));
           // eslint-disable-next-line no-undef
