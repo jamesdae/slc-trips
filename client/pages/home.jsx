@@ -148,7 +148,7 @@ export default function Home({ user, signOut }) {
                               setViewingIds([viewingId]);
                             }}
                             addCard={addedLocationId => {
-                              if (user === 'guest') return; //
+                              if (user === 'guest') return;
                               const existenceCheck = addedLocations.find(savedlocation => savedlocation.locationId === addedLocationId);
                               if (existenceCheck) {
                                 return null;
@@ -215,7 +215,7 @@ export default function Home({ user, signOut }) {
                                           setPrevList(remainingPins);
                                         }
                                       }}
-                                      removeLocation={removeId => {
+                                      removeLocation={async removeId => {
                                         const deleteRequest = {
                                           method: 'DELETE',
                                           headers: {
@@ -224,38 +224,69 @@ export default function Home({ user, signOut }) {
                                           }
                                         };
                                         if (homeRoutes.find(route => route.myListItemsIds.includes(removeId))) {
-                                          const route = homeRoutes.find(route => route.myListItemsIds.includes(removeId));
-                                          fetch(`/api/routes/${route.routeId}`, deleteRequest)
+                                          const routesToDelete = homeRoutes.filter(route => route.myListItemsIds.includes(removeId));
+                                          const deleteRoutes = async () => {
+                                            for (const route of routesToDelete) {
+                                              try {
+                                                await fetch(`/api/routes/${route.routeId}`, deleteRequest);
+                                                const remainingRoutes = homeRoutes.filter(route => !route.myListItemsIds.includes(removeId));
+                                                setHomeRoutes(remainingRoutes);
+                                              } catch (err) {
+                                                console.error('Error deleting route:', err);
+                                              }
+                                            }
+                                          };
+                                          await deleteRoutes()
+                                            .then(() => {
+                                              return fetch(`/api/mylist/${removeId}`, deleteRequest)
+                                                .then(res => res.json())
+                                                .then(res => {
+                                                  const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
+                                                  setAddedLocations(reducedLocations);
+                                                  const addedLocationIds = reducedLocations.map(obj => obj.locationId);
+                                                  const myListLocations = [];
+                                                  addedLocationIds.forEach(id => {
+                                                    myListLocations.push(place.find(location => location.locationId === id));
+                                                  });
+                                                  setMappedIds(myListLocations);
+                                                  if (viewingIds === false) return;
+                                                  const reducedPins = viewingIds.filter(id => id !== res.locationId);
+                                                  if (reducedPins[0] === undefined) {
+                                                    setViewingIds(false);
+                                                  } else {
+                                                    setViewingIds(reducedPins);
+                                                  }
+                                                  if (reducedLocations[0] === undefined) {
+                                                    setViewingIds(false);
+                                                  }
+                                                })
+                                                .catch(err => console.error('Error:', err));
+                                            });
+                                        } else {
+                                          fetch(`/api/mylist/${removeId}`, deleteRequest)
                                             .then(res => res.json())
-                                            .then(deletedRoute => {
-                                              const remainingRoutes = homeRoutes.filter(route => route.routeId !== deletedRoute.routeId);
-                                              setHomeRoutes(remainingRoutes);
+                                            .then(res => {
+                                              const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
+                                              setAddedLocations(reducedLocations);
+                                              const addedLocationIds = reducedLocations.map(obj => obj.locationId);
+                                              const myListLocations = [];
+                                              addedLocationIds.forEach(id => {
+                                                myListLocations.push(place.find(location => location.locationId === id));
+                                              });
+                                              setMappedIds(myListLocations);
+                                              if (viewingIds === false) return;
+                                              const reducedPins = viewingIds.filter(id => id !== res.locationId);
+                                              if (reducedPins[0] === undefined) {
+                                                setViewingIds(false);
+                                              } else {
+                                                setViewingIds(reducedPins);
+                                              }
+                                              if (reducedLocations[0] === undefined) {
+                                                setViewingIds(false);
+                                              }
                                             })
                                             .catch(err => console.error('Error:', err));
                                         }
-                                        fetch(`/api/mylist/${removeId}`, deleteRequest)
-                                          .then(res => res.json())
-                                          .then(res => {
-                                            const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
-                                            setAddedLocations(reducedLocations);
-                                            const addedLocationIds = reducedLocations.map(obj => obj.locationId);
-                                            const myListLocations = [];
-                                            addedLocationIds.forEach(id => {
-                                              myListLocations.push(place.find(location => location.locationId === id));
-                                            });
-                                            setMappedIds(myListLocations);
-                                            if (viewingIds === false) return;
-                                            const reducedPins = viewingIds.filter(id => id !== res.locationId);
-                                            if (reducedPins[0] === undefined) {
-                                              setViewingIds(false);
-                                            } else {
-                                              setViewingIds(reducedPins);
-                                            }
-                                            if (reducedLocations[0] === undefined) {
-                                              setViewingIds(false);
-                                            }
-                                          })
-                                          .catch(err => console.error('Error:', err));
                                       }}
                                       viewCard={viewingId => {
                                         setExtraDetailsOpen(!extraDetailsOpen);
@@ -337,7 +368,9 @@ export default function Home({ user, signOut }) {
                               <div className='collapse' id="collapseRoutes">
                                 {
                                 homeRoutes.map(route => {
-                                  const locationIds = route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId);
+                                  const locationIds = route.myListItemsIds.map(id => {
+                                    return addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId;
+                                  });
                                   return <SavedRoute key={route.routeId} route={route} homeRoutes={homeRoutes} setHomeRoutes={remainingRoutes => setHomeRoutes(remainingRoutes)} locationIds={locationIds} mappedIds={mappedIds} accessToken={accessToken} setViewingIds={ids => setViewingIds(ids)} setPrevList={ids => setPrevList(ids)} viewingIds={viewingIds}/>;
                                 })
                               }

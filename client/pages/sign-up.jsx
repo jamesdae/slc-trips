@@ -34,6 +34,11 @@ export default function SignUp({ showLogIn }) {
         if (newUser.errors) {
           setValidity[newUser.errors[0].param](false);
           return;
+        } else if (newUser.error) {
+          console.error(newUser.error);
+          setEmailIsValid(false);
+          setUsernameIsValid(false);
+          return;
         }
         setEmail('');
         setUsername('');
@@ -58,7 +63,7 @@ export default function SignUp({ showLogIn }) {
                 setEmail(event.target.value);
                 setEmailIsValid(true);
               }} className={`form-control ${!emailIsValid ? 'is-invalid' : ''} w-75`} />
-              {!emailIsValid && <div className="invalid-feedback">Please enter a valid email address.</div>}
+              {!emailIsValid && <div className="invalid-feedback">Email already exists, or is not a valid email address.</div>}
             </div>
             <div className="mb-3 d-flex flex-column align-items-center">
               <label htmlFor="username" className="col-form-label">Username:</label>
@@ -66,15 +71,15 @@ export default function SignUp({ showLogIn }) {
                 setUsername(event.target.value);
                 setUsernameIsValid(true);
               }} className={`form-control ${!usernameIsValid ? 'is-invalid' : ''} w-75`} />
-              {!usernameIsValid && <div className="invalid-feedback">Username can only contain letters or numbers.</div>}
+              {!usernameIsValid && <div className="invalid-feedback">Username already exists, or is not alphanumeric.</div>}
             </div>
             <div className="mb-3 d-flex flex-column align-items-center">
               <label htmlFor="password" className="col-form-label">Password:</label>
-              <input type="password" id="password" value={password} onChange={event => {
+              <input type="password" id="password" value={password} onClick={!passwordIsValid ? () => setPassword('') : null} onChange={event => {
                 setPassword(event.target.value);
                 setPasswordIsValid(true);
               }} className={`form-control ${!passwordIsValid ? 'is-invalid' : ''} w-75`}/>
-              {!passwordIsValid && <div className="invalid-feedback">Please enter a valid password.</div>}
+              {!passwordIsValid && <div className="invalid-feedback">Password must be at least 8 characters, one symbol, and one number.</div>}
             </div>
             <button className="btn btn-primary" type="submit">Submit</button>
           </form>

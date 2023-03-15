@@ -45,6 +45,10 @@
   width: 45%;
 }
 
+.buttonrow {
+  height: 6vh;
+}
+
 @media screen and (width < 430px) {
   .card-body {
     font-size: 80%;
@@ -65,7 +69,7 @@
   }
 }
 
-@media screen and (min-width: 768px) and (max-width: 1036px) {
+@media screen and (min-width: 768px) and (max-width: 1234px) {
   .cardbutton {
     font-size: x-small;
   }
@@ -121,7 +125,7 @@
   color: white;
   align-items: center;
   border-radius: 50%;
-  font-size: 15px;
+  font-size: 1rem;
   height: 5px;
   width: 5px;
   transition: all 0.3s ease-out;
@@ -198,8 +202,8 @@
   background-color: white;
 }
 
-.img {
-  width: 100%;
+.markerimg {
+  width: 9rem;
 }
 
 .photo {
@@ -296,8 +300,4 @@
 
 .routecard {
   width: 50%;
-}
-
-.buttonrow {
-  height: 6vh;
 }

@@ -48,11 +48,6 @@ export default function Carousel(props) {
     ));
   }
 
-  // eslint-disable-next-line no-console
-  console.log(props.images);
-
-  // eslint-disable-next-line no-console
-  console.log('sani', sanitizedAttribution);
   return (
     <div className="container me-auto">
       <div className='box'>
