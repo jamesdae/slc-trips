@@ -19,7 +19,7 @@ export default function EachCard(props) {
           {
             props.tab === 'extradetails'
               ? (
-                <Carousel location={props.location} images={props.location.photos} />
+                <Carousel setViewImageModal={(imageLocation, activeIndex) => props.setViewImageModal(imageLocation, activeIndex)} location={props.location} images={props.location.photos} />
                 )
               : (
                 <img className='p-1 detailimage align-self-center align-self-md-stretch' src={props.location.photos[0].getUrl()} alt={props.location.name} />

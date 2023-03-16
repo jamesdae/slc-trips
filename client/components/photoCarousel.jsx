@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import DOMPurify from 'dompurify';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Carousel(props) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -48,31 +49,46 @@ export default function Carousel(props) {
     ));
   }
 
+  const imageId = uuidv4();
+
   return (
     <div className="container me-auto">
-      <div className='box'>
-        <div className='d-flex align-items-center pointer h-75 btn btn-outline-light px-1 py-0' onClick={prevImage}>
+      <div className='box align-items-stretch'>
+        <div title="View previous image" className='d-flex align-items-center pointer btn btn-outline-light px-1 py-0' onClick={prevImage}>
           <i className='fa-solid fa-angle-left blue' />
         </div>
         <div className='center d-flex flex-column justify-content-center'>
-          <a title="View full image" href="#" data-bs-toggle="modal" data-bs-target={`#fullImageModal${activeIndex}`}><img src={props.images[activeIndex].getUrl()} className='p-2 carouselimg align-self-stretch' alt={props.location.name} /></a>
+          <a title="View full image" href="#" data-bs-toggle="modal" data-bs-target={`#fullImageModal${imageId}`}><img src={props.images[activeIndex].getUrl()} className='p-2 carouselimg align-self-stretch btn btn-outline-light' alt={props.location.name} /></a>
           <div className="dots">
             <Dots />
           </div>
         </div>
-        <div className='d-flex align-items-center pointer h-75 btn btn-outline-light px-1 py-0' onClick={nextImage}>
+        <div title="View next image" className='d-flex align-items-center pointer btn btn-outline-light px-1 py-0' onClick={nextImage}>
           <i className='fa-solid fa-angle-right blue pointer'/>
         </div>
       </div>
       <div className='mt-1 text-center'>
-        <p className='smalltext mb-0'>Photo credits: <span ref={attributionRef} dangerouslySetInnerHTML={{ __html: sanitizedAttribution }} /></p>
+        <p className='smalltext mb-0'>Photo credits: <span title="Google Places User Page" ref={attributionRef} dangerouslySetInnerHTML={{ __html: sanitizedAttribution }} /></p>
       </div>
-      <div className="modal fade" id={`fullImageModal${activeIndex}`} tabIndex="-1" aria-labelledby="fullImageModalLabel" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content w-100">
-            <div className="modal-body d-flex flex-column align-items-center">
-              <img src={props.images[activeIndex].getUrl()} className='w-100' alt={props.location.name} />
-              <p className='mb-0 mt-2'>Photo credits: <span ref={attributionRef} dangerouslySetInnerHTML={{ __html: sanitizedAttribution }} /></p>
+      <div className="modal fade" id={`fullImageModal${imageId}`} tabIndex="-1" aria-labelledby="fullImageModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered modal-xl">
+          <div className="modal-content">
+            <div className='modalbox'>
+              <div title="View previous image" className='d-flex align-items-center pointer btn btn-outline-light px-1 py-0' onClick={prevImage}>
+                <i className='fa-solid fa-angle-left blue' />
+              </div>
+              <div className='center d-flex flex-column justify-content-center'>
+                <a title="View original image source" href={props.images[activeIndex].getUrl()} target='_blank' rel="noreferrer"><img src={props.images[activeIndex].getUrl()} className='p-2 h-100 w-100 modalcarousel' alt={props.location.name} /></a>
+                <div className="dots">
+                  <Dots />
+                </div>
+              </div>
+              <div title="View next image" className='d-flex align-items-center pointer btn btn-outline-light px-1 py-0' onClick={nextImage}>
+                <i className='fa-solid fa-angle-right blue pointer' />
+              </div>
+            </div>
+            <div className='mt-1 text-center'>
+              <p className='smalltext mb-0'>Photo credits: <span title="Google Places User Page" ref={attributionRef} dangerouslySetInnerHTML={{ __html: sanitizedAttribution }} /></p>
             </div>
           </div>
         </div>

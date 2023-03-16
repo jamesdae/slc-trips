@@ -105,10 +105,15 @@
 
 .box {
   display: flex;
-  align-items: center;
   justify-content: space-around;
   padding: 10px;
   max-height: 32vh;
+  height: 100%;
+}
+
+.modalbox {
+  display: flex;
+  justify-content: space-around;
   height: 100%;
 }
 
@@ -149,4 +154,9 @@
 
 .routecard {
   width: 50%;
+}
+
+.modalcarousel {
+  max-height: 90vh;
+  object-fit: cover;
 }
