@@ -40,7 +40,7 @@ export default function SignIn({ onSignIn, signUp }) {
   return (
     <div className="d-flex flex-column justify-content-center align-items-center main">
       <h1 className='blue heading'>SLCTrips</h1>
-      <div className='card text-center w-50'>
+      <div className='card text-center w-75'>
         <div className="card-header">
           <p className='m-2'>Plan your next trip to Salt Lake City!</p>
         </div>

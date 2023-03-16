@@ -51,7 +51,7 @@ export default function SignUp({ showLogIn }) {
   return (
     <div className="d-flex flex-column justify-content-center align-items-center main">
       <h1 className='blue heading'>SLCTrips</h1>
-      <div className='card text-center w-50'>
+      <div className='card text-center w-75'>
         <div className="card-header">
           Create Account
         </div>
