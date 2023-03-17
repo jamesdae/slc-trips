@@ -101,7 +101,13 @@ app.post('/api/auth/sign-up', [
     .catch(err => next(err));
 });
 
-app.post('/api/auth/sign-in', (req, res, next) => {
+app.post('/api/auth/sign-in', [
+  check('username').trim().escape(),
+  check('password').trim().escape(),
+
+  check('username').notEmpty().withMessage('Username is required.').isAlphanumeric().withMessage('Invalid username.'),
+  check('password').notEmpty().withMessage('Password is required.').isStrongPassword({ minLowercase: 0, minUppercase: 0 }).withMessage('Invalid password.').isLength({ max: 50 }).withMessage('Invalid password.')
+], (req, res, next) => {
   const { username, password } = req.body;
   if (!username || !password) {
     throw new ClientError(401, 'Invalid login.');
