@@ -1,48 +1,13 @@
 :root {
-  --hiking-color: rgb(216, 140, 65);
+  --hiking-color: rgba(255, 123, 0, 0.988);
   --parks-color: rgb(3, 145, 3);
   --water-color: rgb(59, 94, 249);
-  --attractions-color: rgb(238, 120, 107);
+  --attractions-color: rgb(214, 42, 23);
   --snow-color: rgb(18, 219, 219);
 }
 
 * {
   font-family: Inter, sans-serif;
-}
-
-#root {
-  height: 100vh;
-}
-
-.map-container {
-  width: 100%;
-  height: 46vh;
-}
-
-.myflex {
-  flex-wrap: wrap;
-  flex-direction: column-reverse;
-}
-
-.detailimage {
-  height: 16vh;
-  width: 52%;
-  object-fit: cover;
-}
-
-.stickytab {
-  position: sticky;
-  top: 47vh;
-  z-index: 1;
-}
-
-.full {
-  position: sticky;
-  top: 0;
-}
-
-.carddetails {
-  width: 45%;
 }
 
 @media screen and (width < 430px) {
@@ -52,6 +17,22 @@
 
   .mybuttons {
     scale: 75%;
+  }
+
+  .cardbutton {
+    font-size: xx-small;
+  }
+}
+
+@media screen and (min-width: 430px) and (max-width: 610px) {
+  .cardbutton {
+    font-size: small;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1234px) {
+  .cardbutton {
+    font-size: x-small;
   }
 }
 
@@ -85,72 +66,25 @@
   }
 }
 
-.navbar {
-  height: 7vh;
-}
-
-.heading {
-  font-weight: 999;
-}
-
-.botpad {
-  padding-bottom: 1vh;
-}
-
-.logopad {
-  padding: 0 0 0.5em 0.5em;
-}
-
-.location {
-  color: white;
-  align-items: center;
-  border-radius: 50%;
-  font-size: 15px;
-  height: 5px;
-  width: 5px;
-  transition: all 0.3s ease-out;
-}
-
-.icon i {
-  height: 20px;
-  width: auto;
-}
-
-.details {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-}
-
-.highlight .details {
-  display: flex;
-}
-
-.highlight {
-  height: auto;
-  width: auto;
-}
-
 .hiddenbox {
   border-radius: 8px;
   box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.359);
 }
 
-.location:has(.fa-tree) {
+.location:has(.fa-camera-retro) {
   background-color: var(--parks-color);
 }
 
-.location.highlight:has(.fa-tree) {
+.location.highlight:has(.fa-camera-retro) {
   color: var(--parks-color);
   background-color: white;
 }
 
-.location:has(.fa-binoculars) {
+.location:has(.fa-utensils) {
   background-color: var(--attractions-color);
 }
 
-.location.highlight:has(.fa-binoculars) {
+.location.highlight:has(.fa-utensils) {
   color: var(--attractions-color);
   background-color: white;
 }
@@ -164,11 +98,11 @@
   background-color: white;
 }
 
-.location:has(.fa-mountain-sun) {
+.location:has(.fa-person-hiking) {
   background-color: var(--hiking-color);
 }
 
-.location.highlight:has(.fa-mountain-sun) {
+.location.highlight:has(.fa-person-hiking) {
   color: var(--hiking-color);
   background-color: white;
 }
@@ -180,14 +114,6 @@
 .location.highlight:has(.fa-sailboat) {
   color: var(--water-color);
   background-color: white;
-}
-
-.img {
-  width: 100%;
-}
-
-.photo {
-  max-width: 200px;
 }
 
 .grey {
@@ -227,57 +153,10 @@
   font-size: xx-large;
 }
 
-.box {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 10px;
-  height: 30vh;
-}
-
-.dots {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.4em;
-}
-
-.button {
-  padding: 0;
-  height: 0.8em;
-  width: 0.8em;
-  border-radius: 50%;
-  border-color: var(--water-color);
-  background-color: white;
-}
-
-.carouselimg {
-  width: 100%;
-  object-fit: cover;
-  object-position: 50% 50%;
-  max-height: 29vh;
-}
-
 .button.selected {
   background-color: var(--water-color);
 }
 
 .pointer {
   cursor: pointer;
-}
-
-.multiline {
-  white-space: pre-line;
-}
-
-.listicon {
-  width: 2em;
-}
-
-.center {
-  width: 100%;
-}
-
-.routecard {
-  width: 50%;
 }

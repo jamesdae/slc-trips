@@ -10,7 +10,8 @@ export default function ExtraDetails({ place, viewingIds, setExtraDetailsOpen, s
             setExtraDetailsOpen(!extraDetailsOpen);
             setViewingIds(prevList);
           }}>
-          Close Details
+          <i className="fa-solid fa-arrow-left mx-1"/>
+          Back
         </button>
       </div>
       {

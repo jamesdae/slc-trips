@@ -11,9 +11,9 @@ export default function NewRouteForm({ accessToken, viewingIds, homeRoutes, setH
   }
 
   return (
-    <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div className="offcanvas offcanvas-start" tabIndex="-1" id="saveRouteCanvas" aria-labelledby="saveRouteCanvasLabel">
       <div className="offcanvas-header">
-        <h5 className="offcanvas-title" id="offcanvasExampleLabel">Save Route?</h5>
+        <h5 className="offcanvas-title" id="saveRouteCanvasLabel">Save Route?</h5>
         <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" />
       </div>
       <div className="offcanvas-body">

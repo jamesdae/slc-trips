@@ -3,23 +3,23 @@ import React from 'react';
 export default function getIconsAndDetails(location) {
   let categoryValue = 'fa-solid';
   switch (location.category) {
-    case 'Parks':
-      categoryValue += ' fa-tree';
+    case 'Parks & Attractions':
+      categoryValue += ' fa-camera-retro';
       break;
-    case 'Water Activities':
+    case 'Lakes':
       categoryValue += ' fa-sailboat';
       break;
     case 'Snow Activities':
       categoryValue += ' fa-snowflake';
       break;
     case 'Hiking':
-      categoryValue += ' fa-mountain-sun';
+      categoryValue += ' fa-person-hiking';
       break;
-    case 'Viewpoints':
-      categoryValue += ' fa-binoculars';
+    case 'Restaurants':
+      categoryValue += ' fa-utensils';
       break;
     default:
-      categoryValue += ' fa-tree';
+      categoryValue += ' fa-snowwflake';
   }
 
   return (
@@ -28,10 +28,10 @@ export default function getIconsAndDetails(location) {
         <i className={categoryValue} title={location.name} />
       </div>
       <div className="details">
-        <p>{location.name}</p>
-        <p className="grey">{location.category}</p>
+        <p className='smalltext mb-1'>{location.name}</p>
+        <p className="grey smalltext mb-1">{location.category}</p>
         <div className='photo'>
-          <img className="img" src={location.photos[0].getUrl()} />
+          <img className="markerimg" src={location.photos[0].getUrl()} />
         </div>
       </div>
     </div>

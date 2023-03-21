@@ -1,3 +1,5 @@
+/* global google */
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { getIconsAndDetails } from '../lib';
@@ -12,7 +14,6 @@ export default class MapMarkers extends React.Component {
 
   componentDidMount(props) {
     const center = this.props.place[0].geometry.location;
-    // eslint-disable-next-line no-undef
     const map = new google.maps.Map(document.getElementById('map'), {
       zoom: 9,
       center,
@@ -20,10 +21,9 @@ export default class MapMarkers extends React.Component {
     });
     this.props.place.forEach((location, index) => {
       const div = document.createElement('div');
-      div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
+      div.classList.add('location', 'd-flex', 'justify-content-center');
       const root = ReactDOM.createRoot(div);
       root.render(getIconsAndDetails(location));
-      // eslint-disable-next-line no-undef
       const advancedMarkerView = new google.maps.marker.AdvancedMarkerView({
         map,
         content: div,
@@ -35,12 +35,10 @@ export default class MapMarkers extends React.Component {
         advancedMarkerView.content.classList.add('highlight', 'hiddenbox');
         advancedMarkerView.element.style.zIndex = 1;
       });
-
       element.addEventListener('mouseleave', () => {
         advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
         advancedMarkerView.element.style.zIndex = '';
       });
-
       advancedMarkerView.addListener('click', event => {
         this.props.openExtraDetailsForId(location.locationId);
       });
@@ -56,7 +54,6 @@ export default class MapMarkers extends React.Component {
       } else {
         center = this.props.place[0].geometry.location;
       }
-      // eslint-disable-next-line no-undef
       const map = new google.maps.Map(document.getElementById('map'), {
         zoom: 9,
         center,
@@ -65,10 +62,9 @@ export default class MapMarkers extends React.Component {
       this.props.place.forEach((location, index) => {
         if (location.category === this.props.clickedCategory || this.props.clickedCategory === 'All Categories') {
           const div = document.createElement('div');
-          div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
+          div.classList.add('location', 'd-flex', 'justify-content-center');
           const root = ReactDOM.createRoot(div);
           root.render(getIconsAndDetails(location));
-          // eslint-disable-next-line no-undef
           const advancedMarkerView = new google.maps.marker.AdvancedMarkerView({
             map,
             content: div,
@@ -80,14 +76,12 @@ export default class MapMarkers extends React.Component {
             advancedMarkerView.content.classList.add('highlight', 'hiddenbox');
             advancedMarkerView.element.style.zIndex = 1;
           });
-
           element.addEventListener('mouseleave', () => {
             advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
             advancedMarkerView.element.style.zIndex = '';
             advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
             advancedMarkerView.element.style.zIndex = '';
           });
-
           advancedMarkerView.addListener('click', event => {
             this.props.openExtraDetailsForId(location.locationId);
           });
@@ -101,7 +95,6 @@ export default class MapMarkers extends React.Component {
         const index = this.props.place.findIndex(location => location.locationId === this.props.viewingIds[0]);
         center = this.props.place[index].geometry.location;
       }
-      // eslint-disable-next-line no-undef
       const map = new google.maps.Map(document.getElementById('map'), {
         zoom: 9,
         center,
@@ -111,10 +104,9 @@ export default class MapMarkers extends React.Component {
       this.props.place.forEach((location, index) => {
         if (this.props.viewingIds !== null && this.props.viewingIds.length === 1 && location.locationId === this.props.viewingIds[0]) {
           const div = document.createElement('div');
-          div.classList.add('location', 'd-flex', 'justify-content-center', 'p-4');
+          div.classList.add('location', 'd-flex', 'justify-content-center');
           const root = ReactDOM.createRoot(div);
           root.render(getIconsAndDetails(location));
-          // eslint-disable-next-line no-undef
           const advancedMarkerView = new google.maps.marker.AdvancedMarkerView({
             map,
             content: div,
@@ -126,33 +118,26 @@ export default class MapMarkers extends React.Component {
             advancedMarkerView.content.classList.add('highlight', 'hiddenbox');
             advancedMarkerView.element.style.zIndex = 1;
           });
-
           element.addEventListener('mouseleave', () => {
             advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
             advancedMarkerView.element.style.zIndex = '';
             advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
             advancedMarkerView.element.style.zIndex = '';
           });
-
           advancedMarkerView.addListener('click', event => {
             this.props.openExtraDetailsForId(location.locationId);
           });
         }
       });
-
       if (this.props.viewingIds.length < 2) return;
-
       const mappedIds = [];
       this.props.viewingIds.forEach(id => {
         mappedIds.push(this.props.place.find(location => location.locationId === id));
       });
 
-      // eslint-disable-next-line no-undef
       const directionsDisplay = new google.maps.DirectionsRenderer();
-      // eslint-disable-next-line no-undef
       const directionsService = new google.maps.DirectionsService();
       directionsDisplay.setMap(map);
-
       const start = mappedIds[0].geometry.location;
       const end = mappedIds[mappedIds.length - 1].geometry.location;
 
@@ -175,7 +160,7 @@ export default class MapMarkers extends React.Component {
           }
           directionsDisplay.setPanel(panelDiv);
           result.routes.forEach((route, index) => {
-            // eslint-disable-next-line no-undef
+
             const line = new google.maps.Polyline({
               path: route.overview_path,
               strokeColor: '#595f65',
@@ -183,22 +168,17 @@ export default class MapMarkers extends React.Component {
               strokeWeight: 3,
               clickable: true
             });
-
-            // eslint-disable-next-line no-undef
             const infowindow = new google.maps.InfoWindow({
               ariaLabel: 'duration',
               content: `Route ${index + 1} | Distance: ${route.legs[0].distance.text} | Duration: ${route.legs[0].duration.text}`,
               position: route.legs[0].steps[Math.round((route.legs[0].steps.length - 1) / 2)].end_location
             });
-
             line.addListener('mouseover', event => {
               infowindow.open(map);
             });
-
             line.addListener('mouseout', event => {
               infowindow.close(map);
             });
-
             line.addListener('click', event => {
               const routeList = document.querySelectorAll('[jsaction="directionsRouteList.selectRoute"]');
               if (index < routeList.length) {

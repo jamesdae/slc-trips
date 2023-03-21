@@ -11,11 +11,11 @@ export default function EditForm({ setRouteName, route, accessToken, routeName }
   }
 
   return (
-    <div className="modal fade" id={`editingModal-${route.routeId}`} tabIndex="-1" aria-labelledby="editingModalLabel" aria-hidden="true">
+    <div className="cool modal fade" id={`editingModal-${route.routeId}`} tabIndex="-1" aria-labelledby="editingModalLabel" aria-hidden="true">
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <h1 className="modal-title fs-5" id="exampleModalLabel">Edit Route: {routeName}</h1>
+            <h1 className="modal-title fs-5" id="editingModalLabel">Edit Route: {routeName}</h1>
             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
           </div>
           <div className="modal-body">
@@ -56,7 +56,6 @@ export default function EditForm({ setRouteName, route, accessToken, routeName }
                 </div>
               </div>
               <div className="modal-footer d-flex gap-2">
-                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" className="btn btn-danger" data-bs-target={`#confirmDeleteModal-${route.routeId}`} data-bs-toggle="modal" data-bs-dismiss="modal">Delete Route</button>
                 <button type="submit" className="btn btn-primary" disabled={!routeNameValid} data-bs-dismiss="modal">Save changes</button>
               </div>

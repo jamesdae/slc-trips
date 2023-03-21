@@ -37,32 +37,28 @@ export default function Home({ user, signOut }) {
     if (isLoaded && place === null) {
       fetch(`/api/locations/?category=${selectedCategory}`)
         .then(res => res.json())
-        .then(locations => fetchPlaces(locations, selectedCategory))
+        .then(locations => fetchPlaces(locations, selectedCategory, isLoaded))
         .then(fetchedLocations => setPlace(fetchedLocations))
         .catch(error => console.error(error));
-    } else if (isLoaded && place !== null) {
-      const myInit = {
+    } else if (isLoaded && place !== null && accessToken) {
+      const getRequest = {
         method: 'GET',
         headers: {
           'X-Access-Token': accessToken
         }
       };
-      fetch('/api/mylist', myInit)
+      fetch('/api/mylist', getRequest)
         .then(res => res.json())
         .then(res => {
           const myList = res.map(obj => obj);
           const addedLocationIds = res.map(obj => obj.locationId);
           setAddedLocations(myList);
           const myListLocations = [];
-          addedLocationIds.forEach(id => {
-            myListLocations.push(place.find(location => location.locationId === id));
-          });
+          addedLocationIds.forEach(id => myListLocations.push(place.find(location => location.locationId === id)));
           setMappedIds(myListLocations);
-          fetch('/api/routes', myInit)
+          fetch('/api/routes', getRequest)
             .then(response => response.json())
-            .then(oldRoutes => {
-              setHomeRoutes(oldRoutes);
-            });
+            .then(oldRoutes => setHomeRoutes(oldRoutes));
         })
         .catch(err => console.error('Error:', err));
     }
@@ -70,38 +66,55 @@ export default function Home({ user, signOut }) {
 
   if (loadError) return 'Error loading maps';
 
-  if (place !== null && addedLocations !== null) {
+  function findRouteLink() {
+    if (!Array.isArray(viewingIds) || !viewingIds.length > 1 || !mappedIds) return '#';
+    const coordinates = viewingIds.map(id => {
+      const pinnedIndex = mappedIds.findIndex(place => place.locationId === id);
+      if (pinnedIndex >= 0) {
+        return `${mappedIds[pinnedIndex].geometry.location.lat()}, ${mappedIds[pinnedIndex].geometry.location.lng()}`;
+      } else {
+        return null;
+      }
+    });
+    const waypoints = coordinates.slice(1, -1).map(coord => ({ location: coord }));
+    const daddr = coordinates[coordinates.length - 1];
+    const origin = coordinates[0];
+    const link = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${daddr}&waypoints=${waypoints.map(waypoint => waypoint.location).join('|')}`;
+    return link;
+  }
+
+  if (place !== null) {
     return (
       <div className='bg-light'>
-        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md justify-content-md-between navbar-light bg-light'>
+        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md justify-content-md-between navbar-light bg-light mynav'>
           <h1 className='mx-2 blue heading'>SLCTrips</h1>
-          <button className='mx-2 btn btn-secondary' onClick={() => signOut()}>Sign Out</button>
+          <button className='mx-2 btn btn-secondary' onClick={() => signOut()}>{user === 'guest' ? 'Sign in' : 'Sign Out'}</button>
         </nav>
         <div className='d-flex flex-wrap flex-column-reverse'>
           <div className='col-md-6 col-12'>
             <div>
               <nav className='stickytab backwhite'>
                 <div className='nav nav-tabs nav-fill' id='nav-tab' role='tablist'>
-                  <button className='nav-link active' id='nav-places-tab' data-bs-toggle='tab' data-bs-target='#nav-places' type='button' role='tab' aria-controls='nav-places' aria-selected='true' onClick={() => {
-                    window.scrollTo({ top: 0 });
-                    if (extraDetailsOpen) return;
+                  <button className='nav-link active' disabled={extraDetailsOpen} id='nav-places-tab' data-bs-toggle='tab' data-bs-target='#nav-places' type='button' role='tab' aria-controls='nav-places' aria-selected='true' onClick={() => {
+                    const offset = window.innerWidth < 768 ? window.innerHeight * 0.07 : 0;
+                    window.scrollTo({ top: offset, behavior: 'smooth' });
                     if (viewingIds !== null) {
                       setPrevList(viewingIds);
                     }
                     setViewingIds(null);
                   }}>Places</button>
-                  <button className='nav-link' id='nav-mylist-tab' data-bs-toggle='tab' data-bs-target='#nav-mylist' type='button' role='tab' aria-controls='nav-mylist' aria-selected='false' onClick={() => {
-                    window.scrollTo({ top: 0 });
-                    if (extraDetailsOpen) return;
+                  <button className='nav-link' disabled={extraDetailsOpen} id='nav-mylist-tab' data-bs-toggle='tab' data-bs-target='#nav-mylist' type='button' role='tab' aria-controls='nav-mylist' aria-selected='false' onClick={() => {
+                    const offset = window.innerWidth < 768 ? window.innerHeight * 0.07 : 0;
+                    window.scrollTo({ top: offset, behavior: 'smooth' });
                     if (prevList !== null) {
                       setViewingIds(prevList);
                     } else {
                       setViewingIds(false);
                     }
                   }}>My List</button>
-                  <button className='nav-link' id='nav-routes-tab' data-bs-toggle='tab' data-bs-target='#nav-routes' type='button' role='tab' aria-controls='nav-routes' aria-selected='false' onClick={() => {
-                    window.scrollTo({ top: 0 });
-                    if (extraDetailsOpen) return;
+                  <button className='nav-link' disabled={extraDetailsOpen} id='nav-routes-tab' data-bs-toggle='tab' data-bs-target='#nav-routes' type='button' role='tab' aria-controls='nav-routes' aria-selected='false' onClick={() => {
+                    const offset = window.innerWidth < 768 ? window.innerHeight * 0.07 : 0;
+                    window.scrollTo({ top: offset, behavior: 'smooth' });
                     if (viewingIds !== null) {
                       setPrevList(viewingIds);
                     } else {
@@ -120,12 +133,14 @@ export default function Home({ user, signOut }) {
                           setSelectedCategory(selectedCategory);
                         }} />
                         <div className='row row-cols-1 row-cols-md-2 g-1'>
-                          <LocationCards place={place} clickedCategory={selectedCategory}
+                          <LocationCards place={place} clickedCategory={selectedCategory} user={user}
                             viewCard={viewingId => {
                               setExtraDetailsOpen(!extraDetailsOpen);
+                              setPrevList(viewingIds);
                               setViewingIds([viewingId]);
                             }}
                             addCard={addedLocationId => {
+                              if (user === 'guest') return;
                               const existenceCheck = addedLocations.find(savedlocation => savedlocation.locationId === addedLocationId);
                               if (existenceCheck) {
                                 return null;
@@ -164,16 +179,16 @@ export default function Home({ user, signOut }) {
                   {extraDetailsOpen === false
                     ? (
                       <div>
-                        <RouteOptionsButton viewingIds={viewingIds} />
+                        {accessToken && <RouteOptionsButton link={findRouteLink()} mappedIds={mappedIds} viewingIds={viewingIds} />}
                         {
-                          addedLocations.length > 0
+                          accessToken && addedLocations !== null && addedLocations.length > 0
                             ? (
                               <div className='row row-cols-1 row-cols-md-2 g-1'>
                                 {
                                   mappedIds.map((location, index) => {
                                     const savedlocation = addedLocations.find(savedlocation => savedlocation.locationId === location.locationId);
                                     if (savedlocation.locationId === location.locationId) {
-                                      return <EachCard location={location} key={savedlocation.myListItemsId} viewingIds={viewingIds} myListItemsId={savedlocation.myListItemsId} tab="list"
+                                      return <EachCard location={location} key={savedlocation.myListItemsId} homeRoutes={homeRoutes} viewingIds={viewingIds} myListItemsId={savedlocation.myListItemsId} tab="list"
                                       setPins={pinnedId => {
                                         if (viewingIds === false) {
                                           setViewingIds([pinnedId]);
@@ -192,36 +207,78 @@ export default function Home({ user, signOut }) {
                                           setPrevList(remainingPins);
                                         }
                                       }}
-                                      removeLocation={removeId => {
-                                        fetch(`/api/mylist/${removeId}`, {
+                                      removeLocation={async removeId => {
+                                        const deleteRequest = {
                                           method: 'DELETE',
                                           headers: {
                                             'Content-Type': 'application/json',
                                             'X-Access-Token': accessToken
                                           }
-                                        })
-                                          .then(res => res.json())
-                                          .then(res => {
-                                            const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
-                                            setAddedLocations(reducedLocations);
-                                            const addedLocationIds = reducedLocations.map(obj => obj.locationId);
-                                            const myListLocations = [];
-                                            addedLocationIds.forEach(id => {
-                                              myListLocations.push(place.find(location => location.locationId === id));
+                                        };
+                                        if (homeRoutes.find(route => route.myListItemsIds.includes(removeId))) {
+                                          const routesToDelete = homeRoutes.filter(route => route.myListItemsIds.includes(removeId));
+                                          const deleteRoutes = async () => {
+                                            for (const route of routesToDelete) {
+                                              try {
+                                                await fetch(`/api/routes/${route.routeId}`, deleteRequest);
+                                                const remainingRoutes = homeRoutes.filter(route => !route.myListItemsIds.includes(removeId));
+                                                setHomeRoutes(remainingRoutes);
+                                              } catch (err) {
+                                                console.error('Error deleting route:', err);
+                                              }
+                                            }
+                                          };
+                                          await deleteRoutes()
+                                            .then(() => {
+                                              return fetch(`/api/mylist/${removeId}`, deleteRequest)
+                                                .then(res => res.json())
+                                                .then(res => {
+                                                  const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
+                                                  setAddedLocations(reducedLocations);
+                                                  const addedLocationIds = reducedLocations.map(obj => obj.locationId);
+                                                  const myListLocations = [];
+                                                  addedLocationIds.forEach(id => {
+                                                    myListLocations.push(place.find(location => location.locationId === id));
+                                                  });
+                                                  setMappedIds(myListLocations);
+                                                  if (viewingIds === false) return;
+                                                  const reducedPins = viewingIds.filter(id => id !== res.locationId);
+                                                  if (reducedPins[0] === undefined) {
+                                                    setViewingIds(false);
+                                                  } else {
+                                                    setViewingIds(reducedPins);
+                                                  }
+                                                  if (reducedLocations[0] === undefined) {
+                                                    setViewingIds(false);
+                                                  }
+                                                })
+                                                .catch(err => console.error('Error:', err));
                                             });
-                                            setMappedIds(myListLocations);
-                                            if (viewingIds === false) return;
-                                            const reducedPins = viewingIds.filter(id => id !== res.locationId);
-                                            if (reducedPins[0] === undefined) {
-                                              setViewingIds(false);
-                                            } else {
-                                              setViewingIds(reducedPins);
-                                            }
-                                            if (reducedLocations[0] === undefined) {
-                                              setViewingIds(false);
-                                            }
-                                          })
-                                          .catch(err => console.error('Error:', err));
+                                        } else {
+                                          fetch(`/api/mylist/${removeId}`, deleteRequest)
+                                            .then(res => res.json())
+                                            .then(res => {
+                                              const reducedLocations = addedLocations.filter(location => location.myListItemsId !== res.myListItemsId);
+                                              setAddedLocations(reducedLocations);
+                                              const addedLocationIds = reducedLocations.map(obj => obj.locationId);
+                                              const myListLocations = [];
+                                              addedLocationIds.forEach(id => {
+                                                myListLocations.push(place.find(location => location.locationId === id));
+                                              });
+                                              setMappedIds(myListLocations);
+                                              if (viewingIds === false) return;
+                                              const reducedPins = viewingIds.filter(id => id !== res.locationId);
+                                              if (reducedPins[0] === undefined) {
+                                                setViewingIds(false);
+                                              } else {
+                                                setViewingIds(reducedPins);
+                                              }
+                                              if (reducedLocations[0] === undefined) {
+                                                setViewingIds(false);
+                                              }
+                                            })
+                                            .catch(err => console.error('Error:', err));
+                                        }
                                       }}
                                       viewCard={viewingId => {
                                         setExtraDetailsOpen(!extraDetailsOpen);
@@ -232,13 +289,13 @@ export default function Home({ user, signOut }) {
                                   })
                                   }
                                 <span><div className="alert alert-warning alert-dismissible fade show d-flex justify-content-between" role="alert">
-                                  <p><i className="fa-solid fa-circle-info" /> Press{' '}<button className="mybuttons btn btn-success" type="button">Pin</button> to start a new route on the map!</p>
+                                  <p><i className="fa-solid fa-circle-info" /> Press{' '}<i className='fa-solid fa-location-dot text-success fs-3' /> to start a new route on the map!</p>
                                   <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
                                 </div></span>
                               </div>
                               )
                             : (
-                              <EmptyTabAlert tab='list' user={user}/>
+                              <EmptyTabAlert signIn={() => signOut()} tab='list' user={user}/>
                               )
                         }
                       </div>
@@ -255,10 +312,10 @@ export default function Home({ user, signOut }) {
                           ? (
                             <div className='row rows-cols-1'>
                               <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePins" aria-expanded="true" aria-controls="collapsePins">
-                                New Route Details
+                                Current Route Details <i className="fa-sharp fa-solid fa-caret-down" />
                               </button>
                               <div className="collapse show" id="collapsePins">
-                                <RouteOptionsButton viewingIds={viewingIds} />
+                                <RouteOptionsButton link={findRouteLink()} mappedIds={mappedIds} viewingIds={viewingIds} />
                                 <div className='row row-cols-1 row-cols-md-2 g-1'>
                                   {
                                     mappedIds.map((location, index) => {
@@ -290,20 +347,22 @@ export default function Home({ user, signOut }) {
                             )
                           : (
                             <div className='flex-fill'>
-                              {homeRoutes[0] === undefined ? <EmptyTabAlert tab='routes' user={user} /> : null}
+                              {homeRoutes[0] === undefined ? <EmptyTabAlert signIn={() => signOut()} tab='routes' user={user} /> : null}
                             </div>
                             )
                           }
                         {homeRoutes[0] !== undefined
                           ? (
                             <div className='row row-cols-1'>
-                              <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRoutes" aria-expanded="false" aria-controls="collapseRoutes">
-                                My Saved Routes
+                              <button className="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRoutes" aria-expanded={!viewingIds} aria-controls="collapseRoutes">
+                                My Saved Routes <i className="fa-sharp fa-solid fa-caret-down" />
                               </button>
-                              <div className="collapse" id="collapseRoutes">
+                              <div className='collapse' id="collapseRoutes">
                                 {
                                 homeRoutes.map(route => {
-                                  const locationIds = route.myListItemsIds.map(id => addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId);
+                                  const locationIds = route.myListItemsIds.map(id => {
+                                    return addedLocations[addedLocations.findIndex(location => location.myListItemsId === id)].locationId;
+                                  });
                                   return <SavedRoute key={route.routeId} route={route} homeRoutes={homeRoutes} setHomeRoutes={remainingRoutes => setHomeRoutes(remainingRoutes)} locationIds={locationIds} mappedIds={mappedIds} accessToken={accessToken} setViewingIds={ids => setViewingIds(ids)} setPrevList={ids => setPrevList(ids)} viewingIds={viewingIds}/>;
                                 })
                               }
@@ -321,7 +380,7 @@ export default function Home({ user, signOut }) {
             </div>
           </div>
           <NewRouteForm accessToken={accessToken} viewingIds={viewingIds} homeRoutes={homeRoutes} setHomeRoutes={routes => setHomeRoutes(routes)} setPrevList={list => setPrevList(list)} setViewingIds={ids => setViewingIds(ids)}/>
-          <DirectionsPanel homeRoutes={homeRoutes} setHomeRoutes={newRoutes => setHomeRoutes(newRoutes)} addedLocations={addedLocations} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} mappedIds={mappedIds} viewingIds={viewingIds}/>
+          <DirectionsPanel link={findRouteLink()} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} viewingIds={viewingIds}/>
           <div className='full backwhite col-md-6 col-12 botpad'>
             <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {
               if (extraDetailsOpen === true) return;
