@@ -37,9 +37,9 @@ export default function Carousel(props) {
 
   function selectedDot(index, activeIndex) {
     if (index === activeIndex) {
-      return 'selected button';
+      return 'selected carouselbutton';
     } else {
-      return 'button';
+      return 'carouselbutton';
     }
   }
 

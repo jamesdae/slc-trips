@@ -30,42 +30,6 @@
   }
 }
 
-@media screen and (min-width: 768px) and (max-width: 1234px) {
-  .cardbutton {
-    font-size: x-small;
-  }
-}
-
-@media screen and (min-width: 768px) {
-  .map-container {
-    width: 100%;
-    height: 100vh;
-  }
-
-  .myflex {
-    flex-direction: row;
-  }
-
-  .full {
-    position: fixed;
-    left: 50%;
-    top: 0;
-  }
-
-  .stickytab {
-    top: 7vh;
-  }
-
-  .detailimage {
-    height: 22vh;
-    width: 100%;
-  }
-
-  .carddetails {
-    width: auto;
-  }
-}
-
 .hiddenbox {
   border-radius: 8px;
   box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.359);
@@ -149,11 +113,11 @@
   font-weight: bolder;
 }
 
-.fa-spinner {
+.iconxl {
   font-size: xx-large;
 }
 
-.button.selected {
+.carouselbutton.selected {
   background-color: var(--water-color);
 }
 
