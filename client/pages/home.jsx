@@ -395,7 +395,7 @@ export default function Home({ user, signOut }) {
   } else {
     return (
       <div className="d-flex justify-content-center align-items-center main">
-        <i className="p-2 fas fa-spinner fa-pulse" />
+        <i className="p-2 fas fa-spinner fa-pulse iconxl" />
         <h1 className='p-2 d-inline-flex grow'>Loading...</h1>
       </div>
     );

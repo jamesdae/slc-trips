@@ -30,7 +30,7 @@ export default function getIconsAndDetails(location) {
       <div className="details">
         <p className='smalltext mb-1'>{location.name}</p>
         <p className="grey smalltext mb-1">{location.category}</p>
-        <div className='photo'>
+        <div className='markerphoto'>
           <img className="markerimg" src={location.photos[0].getUrl()} />
         </div>
       </div>

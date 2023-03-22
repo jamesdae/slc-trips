@@ -7,21 +7,10 @@
   height: 46vh;
 }
 
-.myflex {
-  flex-wrap: wrap;
-  flex-direction: column-reverse;
-}
-
 .detailimage {
   max-height: 16rem;
   width: 54%;
   object-fit: cover;
-}
-
-@media screen and (min-width: 1200px) {
-  .carouselimg.p-2 {
-    object-fit: contain;
-  }
 }
 
 .stickytab {
@@ -99,7 +88,7 @@
   object-fit: cover;
 }
 
-.photo {
+.markerphoto {
   max-width: 200px;
 }
 
@@ -124,7 +113,7 @@
   gap: 0.4em;
 }
 
-.button {
+.carouselbutton {
   padding: 0;
   height: 0.6rem;
   width: 0.6rem;
@@ -138,10 +127,6 @@
   object-fit: cover;
   object-position: 50% 50%;
   max-height: 31vh;
-}
-
-.multiline {
-  white-space: pre-line;
 }
 
 .listicon {
@@ -159,4 +144,42 @@
 .modalcarousel {
   max-height: 90vh;
   object-fit: cover;
+}
+
+@media screen and (min-width: 1200px) {
+  .carouselimg.p-2 {
+    object-fit: contain;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1234px) {
+  .cardbutton {
+    font-size: x-small;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .map-container {
+    width: 100%;
+    height: 100vh;
+  }
+
+  .full {
+    position: fixed;
+    left: 50%;
+    top: 0;
+  }
+
+  .stickytab {
+    top: 7vh;
+  }
+
+  .detailimage {
+    height: 22vh;
+    width: 100%;
+  }
+
+  .carddetails {
+    width: auto;
+  }
 }

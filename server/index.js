@@ -163,21 +163,21 @@ app.post('/api/routes', (req, res, next) => {
   const { viewingIds, routeName } = req.body;
   const { userId } = req.user;
   const sql = `
-    INSERT INTO "routes" ("userId", "routeName")
-    VALUES ($1, $2)
-    RETURNING "routeId"
+    insert into "routes" ("userId", "routeName")
+    values ($1, $2)
+    returning "routeId"
   `;
   const params = [userId, routeName];
   db.query(sql, params)
     .then(result => {
       const routeId = result.rows[0].routeId;
       const routeLocationsSql = `
-      INSERT INTO "routeLocations" ("routeId", "myListItemsId")
-        SELECT $1, "myListItemsId"
-        FROM "myListItems"
-        WHERE "userId" = $2 AND "locationId" = ANY($3)
-        ORDER BY array_position($3, "locationId")
-        RETURNING *
+      insert into "routeLocations" ("routeId", "myListItemsId")
+        select $1, "myListItemsId"
+        from "myListItems"
+        where "userId" = $2 AND "locationId" = ANY($3)
+        order by array_position($3, "locationId")
+        returning *
       `;
       const routeLocationsParams = [routeId, userId, viewingIds];
       return db.query(routeLocationsSql, routeLocationsParams);
@@ -205,10 +205,10 @@ app.delete('/api/mylist/:removeId', (req, res, next) => {
 app.delete('/api/routes/:routeId', (req, res, next) => {
   const routeId = Number(req.params.routeId);
   const sql1 = `
-    DELETE FROM "routeLocations" WHERE "routeId" = $1;
+    delete from "routeLocations" where "routeId" = $1;
   `;
   const sql2 = `
-    DELETE FROM "routes" WHERE "routeId" = $1 RETURNING *;
+    delete from "routes" where "routeId" = $1 returning *;
   `;
   const params = [routeId];
   db.query(sql1, params)
@@ -242,8 +242,8 @@ app.get('/api/routes', (req, res, next) => {
         from "routes"
         join "routeLocations" USING ("routeId")
        where "userId" = $1
-       GROUP BY "routeId", "routeName"
-       ORDER BY "routeId"
+       group by "routeId", "routeName"
+       order by "routeId"
       `;
   const params = [userId];
   db.query(sql, params)
@@ -258,10 +258,10 @@ app.put('/api/routes', (req, res, next) => {
   const { routeId } = req.body;
   const { newRouteName } = req.body;
   const sql = `
-  UPDATE "routes"
-    SET "routeName" = $1
-    WHERE "userId" = $2 AND "routeId" = $3
-    RETURNING *
+  update "routes"
+    set "routeName" = $1
+    where "userId" = $2 AND "routeId" = $3
+    returning *
   `;
   const params = [newRouteName, userId, routeId];
   db.query(sql, params)
