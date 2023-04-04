@@ -19,7 +19,7 @@ Try the application live at [slctrips.com](https://slctrips.com)
 - Google Maps Platform APIs:
   - Google Maps JavaScript API: API for embedding Google Maps components
   - Google Places API: A web service for retrieving information about places with HTTP requests
-  - Google Directions API: A web service for retrieving directions between multiple locations.
+  - Google Directions API: A web service for retrieving directions between multiple locations
 
 ### Back-end
 
@@ -31,7 +31,6 @@ Try the application live at [slctrips.com](https://slctrips.com)
 
 - Babel
 - Webpack
-
 
 ## Features
 
@@ -106,4 +105,3 @@ Try the application live at [slctrips.com](https://slctrips.com)
     ```shell
     npm run dev
     ```
-```
