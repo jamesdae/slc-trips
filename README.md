@@ -88,7 +88,7 @@ Try the application live at [slctrips.com](https://slctrips.com)
     npm install
     ```
 
-1. Start the PostgresQL service
+1. Start the PostgreSQL service
 
     ```shell
     sudo service postgresql start
