@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 export default function SignIn({ onSignIn, signUp }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('test');
+  const [password, setPassword] = useState('Password123!!!');
   const [invalidLogin, setInvalidLogin] = useState(null);
 
   const API_URL = '/api/auth';

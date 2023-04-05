@@ -10,23 +10,21 @@
   font-family: Inter, sans-serif;
 }
 
-@media screen and (width < 430px) {
-  .card-body {
-    font-size: 80%;
-  }
-
-  .mybuttons {
-    scale: 75%;
-  }
-
-  .cardbutton {
-    font-size: xx-small;
-  }
+.card-body {
+  font-size: 0.8rem;
 }
 
-@media screen and (min-width: 430px) and (max-width: 610px) {
+.cardbutton {
+  font-size: 0.6rem;
+}
+
+@media screen and (min-width: 768px) {
+  .card-body {
+    font-size: 0.9rem;
+  }
+
   .cardbutton {
-    font-size: small;
+    font-size: 0.7rem;
   }
 }
 

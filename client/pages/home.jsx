@@ -23,6 +23,7 @@ export default function Home({ user, signOut }) {
   });
 
   const [place, setPlace] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [addedLocations, setAddedLocations] = useState(null);
   const [extraDetailsOpen, setExtraDetailsOpen] = useState(false);
@@ -39,7 +40,10 @@ export default function Home({ user, signOut }) {
         .then(res => res.json())
         .then(locations => fetchPlaces(locations, selectedCategory, isLoaded))
         .then(fetchedLocations => setPlace(fetchedLocations))
-        .catch(error => console.error(error));
+        .catch(error => {
+          console.error(error);
+          setErrorMessage('Sorry, there was an error connecting to the network! Please try again in a few moments.');
+        });
     } else if (isLoaded && place !== null && accessToken) {
       const getRequest = {
         method: 'GET',
@@ -83,7 +87,7 @@ export default function Home({ user, signOut }) {
     return link;
   }
 
-  if (place !== null) {
+  if (place !== null && errorMessage === null) {
     return (
       <div className='bg-light'>
         <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md justify-content-md-between navbar-light bg-light mynav'>
@@ -392,11 +396,17 @@ export default function Home({ user, signOut }) {
         </div>
       </div>
     );
-  } else {
+  } else if (place === null && errorMessage === null) {
     return (
       <div className="d-flex justify-content-center align-items-center main">
         <i className="p-2 fas fa-spinner fa-pulse iconxl" />
         <h1 className='p-2 d-inline-flex grow'>Loading...</h1>
+      </div>
+    );
+  } else if (errorMessage !== null) {
+    return (
+      <div className="d-flex justify-content-center align-items-center main">
+        <h4 className='text-center'>{errorMessage}</h4>
       </div>
     );
   }
