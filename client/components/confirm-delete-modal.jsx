@@ -27,7 +27,7 @@ export default function ConfirmDeleteModal({ route, accessToken, locationIds, ro
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Confirm Changes</h5>
-              <i aria-hidden="true" type="button" className="close fa-solid fa-xmark" data-bs-dismiss="modal" aria-label="Close" />
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" aria-hidden="true"/>
             </div>
             <div className="modal-body">
               <p>Are you sure you want to delete this route?</p>
