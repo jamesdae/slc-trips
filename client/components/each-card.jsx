@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Carousel from './photoCarousel';
+import Carousel from './photo-carousel';
 
 export default function EachCard(props) {
   const [logoIsHovered, setLogoIsHovered] = useState(false);
