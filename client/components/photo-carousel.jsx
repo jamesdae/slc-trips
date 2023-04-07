@@ -69,7 +69,7 @@ export default function Carousel(props) {
       <div className="modal fade" id={`fullImageModal${imageId}`} tabIndex="-1" aria-labelledby="fullImageModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered modal-xl">
           <div className="modal-content">
-            <div className='modal-box'>
+            <div className='box'>
               <button title="View previous image" className='d-flex align-items-center btn btn-outline-light px-1 py-0' onClick={prevImage}><i className='fa-solid fa-angle-left blue' /></button>
               <div className=' d-flex flex-column justify-content-center'>
                 <a title="View original image source" href={props.images[activeIndex].getUrl()} target='_blank' rel="noreferrer"><img src={props.images[activeIndex].getUrl()} className='p-2 w-100 modal-carousel-image' alt={props.location.name} /></a>
