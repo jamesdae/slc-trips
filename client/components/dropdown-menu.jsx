@@ -15,7 +15,7 @@ export default function DropdownMenu(props) {
   };
 
   return (
-    <div className="p-2 d-flex flex-row-reverse botpad">
+    <div className="p-2 d-flex flex-row-reverse">
       <div className="dropdown-center">
         <button className="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded={dropdownOpen} onClick={toggleDropdown} >
           {activeItem}

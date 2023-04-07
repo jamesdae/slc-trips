@@ -32,11 +32,11 @@ export default class MapMarkers extends React.Component {
       });
       const element = advancedMarkerView.element;
       element.addEventListener('mouseenter', () => {
-        advancedMarkerView.content.classList.add('highlight', 'hiddenbox');
+        advancedMarkerView.content.classList.add('highlight', 'hidden-box');
         advancedMarkerView.element.style.zIndex = 1;
       });
       element.addEventListener('mouseleave', () => {
-        advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
+        advancedMarkerView.content.classList.remove('highlight', 'hidden-box');
         advancedMarkerView.element.style.zIndex = '';
       });
       advancedMarkerView.addListener('click', event => {
@@ -73,13 +73,13 @@ export default class MapMarkers extends React.Component {
           });
           const element = advancedMarkerView.element;
           element.addEventListener('mouseenter', () => {
-            advancedMarkerView.content.classList.add('highlight', 'hiddenbox');
+            advancedMarkerView.content.classList.add('highlight', 'hidden-box');
             advancedMarkerView.element.style.zIndex = 1;
           });
           element.addEventListener('mouseleave', () => {
-            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
+            advancedMarkerView.content.classList.remove('highlight', 'hidden-box');
             advancedMarkerView.element.style.zIndex = '';
-            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
+            advancedMarkerView.content.classList.remove('highlight', 'hidden-box');
             advancedMarkerView.element.style.zIndex = '';
           });
           advancedMarkerView.addListener('click', event => {
@@ -115,13 +115,13 @@ export default class MapMarkers extends React.Component {
           });
           const element = advancedMarkerView.element;
           element.addEventListener('mouseenter', () => {
-            advancedMarkerView.content.classList.add('highlight', 'hiddenbox');
+            advancedMarkerView.content.classList.add('highlight', 'hidden-box');
             advancedMarkerView.element.style.zIndex = 1;
           });
           element.addEventListener('mouseleave', () => {
-            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
+            advancedMarkerView.content.classList.remove('highlight', 'hidden-box');
             advancedMarkerView.element.style.zIndex = '';
-            advancedMarkerView.content.classList.remove('highlight', 'hiddenbox');
+            advancedMarkerView.content.classList.remove('highlight', 'hidden-box');
             advancedMarkerView.element.style.zIndex = '';
           });
           advancedMarkerView.addListener('click', event => {

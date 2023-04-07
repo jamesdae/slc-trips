@@ -7,13 +7,13 @@
   height: 46vh;
 }
 
-.detailimage {
+.detail-image {
   max-height: 16rem;
   width: 54%;
   object-fit: cover;
 }
 
-.stickytab {
+.sticky-tab {
   position: sticky;
   top: 47vh;
   z-index: 1;
@@ -24,15 +24,15 @@
   top: 0;
 }
 
-.carddetails {
+.card-details {
   width: 46%;
 }
 
-.buttonrow {
+.button-row {
   height: 6vh;
 }
 
-.mynav {
+.my-nav {
   height: 7vh;
 }
 
@@ -40,12 +40,8 @@
   font-weight: 999;
 }
 
-.botpad {
+.map-padding {
   padding-bottom: 1vh;
-}
-
-.logopad {
-  padding: 0 0 0.5em 0.5em;
 }
 
 .location {
@@ -82,13 +78,13 @@
   max-width: 10rem;
 }
 
-.markerimg {
+.marker-image {
   width: 9rem;
   max-height: 4rem;
   object-fit: cover;
 }
 
-.markerphoto {
+.marker-photo {
   max-width: 200px;
 }
 
@@ -100,7 +96,7 @@
   height: 100%;
 }
 
-.modalbox {
+.modal-box {
   display: flex;
   justify-content: space-around;
   height: 100%;
@@ -113,7 +109,7 @@
   gap: 0.4em;
 }
 
-.carouselbutton {
+.carousel-button {
   padding: 0;
   height: 0.6rem;
   width: 0.6rem;
@@ -122,14 +118,14 @@
   background-color: white;
 }
 
-.carouselimg {
+.carousel-image {
   width: 100%;
   object-fit: cover;
   object-position: 50% 50%;
   max-height: 31vh;
 }
 
-.listicon {
+.list-icon {
   width: 2em;
 }
 
@@ -137,17 +133,17 @@
   width: 100%;
 }
 
-.routecard {
+.route-card {
   width: 50%;
 }
 
-.modalcarousel {
+.modal-carousel {
   max-height: 90vh;
   object-fit: cover;
 }
 
 @media screen and (min-width: 1200px) {
-  .carouselimg.p-2 {
+  .carousel-image.p-2 {
     object-fit: contain;
   }
 }
@@ -164,16 +160,16 @@
     top: 0;
   }
 
-  .stickytab {
+  .sticky-tab {
     top: 7vh;
   }
 
-  .detailimage {
+  .detail-image {
     height: 22vh;
     width: 100%;
   }
 
-  .carddetails {
+  .card-details {
     width: auto;
   }
 }

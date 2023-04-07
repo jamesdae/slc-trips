@@ -22,8 +22,8 @@ export default function SavedRoute({ route, locationIds, mappedIds, accessToken,
           locationIds.map((id, index) => {
             const eachId = mappedIds.find(location => location.locationId === id);
             return (
-              <div className="card routecard" key={index}>
-                <img src={eachId.photos[0].getUrl()} className="card-img-top detailimage" alt="..." />
+              <div className="card route-card" key={index}>
+                <img src={eachId.photos[0].getUrl()} className="card-img-top detail-image" alt="..." />
                 <div className="card-body">
                   <h6 className="card-title">{eachId.name}</h6>
                   <p className="card-text"><small className="text-muted">{eachId.category}</small></p>

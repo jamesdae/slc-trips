@@ -22,13 +22,13 @@ export default function EachCard(props) {
                 <Carousel setViewImageModal={(imageLocation, activeIndex) => props.setViewImageModal(imageLocation, activeIndex)} location={props.location} images={props.location.photos} />
                 )
               : (
-                <img className='p-1 detailimage align-self-center align-self-md-stretch' src={props.location.photos[0].getUrl()} alt={props.location.name} />
+                <img className='p-1 detail-image align-self-center align-self-md-stretch' src={props.location.photos[0].getUrl()} alt={props.location.name} />
                 )
           }
-          <div className='card-body d-flex flex-column justify-content-center carddetails'>
+          <div className='card-body d-flex flex-column justify-content-center card-details'>
             <div className='d-flex flex-column ps-1'>
               {props.tab === 'extradetails' ? <a href={props.location.url} target='_blank' rel="noreferrer" title="Open in Google Maps"><p className='card-title'>{props.location.name}</p></a> : <p className='card-title'>{props.location.name}</p>}
-              <p className='grey smalltext mb-1'>{props.location.category}</p>
+              <p className='grey small-text mb-1'>{props.location.category}</p>
               <span>Rating: {props.location.rating}/5 <i className='fa-solid fa-star gold' /></span>
               <p className='my-1'>{props.location.user_ratings_total} reviews</p>
             </div>
@@ -38,7 +38,7 @@ export default function EachCard(props) {
                     null
                   )
                 : (
-                  <div className="d-flex justify-content-evenly align-items-center buttonrow" role="group" onClick={event => event.stopPropagation()}>
+                  <div className="d-flex justify-content-evenly align-items-center button-row" role="group" onClick={event => event.stopPropagation()}>
                     {props.tab === 'list'
                       ? (
                         <div className='d-flex'>
@@ -64,7 +64,7 @@ export default function EachCard(props) {
                         </div>
                         )
                       : null}
-                    <a className="btn btn-primary" href={props.location.url} target='_blank' rel="noreferrer" title="Open in Google Maps" onMouseEnter={() => setLogoIsHovered(true)} onMouseLeave={() => setLogoIsHovered(false)} onClick={event => event.stopPropagation()}>{!logoIsHovered ? <i className="fa-brands fa-google fs-6" /> : <p className='cardbutton mb-0'>Open Google Maps</p>}</a>
+                    <a className="btn btn-primary" href={props.location.url} target='_blank' rel="noreferrer" title="Open in Google Maps" onMouseEnter={() => setLogoIsHovered(true)} onMouseLeave={() => setLogoIsHovered(false)} onClick={event => event.stopPropagation()}>{!logoIsHovered ? <i className="fa-brands fa-google fs-6" /> : <p className='card-button mb-0'>Open Google Maps</p>}</a>
                     {Array.isArray(props.viewingIds) && props.viewingIds.includes(props.location.locationId)
                       ? (
                         <button title="Unpin from map" className='btn btn-danger' onMouseEnter={() => setPinIconHovered(true)} onMouseLeave={() => setPinIconHovered(false)} onClick={() => props.unpinLocation(props.location.locationId)}>{!pinIconHovered ? <i className="fa-solid fa-location-dot fs-6" /> : <p className='mb-0 fs-6'>Unpin</p>}</button>
@@ -75,8 +75,8 @@ export default function EachCard(props) {
                           )
                         : (
                             props.user === 'guest'
-                              ? <button className='btn btn-secondary' type='button' title='Sign in to make changes' aria-disabled="false" onMouseEnter={() => setAddIconHovered(true)} onMouseLeave={() => setAddIconHovered(false)} >{!addIconHovered ? <i className='fa-solid fa-plus fs-6' /> : <p className='mb-0 cardbutton'>Sign in to add</p>} </button>
-                              : <button className='btn btn-success' type='button' title='Add to my list' aria-disabled="false" onMouseEnter={() => setAddIconHovered(true)} onMouseLeave={() => setAddIconHovered(false)} onClick={() => props.addCard(props.location.locationId)} >{!addIconHovered ? <i className='fa-solid fa-plus fs-6' /> : <p className='cardbutton mb-0'>Add to My List</p>} </button>
+                              ? <button className='btn btn-secondary' type='button' title='Sign in to make changes' aria-disabled="false" onMouseEnter={() => setAddIconHovered(true)} onMouseLeave={() => setAddIconHovered(false)} >{!addIconHovered ? <i className='fa-solid fa-plus fs-6' /> : <p className='mb-0 card-button'>Sign in to add</p>} </button>
+                              : <button className='btn btn-success' type='button' title='Add to my list' aria-disabled="false" onMouseEnter={() => setAddIconHovered(true)} onMouseLeave={() => setAddIconHovered(false)} onClick={() => props.addCard(props.location.locationId)} >{!addIconHovered ? <i className='fa-solid fa-plus fs-6' /> : <p className='card-button mb-0'>Add to My List</p>} </button>
                           )}
                   </div>
                   )
@@ -91,7 +91,7 @@ export default function EachCard(props) {
                     <div key={index} className="m-2 p-2 d-flex flex-column justify-content-center">
                       <a title="Contributor Google Maps Page" href={review.author_url} target='_blank' rel="noreferrer" className='text-capitalize'><i className='me-1 fa-solid fa-circle-user'/>{review.author_name}</a>
                       <p className='my-1'>{review.rating}/5 <i className='fa-solid fa-star gold' /> <em>about {review.relative_time_description}</em></p>
-                      <p className='grey smalltext'>&quot;{review.text}&quot;</p>
+                      <p className='grey small-text'>&quot;{review.text}&quot;</p>
                     </div>
                   );
                 })
