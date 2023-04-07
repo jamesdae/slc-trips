@@ -37,9 +37,9 @@ export default function Carousel(props) {
 
   function selectedDot(index, activeIndex) {
     if (index === activeIndex) {
-      return 'selected carouselbutton';
+      return 'selected carousel-button';
     } else {
-      return 'carouselbutton';
+      return 'carousel-button';
     }
   }
 
@@ -54,41 +54,33 @@ export default function Carousel(props) {
   return (
     <div className="container me-auto">
       <div className='box align-items-stretch'>
-        <div title="View previous image" className='d-flex align-items-center btn btn-outline-light px-1 py-0' onClick={prevImage}>
-          <i className='fa-solid fa-angle-left blue' />
-        </div>
-        <div className='center d-flex flex-column justify-content-center'>
-          <a title="View full image" href="#" data-bs-toggle="modal" data-bs-target={`#fullImageModal${imageId}`}><img src={props.images[activeIndex].getUrl()} className='p-2 carouselimg align-self-stretch btn btn-outline-light' alt={props.location.name} /></a>
+        <button title="View previous image" className='d-flex align-items-center btn btn-outline-light px-1 py-0' onClick={prevImage}><i className='fa-solid fa-angle-left blue' /></button>
+        <div className='d-flex flex-column justify-content-center'>
+          <a title="View full image" href="#" data-bs-toggle="modal" data-bs-target={`#fullImageModal${imageId}`}><img src={props.images[activeIndex].getUrl()} className='p-2 carousel-image align-self-stretch btn btn-outline-light' alt={props.location.name} /></a>
           <div className="dots">
             <Dots />
           </div>
         </div>
-        <div title="View next image" className='d-flex align-items-center btn btn-outline-light px-1 py-0' onClick={nextImage}>
-          <i className='fa-solid fa-angle-right blue'/>
-        </div>
+        <button title="View next image" className='d-flex align-items-center btn btn-outline-light px-1 py-0' onClick={nextImage}><i className='fa-solid fa-angle-right blue'/></button>
       </div>
       <div className='mt-1 text-center'>
-        <p className='smalltext mb-0'>Photo credits: <span title="Google Places User Page" ref={attributionRef} dangerouslySetInnerHTML={{ __html: sanitizedAttribution }} /></p>
+        <p className='small-text mb-0'>Photo credits: <span title="Google Places User Page" ref={attributionRef} dangerouslySetInnerHTML={{ __html: sanitizedAttribution }} /></p>
       </div>
       <div className="modal fade" id={`fullImageModal${imageId}`} tabIndex="-1" aria-labelledby="fullImageModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered modal-xl">
           <div className="modal-content">
-            <div className='modalbox'>
-              <div title="View previous image" className='d-flex align-items-center btn btn-outline-light px-1 py-0' onClick={prevImage}>
-                <i className='fa-solid fa-angle-left blue' />
-              </div>
-              <div className='center d-flex flex-column justify-content-center'>
-                <a title="View original image source" href={props.images[activeIndex].getUrl()} target='_blank' rel="noreferrer"><img src={props.images[activeIndex].getUrl()} className='p-2 h-100 w-100 modalcarousel' alt={props.location.name} /></a>
+            <div className='box'>
+              <button title="View previous image" className='d-flex align-items-center btn btn-outline-light px-1 py-0' onClick={prevImage}><i className='fa-solid fa-angle-left blue' /></button>
+              <div className=' d-flex flex-column justify-content-center'>
+                <a title="View original image source" href={props.images[activeIndex].getUrl()} target='_blank' rel="noreferrer"><img src={props.images[activeIndex].getUrl()} className='p-2 w-100 modal-carousel-image' alt={props.location.name} /></a>
                 <div className="dots">
                   <Dots />
                 </div>
               </div>
-              <div title="View next image" className='d-flex align-items-center btn btn-outline-light px-1 py-0' onClick={nextImage}>
-                <i className='fa-solid fa-angle-right blue' />
-              </div>
+              <button title="View next image" className='d-flex align-items-center btn btn-outline-light px-1 py-0' onClick={nextImage}><i className='fa-solid fa-angle-right blue' /></button>
             </div>
             <div className='mt-1 text-center'>
-              <p className='smalltext mb-0'>Photo credits: <span title="Google Places User Page" ref={attributionRef} dangerouslySetInnerHTML={{ __html: sanitizedAttribution }} /></p>
+              <p className='small-text mb-0'>Photo credits: <span title="Google Places User Page" ref={attributionRef} dangerouslySetInnerHTML={{ __html: sanitizedAttribution }} /></p>
             </div>
           </div>
         </div>

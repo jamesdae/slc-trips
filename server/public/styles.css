@@ -14,7 +14,7 @@
   font-size: 0.8rem;
 }
 
-.cardbutton {
+.card-button {
   font-size: 0.6rem;
 }
 
@@ -23,12 +23,12 @@
     font-size: 0.9rem;
   }
 
-  .cardbutton {
+  .card-button {
     font-size: 0.7rem;
   }
 }
 
-.hiddenbox {
+.hidden-box {
   border-radius: 8px;
   box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.359);
 }
@@ -82,8 +82,8 @@
   color: #595f65;
 }
 
-.smalltext {
-  font-size: smaller;
+.small-text {
+  font-size: 0.8rem;
 }
 
 .gold {
@@ -98,24 +98,23 @@
   color: #0c70e5;
 }
 
-.backwhite {
+.white-background {
   background-color: #f8f9fa;
 }
 
 .main {
-  height: 93vh;
   transition: cubic-bezier(1, 0, 0, 1);
 }
 
 .card-title {
-  font-weight: bolder;
+  font-weight: 700;
 }
 
-.iconxl {
-  font-size: xx-large;
+.icon-xl {
+  font-size: 2rem;
 }
 
-.carouselbutton.selected {
+.carousel-button.selected {
   background-color: var(--water-color);
 }
 

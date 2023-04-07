@@ -5,13 +5,13 @@ export default function ExtraDetails({ place, viewingIds, setExtraDetailsOpen, s
   return (
     <div>
       <div className='p-2'>
-        <button className="mybuttons btn btn-secondary" type="button"
+        <button className="btn btn-secondary" type="button"
           onClick={event => {
             setExtraDetailsOpen(!extraDetailsOpen);
             setViewingIds(prevList);
           }}>
           <i className="fa-solid fa-arrow-left mx-1"/>
-          Back
+          <p className='d-inline'>Back</p>
         </button>
       </div>
       {

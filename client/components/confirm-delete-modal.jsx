@@ -27,7 +27,7 @@ export default function ConfirmDeleteModal({ route, accessToken, locationIds, ro
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Confirm Changes</h5>
-              <i aria-hidden="true" type="button" className="close fa-solid fa-xmark" data-bs-dismiss="modal" aria-label="Close" />
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" aria-hidden="true"/>
             </div>
             <div className="modal-body">
               <p>Are you sure you want to delete this route?</p>
@@ -38,8 +38,8 @@ export default function ConfirmDeleteModal({ route, accessToken, locationIds, ro
                     locationIds.map((id, index) => {
                       const eachId = mappedIds.find(location => location.locationId === id);
                       return (
-                        <div className="card routecard" key={index}>
-                          <img src={eachId.photos[0].getUrl()} className="card-img-top detailimage" alt="..." />
+                        <div className="card route-card" key={index}>
+                          <img src={eachId.photos[0].getUrl()} className="card-img-top detail-image" alt="..." />
                           <div className="card-body">
                             <h6 className="card-title">{eachId.name}</h6>
                             <p className="card-text"><small className="text-muted">{eachId.category}</small></p>

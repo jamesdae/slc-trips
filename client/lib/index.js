@@ -1,2 +1,2 @@
-export { default as getIconsAndDetails } from './getIconsAndDetails';
-export { default as fetchPlaces } from './fetchPlaces';
+export { default as getIconsAndDetails } from './get-icons-and-details';
+export { default as fetchPlaces } from './fetch-places';

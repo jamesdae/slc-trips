@@ -15,14 +15,14 @@ export default function DirectionsPanel({ setPrevList, setViewingIds, viewingIds
             More Options
           </button>
           <ul className="dropdown-menu">
-            <li><a className="dropdown-item" href="#saveRouteCanvas" aria-label="Close" data-bs-toggle="offcanvas"><i className="fa-solid fa-road-circle-check listicon" />Save Route</a></li>
+            <li><a className="dropdown-item" href="#saveRouteCanvas" aria-label="Close" data-bs-toggle="offcanvas"><i className="fa-solid fa-road-circle-check list-icon" />Save Route</a></li>
             <li><a className="dropdown-item" href="#" data-bs-dismiss="offcanvas" aria-label="Close" onClick={() => {
               setPrevList();
               setViewingIds();
-            }}><i className="fa-solid fa-trash-can listicon" />Clear Pins</a></li>
+            }}><i className="fa-solid fa-trash-can list-icon" />Clear Pins</a></li>
             {Array.isArray(viewingIds) && viewingIds.length > 1
               ? (
-                <li><a className="dropdown-item" href={link} target="_blank" rel="noopener noreferrer" aria-label="Close"><i className="fa-brands fa-google listicon" />Open route in Google Maps </a></li>
+                <li><a className="dropdown-item" href={link} target="_blank" rel="noopener noreferrer" aria-label="Close"><i className="fa-brands fa-google list-icon" />Open route in Google Maps </a></li>
                 )
               : (
                   null

@@ -5,9 +5,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 import LocationCards from '../components/location-cards';
 import DropdownMenu from '../components/dropdown-menu';
 import EachCard from '../components/each-card';
-import Libraries from '../components/apilibraries';
+import Libraries from '../components/api-libraries';
 import MapMarkers from '../components/map-markers';
-import { fetchPlaces } from '../lib';
+import { fetchPlaces } from '../lib/';
 import RouteOptionsButton from '../components/route-options-button';
 import ExtraDetails from '../components/extra-details';
 import DirectionsPanel from '../components/directions-panel';
@@ -90,14 +90,14 @@ export default function Home({ user, signOut }) {
   if (place !== null && errorMessage === null) {
     return (
       <div className='bg-light'>
-        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md justify-content-md-between navbar-light bg-light mynav'>
-          <h1 className='mx-2 blue heading'>SLCTrips</h1>
+        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md justify-content-md-between navbar-light bg-light my-nav p-0'>
+          <h1 className='mx-2 my-0 blue heading'>SLCTrips</h1>
           <button className='mx-2 btn btn-secondary' onClick={() => signOut()}>{user === 'guest' ? 'Sign in' : 'Sign Out'}</button>
         </nav>
         <div className='d-flex flex-wrap flex-column-reverse'>
           <div className='col-md-6 col-12'>
             <div>
-              <nav className='stickytab backwhite'>
+              <nav className='sticky-tab white-background'>
                 <div className='nav nav-tabs nav-fill' id='nav-tab' role='tablist'>
                   <button className='nav-link active' disabled={extraDetailsOpen} id='nav-places-tab' data-bs-toggle='tab' data-bs-target='#nav-places' type='button' role='tab' aria-controls='nav-places' aria-selected='true' onClick={() => {
                     const offset = window.innerWidth < 768 ? window.innerHeight * 0.07 : 0;
@@ -385,7 +385,7 @@ export default function Home({ user, signOut }) {
           </div>
           <NewRouteForm accessToken={accessToken} viewingIds={viewingIds} homeRoutes={homeRoutes} setHomeRoutes={routes => setHomeRoutes(routes)} setPrevList={list => setPrevList(list)} setViewingIds={ids => setViewingIds(ids)}/>
           <DirectionsPanel link={findRouteLink()} setPrevList={() => setPrevList(false)} setViewingIds={() => setViewingIds(false)} viewingIds={viewingIds}/>
-          <div className='full backwhite col-md-6 col-12 botpad'>
+          <div className='full white-background col-md-6 col-12 map-padding'>
             <MapMarkers place={place} clickedCategory={selectedCategory} viewingIds={viewingIds} extraDetailsOpen={extraDetailsOpen} openExtraDetailsForId={id => {
               if (extraDetailsOpen === true) return;
               setPrevList(viewingIds);
@@ -399,7 +399,7 @@ export default function Home({ user, signOut }) {
   } else if (place === null && errorMessage === null) {
     return (
       <div className="d-flex justify-content-center align-items-center main">
-        <i className="p-2 fas fa-spinner fa-pulse iconxl" />
+        <i className="p-2 fas fa-spinner fa-pulse icon-xl" />
         <h1 className='p-2 d-inline-flex grow'>Loading...</h1>
       </div>
     );
