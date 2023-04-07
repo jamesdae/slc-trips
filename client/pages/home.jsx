@@ -90,8 +90,8 @@ export default function Home({ user, signOut }) {
   if (place !== null && errorMessage === null) {
     return (
       <div className='bg-light'>
-        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md justify-content-md-between navbar-light bg-light my-nav'>
-          <h1 className='mx-2 blue heading'>SLCTrips</h1>
+        <nav className='sticky-md-top col-md-6 col-12 navbar navbar-expand-md justify-content-md-between navbar-light bg-light my-nav p-0'>
+          <h1 className='mx-2 my-0 blue heading'>SLCTrips</h1>
           <button className='mx-2 btn btn-secondary' onClick={() => signOut()}>{user === 'guest' ? 'Sign in' : 'Sign Out'}</button>
         </nav>
         <div className='d-flex flex-wrap flex-column-reverse'>

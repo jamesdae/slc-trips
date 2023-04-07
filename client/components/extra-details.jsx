@@ -11,7 +11,7 @@ export default function ExtraDetails({ place, viewingIds, setExtraDetailsOpen, s
             setViewingIds(prevList);
           }}>
           <i className="fa-solid fa-arrow-left mx-1"/>
-          Back
+          <p className='d-inline'>Back</p>
         </button>
       </div>
       {

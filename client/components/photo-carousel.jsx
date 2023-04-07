@@ -55,7 +55,7 @@ export default function Carousel(props) {
     <div className="container me-auto">
       <div className='box align-items-stretch'>
         <button title="View previous image" className='d-flex align-items-center btn btn-outline-light px-1 py-0' onClick={prevImage}><i className='fa-solid fa-angle-left blue' /></button>
-        <div className='center d-flex flex-column justify-content-center'>
+        <div className='d-flex flex-column justify-content-center'>
           <a title="View full image" href="#" data-bs-toggle="modal" data-bs-target={`#fullImageModal${imageId}`}><img src={props.images[activeIndex].getUrl()} className='p-2 carousel-image align-self-stretch btn btn-outline-light' alt={props.location.name} /></a>
           <div className="dots">
             <Dots />
@@ -71,8 +71,8 @@ export default function Carousel(props) {
           <div className="modal-content">
             <div className='modal-box'>
               <button title="View previous image" className='d-flex align-items-center btn btn-outline-light px-1 py-0' onClick={prevImage}><i className='fa-solid fa-angle-left blue' /></button>
-              <div className='center d-flex flex-column justify-content-center'>
-                <a title="View original image source" href={props.images[activeIndex].getUrl()} target='_blank' rel="noreferrer"><img src={props.images[activeIndex].getUrl()} className='p-2 h-100 w-100 modal-carousel' alt={props.location.name} /></a>
+              <div className=' d-flex flex-column justify-content-center'>
+                <a title="View original image source" href={props.images[activeIndex].getUrl()} target='_blank' rel="noreferrer"><img src={props.images[activeIndex].getUrl()} className='p-2 w-100 modal-carousel-image' alt={props.location.name} /></a>
                 <div className="dots">
                   <Dots />
                 </div>

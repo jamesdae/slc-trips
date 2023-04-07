@@ -38,7 +38,7 @@ export default function EachCard(props) {
                     null
                   )
                 : (
-                  <div className="d-flex justify-content-evenly align-items-center button-row" role="group" onClick={event => event.stopPropagation()}>
+                  <div className="d-flex justify-content-evenly align-items-center flex-fill" role="group" onClick={event => event.stopPropagation()}>
                     {props.tab === 'list'
                       ? (
                         <div className='d-flex'>

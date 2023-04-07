@@ -83,7 +83,7 @@
 }
 
 .small-text {
-  font-size: smaller;
+  font-size: 0.8rem;
 }
 
 .gold {
@@ -103,16 +103,15 @@
 }
 
 .main {
-  height: 93vh;
   transition: cubic-bezier(1, 0, 0, 1);
 }
 
 .card-title {
-  font-weight: bolder;
+  font-weight: 700;
 }
 
 .icon-xl {
-  font-size: xx-large;
+  font-size: 2rem;
 }
 
 .carousel-button.selected {
