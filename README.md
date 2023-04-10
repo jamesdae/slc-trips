@@ -4,11 +4,11 @@ A full stack JavaScript application for travelers who need help planning a trip 
 
 ## Why I Built This
 
-I wanted to learn how to utilize Google Maps Platform APIs, and how to have users interact with a map and custom markers based on changes made on a database. As a frequent visitor of the area who often encourages others to visit, I used a personalized list of recommendations as the foundation of this trip planning application.
+I wanted to learn how to utilize Google Maps Platform APIs, and how to have users interact with a map and custom markers based on changes made to a database. As a frequent visitor of the area who often encourages others to visit, I used a personalized list of recommendations as the foundation of this trip planning application.
 
 ## Live Demo
 
-Try the application live at [slctrips.com](https://slctrips.com)
+Try the application live at [slctrips.com](https://slctrips.com)!
 
 ## Technologies Used
 
@@ -78,8 +78,8 @@ Try the application live at [slctrips.com](https://slctrips.com)
 1. Clone the repository.
 
     ```shell
-    git clone https://github.com/jamesdae/final-project
-    cd final-project
+    git clone https://github.com/jamesdae/slc-trips
+    cd slc-trips
     ```
 
 1. Install all dependencies with NPM.
@@ -92,6 +92,18 @@ Try the application live at [slctrips.com](https://slctrips.com)
 
     ```shell
     sudo service postgresql start
+    ```
+
+1. Copy the .env.example file to a new file called .env and replace the placeholder values with the appropriate values for your setup. Note that a Google Maps Platform account and its credentials are required for the application to work correctly.
+
+    ```shell
+    cp .env.example .env
+    ```
+
+1. Create a new database named after the database name chosen in new .env file.
+
+    ```shell
+    createdb databaseName
     ```
 
 1. Set up the database
