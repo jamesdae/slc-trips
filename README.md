@@ -16,7 +16,7 @@ Try the application live at [slctrips.com](https://slctrips.com)!
 
 - React.js
 - Bootstrap 5
-- Google Maps Platform APIs:
+- [Google Maps Platform](https://mapsplatform.google.com/) APIs:
   - Google Maps JavaScript API: API for embedding Google Maps components
   - Google Places API: A web service for retrieving information about places with HTTP requests
   - Google Directions API: A web service for retrieving directions between multiple locations
@@ -73,6 +73,10 @@ Try the application live at [slctrips.com](https://slctrips.com)!
 - PostgreSQL 14.3 or higher
 - NPM 8.11 or higher
 
+### API Keys and Credentials
+
+A [Google Maps Platform](https://mapsplatform.google.com/) account and its credentials are required for the application to work correctly. You will need to obtain a personal API credentials from the Google Maps Platform to complete the development process explained below.
+
 ### Getting Started
 
 1. Clone the repository.
@@ -94,7 +98,7 @@ Try the application live at [slctrips.com](https://slctrips.com)!
     sudo service postgresql start
     ```
 
-1. Copy the .env.example file to a new file called .env and replace the placeholder values with the appropriate values for your setup. Note that a Google Maps Platform account and its credentials are required for the application to work correctly.
+1. Copy the .env.example file to a new file called .env and replace the placeholder values with the appropriate values for your setup, which include personal API credentials.
 
     ```shell
     cp .env.example .env
