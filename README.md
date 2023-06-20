@@ -83,7 +83,6 @@ A [Google Maps Platform](https://mapsplatform.google.com/) account and its crede
 
     ```shell
     git clone https://github.com/jamesdae/slc-trips
-    cd slc-trips
     ```
 
 1. Install all dependencies with NPM.
